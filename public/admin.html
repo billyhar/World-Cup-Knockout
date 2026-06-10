@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results Admin — World Cup 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽️</text></svg>">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <h1>Results Admin</h1>
+      <a href="/" class="back">← back to canvas</a>
+    </div>
+    <div class="bar-right">
+      <input type="password" id="token" placeholder="Admin token" autocomplete="current-password">
+      <button id="save" class="primary">Save all</button>
+    </div>
+  </header>
+  <p class="note" id="note">Enter scores and hit <b>Save all</b>. Leave both boxes empty to clear a result.
+  For knockout games add penalty scores if it went to a shootout. Team dropdowns on knockout matches
+  override the auto-resolved bracket — leave on “auto” normally.</p>
+  <main id="main">Loading…</main>
+  <div class="toast" id="toast" hidden></div>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

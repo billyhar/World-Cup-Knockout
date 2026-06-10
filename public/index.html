@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>World Cup 2026 — Groups &amp; Knockout Canvas</title>
+<meta name="description" content="Every group, result and knockout match of the 2026 FIFA World Cup on one pannable canvas.">
+<meta property="og:title" content="World Cup 2026 — Groups & Knockout Canvas">
+<meta property="og:description" content="All 104 matches, 12 groups and the full bracket on one pannable canvas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽️</text></svg>">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div id="viewport">
+    <div id="world"></div>
+  </div>
+
+  <header class="chrome chrome-top">
+    <div class="brand">
+      <span class="brand-ball">⚽️</span>
+      <div class="brand-text">
+        <strong>World Cup 2026</strong>
+        <span>Canada · Mexico · USA</span>
+      </div>
+    </div>
+    <nav class="nav-chips" id="nav-chips">
+      <button data-goto="groups">Groups</button>
+      <button data-goto="r32">R32</button>
+      <button data-goto="r16">R16</button>
+      <button data-goto="qf">QF</button>
+      <button data-goto="final">Final</button>
+    </nav>
+  </header>
+
+  <div class="chrome chrome-zoom">
+    <button id="zoom-out" aria-label="Zoom out">−</button>
+    <button id="zoom-fit" aria-label="Fit everything">⤢</button>
+    <button id="zoom-in" aria-label="Zoom in">+</button>
+  </div>
+
+  <div class="chrome chrome-status" id="status-pill" hidden></div>
+
+  <div class="hint" id="hint">drag to pan · pinch or ⌘ + scroll to zoom</div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

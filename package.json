@@ -1,0 +1,14 @@
+{
+  "name": "world-cup-knockout",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pannable canvas for the 2026 FIFA World Cup — groups, results and knockout bracket",
+  "type": "module",
+  "scripts": {
+    "build:seed": "node scripts/build-seed.mjs",
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
