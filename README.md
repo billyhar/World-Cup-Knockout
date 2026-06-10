@@ -8,7 +8,10 @@ bracket that resolves itself as results come in.
 
 - **Canvas** ([public/index.html](public/index.html)) — drag to pan, pinch or
   `⌘`/`ctrl` + scroll to zoom, double-click to zoom in. Nav chips fly to each
-  stage. Fully responsive; touch gestures on mobile.
+  stage. Fully responsive; touch gestures on mobile, plus a rotate button on
+  phones that turns the canvas 90° for landscape reading.
+- **Local times** — every kickoff is shown in the visitor's timezone with the
+  abbreviation in the corner pill (e.g. BST); today's matches are highlighted.
 - **Bracket auto-resolution** — group standings are computed from results
   (points → goal difference → goals for → head-to-head). When all groups are
   final, the eight best third-placed teams are allocated to their R32 slots by

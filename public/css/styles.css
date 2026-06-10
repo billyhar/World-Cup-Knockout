@@ -42,6 +42,21 @@ html, body {
 }
 #viewport:active { cursor: grabbing; }
 
+#rotor {
+  position: absolute;
+  inset: 0;
+}
+/* 90° rotated reading mode (phone held sideways) */
+#viewport.rotated #rotor {
+  inset: auto;
+  left: 100%;
+  top: 0;
+  width: 100dvh;
+  height: 100dvw;
+  transform: rotate(90deg);
+  transform-origin: 0 0;
+}
+
 #world {
   position: absolute;
   width: 5260px;
@@ -226,6 +241,9 @@ html, body {
 }
 .k-city { color: var(--ink-faint); }
 
+.today-tag { color: var(--accent); font-weight: 800; }
+.g-fix.today .g-fix-date { color: var(--accent); font-weight: 700; }
+
 .k-row {
   display: flex;
   align-items: center;
@@ -359,6 +377,8 @@ html, body {
   font-size: 19px;
   border-radius: 12px;
 }
+#rotate { display: none; }
+#viewport.rotated ~ .chrome-zoom #rotate { color: var(--accent); border-color: rgba(47, 224, 140, 0.4); }
 
 .chrome-status {
   bottom: 22px;
@@ -400,6 +420,7 @@ html, body {
   .nav-chips button { padding: 7px 12px; font-size: 12px; }
   .chrome-zoom { bottom: 14px; right: 12px; }
   .chrome-zoom button { width: 40px; height: 40px; }
+  #rotate { display: block; font-size: 17px; }
   .chrome-status { bottom: 16px; left: 12px; }
   .hint { bottom: 64px; }
 }

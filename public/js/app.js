@@ -1,7 +1,7 @@
 import { PanZoom } from "./canvas.js";
 import {
   loadSeed, loadResults, allStandings, resolveBracket, matchWinner,
-  slotLabel, fmtDate, fmtTime, isToday,
+  slotLabel, fmtDate, fmtTime, isToday, tzAbbr,
 } from "./data.js";
 
 // ---- world layout: mirrored bracket, final in the middle -------------------
@@ -67,9 +67,10 @@ function groupCardHTML(g, standings) {
     const r = state.results[m.id];
     const score = scoreText(r);
     const live = r?.status === "LIVE";
+    const today = isToday(m.kickoff);
     return `
-    <div class="g-fix ${live ? "live" : ""} ${isToday(m.kickoff) ? "today" : ""}">
-      <span class="g-fix-date">${fmtDate(m.kickoff).replace(/^\w+ /, "")}</span>
+    <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""}">
+      <span class="g-fix-date">${today ? "Today" : fmtDate(m.kickoff).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}">${score ?? fmtTime(m.kickoff)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
@@ -111,15 +112,16 @@ function koCardHTML(m, resolved) {
   const teams = resolved[m.id];
   const { winner } = matchWinner(m, resolved, state.results);
   const live = r?.status === "LIVE";
+  const today = isToday(m.kickoff);
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
-    live ? "is-live" : "", isToday(m.kickoff) ? "is-today" : "",
+    live ? "is-live" : "", today ? "is-today" : "",
   ].join(" ");
   return `
   <div class="${cls}" id="match-${m.id}">
     <div class="k-meta">
-      <span>M${m.id} · ${fmtDate(m.kickoff)} · ${fmtTime(m.kickoff)}</span>
+      <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(m.kickoff)} · ${fmtTime(m.kickoff)}</span>
       <span class="k-city">${live ? '<span class="live-dot"></span> LIVE' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
@@ -245,14 +247,21 @@ function render() {
 function bindChrome() {
   document.getElementById("nav-chips").addEventListener("click", (e) => {
     const goto = e.target.dataset.goto;
-    const rects = innerWidth < 700 ? sectionsNarrow : sections;
-    if (goto && rects[goto]) panzoom.flyTo(rects[goto], innerWidth < 700 ? 14 : 60);
+    const narrow = panzoom.view().w < 700;
+    const rects = narrow ? sectionsNarrow : sections;
+    if (goto && rects[goto]) panzoom.flyTo(rects[goto], narrow ? 14 : 60);
   });
-  document.getElementById("zoom-in").onclick = () =>
-    panzoom.zoomAt(innerWidth / 2, innerHeight / 2, 1.35);
-  document.getElementById("zoom-out").onclick = () =>
-    panzoom.zoomAt(innerWidth / 2, innerHeight / 2, 1 / 1.35);
+  document.getElementById("zoom-in").onclick = () => panzoom.zoomCenter(1.35);
+  document.getElementById("zoom-out").onclick = () => panzoom.zoomCenter(1 / 1.35);
   document.getElementById("zoom-fit").onclick = () => panzoom.flyTo(sections.all, 40);
+
+  document.getElementById("rotate").onclick = () => {
+    const vp = document.getElementById("viewport");
+    panzoom.rotated = vp.classList.toggle("rotated");
+    // refit: rotated mode reads like landscape, so show everything
+    if (panzoom.rotated) panzoom.flyTo(sections.all, 24, 0);
+    else phoneGroupsView();
+  };
 
   const hint = document.getElementById("hint");
   setTimeout(() => hint.classList.add("fade"), 6000);
@@ -263,9 +272,19 @@ function bindChrome() {
 function setStatus() {
   const pill = document.getElementById("status-pill");
   const n = Object.values(state.results).filter((r) => r.hs != null).length;
-  if (!n) { pill.hidden = true; return; }
   pill.hidden = false;
-  pill.textContent = `${n} result${n === 1 ? "" : "s"} in`;
+  pill.textContent = tzAbbr
+    ? `All times ${tzAbbr}${n ? ` · ${n} result${n === 1 ? "" : "s"} in` : ""}`
+    : n ? `${n} result${n === 1 ? "" : "s"} in` : "";
+  if (!pill.textContent) pill.hidden = true;
+}
+
+// phone portrait default: one group column filling the width
+function phoneGroupsView() {
+  const groupsTop = MID_Y - (3 * G.h + 2 * G.gapY) / 2;
+  const v = panzoom.view();
+  const s = (v.w - 28) / (G.w + 16);
+  panzoom.animateTo(14 - (COL_X.groupsL[0] - 8) * s, 128 - (groupsTop - 56) * s, s, 0);
 }
 
 async function refresh() {
@@ -289,13 +308,8 @@ async function refresh() {
 
   // initial view: everything on desktop; on mobile fill the width with the
   // first group column, anchored just below the header
-  if (innerWidth < 700) {
-    const groupsTop = MID_Y - (3 * G.h + 2 * G.gapY) / 2;
-    const s = (innerWidth - 28) / (G.w + 16);
-    panzoom.animateTo(14 - (COL_X.groupsL[0] - 8) * s, 128 - (groupsTop - 56) * s, s, 0);
-  } else {
-    panzoom.flyTo(sections.all, 50, 0);
-  }
+  if (innerWidth < 700) phoneGroupsView();
+  else panzoom.flyTo(sections.all, 50, 0);
 
   setInterval(refresh, 60_000);
 })();

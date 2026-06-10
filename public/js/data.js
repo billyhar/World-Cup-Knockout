@@ -179,6 +179,16 @@ export function slotLabel(slot) {
   return slot;
 }
 
+// Viewer's timezone abbreviation during the tournament (e.g. BST, EDT, CEST).
+// Uses a tournament date so DST resolves correctly whatever today is.
+export const tzAbbr = (() => {
+  try {
+    return new Intl.DateTimeFormat(undefined, { timeZoneName: "short" })
+      .formatToParts(new Date("2026-06-11T19:00:00Z"))
+      .find((p) => p.type === "timeZoneName")?.value ?? "";
+  } catch { return ""; }
+})();
+
 export const fmtDate = (iso) =>
   new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric" })
     .format(new Date(iso));
