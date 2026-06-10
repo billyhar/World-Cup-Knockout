@@ -44,27 +44,56 @@ export default async function handler(req) {
 
   // Load our seed to map API matches -> our match ids. Group games map by
   // team pair; knockout pairings aren't known upfront, so those map by
-  // kickoff datetime (unique across the knockout schedule).
+  // stage + nearest kickoff (robust to rescheduled times).
   const seedUrl = new URL("/data/seed.json", req.url);
   const seed = await (await fetch(seedUrl)).json();
+  const STAGE = {
+    LAST_32: "r32", LAST_16: "r16", QUARTER_FINALS: "qf",
+    SEMI_FINALS: "sf", THIRD_PLACE: "third", FINAL: "final",
+  };
   const byPair = {};
-  const koByDate = {};
+  const koByStage = {};
+  const kickoffOf = {};
   for (const m of seed.matches) {
+    kickoffOf[m.id] = m.kickoff;
     if (m.stage === "group") byPair[`${m.home}|${m.away}`] = m.id;
-    else koByDate[m.kickoff] = m.id;
+    else (koByStage[m.stage] ??= []).push(m.id);
   }
 
+  const claimed = new Set();
+  const matchId = (m) => {
+    if (m.stage === "GROUP_STAGE") {
+      const h = normalize(m.homeTeam?.name);
+      const a = normalize(m.awayTeam?.name);
+      return h && a ? byPair[`${h}|${a}`] ?? byPair[`${a}|${h}`] : null;
+    }
+    const pool = koByStage[STAGE[m.stage]] ?? [];
+    const t = Date.parse(m.utcDate);
+    let best = null, bestDelta = Infinity;
+    for (const id of pool) {
+      if (claimed.has(id)) continue;
+      const d = Math.abs(Date.parse(kickoffOf[id]) - t);
+      if (d < bestDelta) { best = id; bestDelta = d; }
+    }
+    if (best == null || bestDelta > 48 * 3600 * 1000) return null;
+    claimed.add(best);
+    return best;
+  };
+
   const results = {};
-  for (const m of data.matches ?? []) {
-    if (!["IN_PLAY", "PAUSED", "FINISHED"].includes(m.status)) continue;
-    const h = normalize(m.homeTeam?.name);
-    const a = normalize(m.awayTeam?.name);
-    const isGroup = m.stage === "GROUP_STAGE";
-    const id = isGroup
-      ? (h && a && (byPair[`${h}|${a}`] ?? byPair[`${a}|${h}`]))
-      : koByDate[m.utcDate];
+  const kicks = {}; // schedule corrections: our id -> updated kickoff
+  const apiMatches = (data.matches ?? [])
+    .slice()
+    .sort((x, y) => Date.parse(x.utcDate) - Date.parse(y.utcDate));
+  for (const m of apiMatches) {
+    const id = matchId(m);
     if (!id) continue;
-    const flipped = isGroup && !byPair[`${h}|${a}`];
+
+    if (m.utcDate && m.utcDate !== kickoffOf[id]) kicks[id] = m.utcDate;
+
+    if (!["IN_PLAY", "PAUSED", "FINISHED"].includes(m.status)) continue;
+    const flipped = m.stage === "GROUP_STAGE" &&
+      !byPair[`${normalize(m.homeTeam?.name)}|${normalize(m.awayTeam?.name)}`];
     const ft = m.score?.fullTime ?? {};
     const pens = m.score?.penalties ?? {};
     const entry = {
@@ -76,7 +105,8 @@ export default async function handler(req) {
       entry.hp = flipped ? pens.away : pens.home;
       entry.ap = flipped ? pens.home : pens.away;
     }
+    if (m.score?.duration && m.score.duration !== "REGULAR") entry.et = true;
     if (entry.hs != null && entry.as != null) results[id] = entry;
   }
-  return json({ enabled: true, results });
+  return json({ enabled: true, results, kicks });
 }

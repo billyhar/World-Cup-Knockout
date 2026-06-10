@@ -244,6 +244,7 @@ html, body {
 }
 .k-city { color: var(--ink); white-space: nowrap; }
 .k-live { color: var(--live); font-weight: 800; }
+.aet { color: var(--amber); font-weight: 800; }
 
 .today-tag { color: var(--accent); font-weight: 800; }
 .g-fix.today .g-fix-date { color: var(--accent); font-weight: 700; }

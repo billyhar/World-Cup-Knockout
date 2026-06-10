@@ -9,13 +9,14 @@ export async function loadSeed() {
 export async function loadResults() {
   // Manual results (Netlify Blobs) + optional live API, merged.
   // Manual entries win over live so mistakes upstream can be corrected.
-  const out = { results: {}, overrides: {} };
+  const out = { results: {}, overrides: {}, kicks: {} };
   const [live, manual] = await Promise.allSettled([
     fetch("/api/live").then((r) => (r.ok ? r.json() : null)),
     fetch("/api/results").then((r) => (r.ok ? r.json() : null)),
   ]);
   if (live.status === "fulfilled" && live.value?.results) {
     Object.assign(out.results, live.value.results);
+    out.kicks = live.value.kicks ?? {};
   }
   if (manual.status === "fulfilled" && manual.value) {
     Object.assign(out.results, manual.value.results ?? {});

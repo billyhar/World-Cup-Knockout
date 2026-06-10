@@ -48,6 +48,9 @@ const flagImg = (code) => {
 
 const scoreText = (r) => (r == null || r.hs == null ? null : `${r.hs}–${r.as}`);
 
+// kickoff with any live schedule correction from the API applied
+const kick = (m) => state.kicks?.[m.id] ?? m.kickoff;
+
 // ---- group cards -----------------------------------------------------------
 
 function groupCardHTML(g, standings) {
@@ -67,13 +70,14 @@ function groupCardHTML(g, standings) {
     const r = state.results[m.id];
     const score = scoreText(r);
     const live = r?.status === "LIVE";
-    const today = isToday(m.kickoff);
+    const ko = kick(m);
+    const today = isToday(ko);
     const done = !!score && !live;
     return `
     <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""} ${done ? "done" : ""}">
-      <span class="g-fix-date">${today ? "Today" : fmtDate(m.kickoff).replace(/^\w+ /, "")}</span>
+      <span class="g-fix-date">${today ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
-      <span class="g-fix-score ${score ? "has" : ""}">${score ?? fmtTime(m.kickoff)}</span>
+      <span class="g-fix-score ${score ? "has" : ""}">${score ?? fmtTime(ko)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
       ${live ? '<span class="live-dot"></span>' : ""}
     </div>`;
@@ -113,17 +117,19 @@ function koCardHTML(m, resolved) {
   const teams = resolved[m.id];
   const { winner } = matchWinner(m, resolved, state.results);
   const live = r?.status === "LIVE";
-  const today = isToday(m.kickoff);
+  const ko = kick(m);
+  const today = isToday(ko);
   const done = r?.hs != null && !live;
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
     live ? "is-live" : "", today ? "is-today" : "", done ? "is-done" : "",
   ].join(" ");
+  const aet = r?.et ? ' · <span class="aet">aet</span>' : "";
   return `
   <div class="${cls}" id="match-${m.id}">
     <div class="k-meta">
-      <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(m.kickoff)} · ${fmtTime(m.kickoff)}</span>
+      <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
       <span class="k-city">${live ? '<span class="live-dot"></span> <b class="k-live">Live</b>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
