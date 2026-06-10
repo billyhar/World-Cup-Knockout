@@ -4,40 +4,49 @@ import {
   slotLabel, fmtDate, fmtTime, isToday,
 } from "./data.js";
 
-// ---- world layout constants ------------------------------------------------
-const G = { x: 60, y: 200, w: 380, h: 478, gapX: 44, gapY: 48, cols: 4 };
-const K = { x: 2080, y: 200, w: 304, h: 104, gapY: 30, colStep: 384 };
-const WORLD = { w: 3960, h: 2400 };
+// ---- world layout: mirrored bracket, final in the middle -------------------
+// groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
+const G = { w: 380, h: 478, gapX: 44, gapY: 48 };
+const K = { w: 304, h: 104, gapY: 30 };
+const MID_Y = 980;
+const WORLD = { w: 5260, h: 1960 };
 
-// Bracket wiring: column order top→bottom, derived from who feeds whom.
-const R32_ORDER = ["74", "77", "73", "75", "83", "84", "81", "82", "76", "78", "79", "80", "86", "88", "85", "87"];
-const R16_ORDER = ["89", "90", "93", "94", "91", "92", "95", "96"];
-const QF_ORDER = ["97", "98", "99", "100"];
-const SF_ORDER = ["101", "102"];
+const COL_X = {
+  groupsL: [60, 484],
+  r32L: 940, r16L: 1324, qfL: 1708, sfL: 2092,
+  final: 2476,
+  sfR: 2860, qfR: 3244, r16R: 3628, r32R: 4012,
+  groupsR: [4396, 4820],
+};
+
+// Column order top→bottom per side, derived from who feeds whom.
+const R32_L = ["74", "77", "73", "75", "83", "84", "81", "82"];
+const R32_R = ["76", "78", "79", "80", "86", "88", "85", "87"];
+const R16_L = ["89", "90", "93", "94"], R16_R = ["91", "92", "95", "96"];
+const QF_L = ["97", "98"], QF_R = ["99", "100"];
 const FEEDERS = {
   89: ["74", "77"], 90: ["73", "75"], 91: ["76", "78"], 92: ["79", "80"],
   93: ["83", "84"], 94: ["81", "82"], 95: ["86", "88"], 96: ["85", "87"],
   97: ["89", "90"], 98: ["93", "94"], 99: ["91", "92"], 100: ["95", "96"],
   101: ["97", "98"], 102: ["99", "100"], 104: ["101", "102"],
 };
+const GROUPS_L = ["A", "B", "C", "D", "E", "F"];
+const GROUPS_R = ["G", "H", "I", "J", "K", "L"];
 
 let seed, panzoom;
 let state = { results: {}, overrides: {} };
 const world = document.getElementById("world");
-const sections = {}; // name -> world rect for nav
+const sections = {}; // name -> world rect for nav (wide screens)
+const sectionsNarrow = {}; // phone variant: one column per round, readable zoom
 
 const flagImg = (code) => {
   const f = seed.teams[code]?.flag;
   return f
-    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="" loading="lazy">`
+    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="" loading="lazy" decoding="async">`
     : `<span class="flag flag-tbd"></span>`;
 };
 
-const scoreText = (r) => {
-  if (r == null || r.hs == null) return null;
-  let s = `${r.hs}–${r.as}`;
-  return s;
-};
+const scoreText = (r) => (r == null || r.hs == null ? null : `${r.hs}–${r.as}`);
 
 // ---- group cards -----------------------------------------------------------
 
@@ -102,11 +111,10 @@ function koCardHTML(m, resolved) {
   const teams = resolved[m.id];
   const { winner } = matchWinner(m, resolved, state.results);
   const live = r?.status === "LIVE";
-  const today = isToday(m.kickoff);
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
-    live ? "is-live" : "", today ? "is-today" : "",
+    live ? "is-live" : "", isToday(m.kickoff) ? "is-today" : "",
   ].join(" ");
   return `
   <div class="${cls}" id="match-${m.id}">
@@ -126,70 +134,75 @@ function render() {
   const { resolved } = resolveBracket(seed, state.results, state.overrides, standings);
   const ko = Object.fromEntries(seed.matches.filter((m) => m.stage !== "group").map((m) => [m.id, m]));
 
-  let html = "";
-  html += `<h1 class="zone-title" style="left:${G.x}px;top:80px">Group Stage</h1>`;
-  html += `<h1 class="zone-title" style="left:${K.x}px;top:80px">Knockout Stage</h1>`;
-
-  // group cards
-  const groups = Object.keys(seed.groups);
   const pos = {};
-  groups.forEach((g, i) => {
-    const col = i % G.cols, row = Math.floor(i / G.cols);
-    const x = G.x + col * (G.w + G.gapX);
-    const y = G.y + row * (G.h + G.gapY);
-    pos[`group-${g}`] = { x, y };
-  });
 
-  // knockout positions
-  const colX = (c) => K.x + c * K.colStep;
-  const colHeights = R32_ORDER.length * (K.h + K.gapY) - K.gapY;
-  R32_ORDER.forEach((id, i) => { pos[`match-${id}`] = { x: colX(0), y: K.y + i * (K.h + K.gapY) }; });
+  // groups: 2 cols × 3 rows per side, vertically centred on the bracket
+  const groupsTop = MID_Y - (3 * G.h + 2 * G.gapY) / 2;
+  const placeGroups = (letters, cols) => letters.forEach((g, i) => {
+    pos[`group-${g}`] = { x: cols[i % 2], y: groupsTop + Math.floor(i / 2) * (G.h + G.gapY) };
+  });
+  placeGroups(GROUPS_L, COL_X.groupsL);
+  placeGroups(GROUPS_R, COL_X.groupsR);
+
+  // knockout columns
+  const r32Top = MID_Y - (8 * (K.h + K.gapY) - K.gapY) / 2;
+  R32_L.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32L, y: r32Top + i * (K.h + K.gapY) }; });
+  R32_R.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32R, y: r32Top + i * (K.h + K.gapY) }; });
   const centerOf = (id) => pos[`match-${id}`].y + K.h / 2;
-  const place = (order, col) => order.forEach((id) => {
+  const place = (ids, x) => ids.forEach((id) => {
     const [a, b] = FEEDERS[id];
-    pos[`match-${id}`] = { x: colX(col), y: (centerOf(a) + centerOf(b)) / 2 - K.h / 2 };
+    pos[`match-${id}`] = { x, y: (centerOf(a) + centerOf(b)) / 2 - K.h / 2 };
   });
-  place(R16_ORDER, 1);
-  place(QF_ORDER, 2);
-  place(SF_ORDER, 3);
-  place(["104"], 4);
-  pos["match-103"] = { x: colX(4), y: pos["match-104"].y + K.h + 110 };
+  place(R16_L, COL_X.r16L); place(R16_R, COL_X.r16R);
+  place(QF_L, COL_X.qfL); place(QF_R, COL_X.qfR);
+  place(["101"], COL_X.sfL); place(["102"], COL_X.sfR);
+  place(["104"], COL_X.final);
+  pos["match-103"] = { x: COL_X.final, y: pos["match-104"].y + K.h + 130 };
 
-  // round labels
-  const roundLabels = [["Round of 32", 0], ["Round of 16", 1], ["Quarter-finals", 2], ["Semi-finals", 3], ["Final", 4]];
-  for (const [label, c] of roundLabels) {
-    html += `<div class="round-label" style="left:${colX(c)}px;top:${K.y - 44}px;width:${K.w}px">${label}</div>`;
+  let html = "";
+
+  // round labels above each column's top card
+  const labelCols = [
+    ["Round of 32", COL_X.r32L, R32_L], ["Round of 32", COL_X.r32R, R32_R],
+    ["Round of 16", COL_X.r16L, R16_L], ["Round of 16", COL_X.r16R, R16_R],
+    ["Quarter-finals", COL_X.qfL, QF_L], ["Quarter-finals", COL_X.qfR, QF_R],
+    ["Semi-final", COL_X.sfL, ["101"]], ["Semi-final", COL_X.sfR, ["102"]],
+    ["Final", COL_X.final, ["104"]],
+  ];
+  for (const [label, x, ids] of labelCols) {
+    const top = Math.min(...ids.map((id) => pos[`match-${id}`].y));
+    html += `<div class="round-label" style="left:${x}px;top:${top - 42}px;width:${K.w}px">${label}</div>`;
   }
-  html += `<div class="round-label minor" style="left:${colX(4)}px;top:${pos["match-103"].y - 30}px;width:${K.w}px">Third place</div>`;
+  html += `<div class="round-label minor" style="left:${COL_X.final}px;top:${pos["match-103"].y - 30}px;width:${K.w}px">Third place</div>`;
 
-  // connectors
+  // connectors (mirrored: works in both directions)
   let paths = "";
-  const link = (childId, parentId) => {
-    const c = pos[`match-${childId}`], p = pos[`match-${parentId}`];
-    const x1 = c.x + K.w, y1 = c.y + K.h / 2;
-    const x2 = p.x, y2 = p.y + K.h / 2;
-    const mid = x1 + (x2 - x1) / 2;
-    return `<path d="M ${x1} ${y1} H ${mid} V ${y2} H ${x2}"/>`;
-  };
   for (const [parent, kids] of Object.entries(FEEDERS)) {
-    for (const kid of kids) paths += link(kid, parent);
+    const p = pos[`match-${parent}`];
+    for (const kid of kids) {
+      const c = pos[`match-${kid}`];
+      const cy = c.y + K.h / 2, py = p.y + K.h / 2;
+      const x1 = p.x >= c.x + K.w ? c.x + K.w : c.x;
+      const x2 = p.x >= c.x + K.w ? p.x : p.x + K.w;
+      const mid = (x1 + x2) / 2;
+      paths += `<path d="M ${x1} ${cy} H ${mid} V ${py} H ${x2}"/>`;
+    }
   }
   html += `<svg class="connectors" width="${WORLD.w}" height="${WORLD.h}" viewBox="0 0 ${WORLD.w} ${WORLD.h}">${paths}</svg>`;
 
-  for (const g of groups) html += groupCardHTML(g, standings);
+  for (const g of Object.keys(seed.groups)) html += groupCardHTML(g, standings);
   for (const m of Object.values(ko)) html += koCardHTML(m, resolved);
 
-  // champion banner
+  // champion banner above the final
   const finalWinner = matchWinner(ko["104"], resolved, state.results).winner;
   if (finalWinner) {
-    html += `<div class="champion" style="left:${pos["match-104"].x - 20}px;top:${pos["match-104"].y - 130}px">
+    html += `<div class="champion" style="left:${pos["match-104"].x - 40}px;top:${pos["match-104"].y - 150}px">
       🏆 ${flagImg(finalWinner)} <b>${seed.teams[finalWinner].name}</b> — World Champions
     </div>`;
   }
 
   world.innerHTML = html;
 
-  // apply positions
   for (const [id, p] of Object.entries(pos)) {
     const el = document.getElementById(id);
     if (!el) continue;
@@ -199,14 +212,32 @@ function render() {
     else { el.style.width = `${K.w}px`; }
   }
 
-  // nav rects
-  const groupsRect = { x: G.x - 40, y: 60, w: G.cols * (G.w + G.gapX), h: G.y + 3 * (G.h + G.gapY) };
-  sections.groups = groupsRect;
-  sections.r32 = { x: colX(0) - 60, y: K.y - 80, w: K.w + 540, h: colHeights + 120 };
-  sections.r16 = { x: colX(1) - 60, y: K.y - 80, w: K.w + 540, h: colHeights + 120 };
-  sections.qf = { x: colX(2) - 60, y: K.y - 80, w: K.w + 540, h: colHeights + 120 };
-  sections.final = { x: colX(3) - 80, y: pos["match-104"].y - 360, w: K.colStep + K.w + 160, h: 900 };
-  sections.all = { x: 0, y: 0, w: WORLD.w, h: WORLD.h };
+  // nav rects: each round spans its two mirrored columns
+  const span = (xl, xr, ids) => {
+    const ys = ids.map((id) => pos[`match-${id}`].y);
+    const top = Math.min(...ys), bottom = Math.max(...ys) + K.h;
+    return { x: xl - 60, y: top - 90, w: xr + K.w - xl + 120, h: bottom - top + 150 };
+  };
+  sections.r32 = span(COL_X.r32L, COL_X.r32R, [...R32_L, ...R32_R]);
+  sections.r16 = span(COL_X.r16L, COL_X.r16R, [...R16_L, ...R16_R]);
+  sections.qf = span(COL_X.qfL, COL_X.qfR, [...QF_L, ...QF_R]);
+  sections.sf = span(COL_X.sfL, COL_X.sfR, ["101", "102"]);
+  sections.final = { x: COL_X.final - 220, y: pos["match-104"].y - 320, w: K.w + 440, h: 920 };
+  sections.groups = { x: 0, y: groupsTop - 90, w: COL_X.groupsL[1] + G.w + 60, h: 3 * (G.h + G.gapY) + 140 };
+  sections.all = { x: 0, y: groupsTop - 70, w: WORLD.w, h: 3 * (G.h + G.gapY) - G.gapY + 140 };
+
+  // phones: fly to the left column of each round instead of the full span
+  const colRect = (x, ids) => {
+    const ys = ids.map((id) => pos[`match-${id}`].y);
+    const top = Math.min(...ys), bottom = Math.max(...ys) + K.h;
+    return { x: x - 26, y: top - 64, w: K.w + 52, h: bottom - top + 110 };
+  };
+  sectionsNarrow.r32 = colRect(COL_X.r32L, R32_L);
+  sectionsNarrow.r16 = colRect(COL_X.r16L, R16_L);
+  sectionsNarrow.qf = colRect(COL_X.qfL, QF_L);
+  sectionsNarrow.sf = colRect(COL_X.sfL, ["101"]);
+  sectionsNarrow.final = colRect(COL_X.final, ["104", "103"]);
+  sectionsNarrow.all = sections.all;
 }
 
 // ---- chrome ------------------------------------------------------------------
@@ -214,7 +245,8 @@ function render() {
 function bindChrome() {
   document.getElementById("nav-chips").addEventListener("click", (e) => {
     const goto = e.target.dataset.goto;
-    if (goto && sections[goto]) panzoom.flyTo(sections[goto]);
+    const rects = innerWidth < 700 ? sectionsNarrow : sections;
+    if (goto && rects[goto]) panzoom.flyTo(rects[goto], innerWidth < 700 ? 14 : 60);
   });
   document.getElementById("zoom-in").onclick = () =>
     panzoom.zoomAt(innerWidth / 2, innerHeight / 2, 1.35);
@@ -255,13 +287,14 @@ async function refresh() {
   panzoom = new PanZoom(document.getElementById("viewport"), world, WORLD);
   bindChrome();
 
-  // initial view: groups overview on desktop; on mobile fill the width with
-  // one group column, anchored just below the header
+  // initial view: everything on desktop; on mobile fill the width with the
+  // first group column, anchored just below the header
   if (innerWidth < 700) {
+    const groupsTop = MID_Y - (3 * G.h + 2 * G.gapY) / 2;
     const s = (innerWidth - 28) / (G.w + 16);
-    panzoom.animateTo(14 - (G.x - 8) * s, 108 - (G.y - 56) * s, s, 0);
+    panzoom.animateTo(14 - (COL_X.groupsL[0] - 8) * s, 128 - (groupsTop - 56) * s, s, 0);
   } else {
-    panzoom.flyTo(sections.groups, 40, 0);
+    panzoom.flyTo(sections.all, 50, 0);
   }
 
   setInterval(refresh, 60_000);

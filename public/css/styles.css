@@ -44,23 +44,12 @@ html, body {
 
 #world {
   position: absolute;
-  width: 3960px;
-  height: 2400px;
+  width: 5260px;
+  height: 1960px;
   transform-origin: 0 0;
+  will-change: transform;
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.2px, transparent 1.2px);
   background-size: 36px 36px;
-}
-
-.zone-title {
-  position: absolute;
-  font-size: 64px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.16);
-  text-transform: uppercase;
-  user-select: none;
-  white-space: nowrap;
 }
 
 .round-label {
@@ -89,8 +78,11 @@ html, body {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 40%), var(--card);
   border: 1px solid var(--card-edge);
   border-radius: var(--radius);
-  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+  content-visibility: auto;
 }
+.group-card { contain-intrinsic-size: 380px 478px; }
+.ko-card { contain-intrinsic-size: 304px 104px; }
 
 .flag {
   width: 26px;
@@ -318,10 +310,12 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  padding: 14px 18px;
-  justify-content: space-between;
+  padding: 14px 18px 26px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(7, 9, 15, 0.92), rgba(7, 9, 15, 0));
+  background: linear-gradient(180deg, rgba(7, 9, 15, 0.95) 40%, rgba(7, 9, 15, 0));
 }
 .chrome-top > * { pointer-events: auto; }
 
@@ -345,7 +339,6 @@ html, body {
   border-radius: 99px;
   padding: 8px 15px;
   cursor: pointer;
-  backdrop-filter: blur(10px);
   transition: background 0.15s, border-color 0.15s;
 }
 .nav-chips button:hover, .chrome-zoom button:hover {
@@ -377,7 +370,6 @@ html, body {
   border: 1px solid var(--card-edge);
   border-radius: 99px;
   padding: 7px 14px;
-  backdrop-filter: blur(10px);
 }
 
 .hint {
@@ -392,7 +384,6 @@ html, body {
   border: 1px solid var(--card-edge);
   border-radius: 99px;
   padding: 8px 16px;
-  backdrop-filter: blur(10px);
   transition: opacity 0.8s;
   pointer-events: none;
   white-space: nowrap;
