@@ -63,6 +63,8 @@ html, body {
   height: 1960px;
   transform-origin: 0 0;
   will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.2px, transparent 1.2px);
   background-size: 36px 36px;
 }
@@ -198,15 +200,17 @@ html, body {
 }
 .g-fix.today { background: rgba(47, 224, 140, 0.05); box-shadow: inset 0 0 0 1px rgba(47, 224, 140, 0.18); }
 .g-fix.live { background: rgba(255, 77, 106, 0.07); }
-.g-fix-date { color: var(--ink-faint); font-size: 11px; }
+.g-fix-date { color: var(--ink); font-size: 11px; }
 .g-fix-team {
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 600;
-  color: var(--ink-dim);
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
+.g-fix.done .g-fix-date, .g-fix.done .g-fix-team { color: var(--ink-faint); }
+.g-fix.done .g-fix-score.has { color: var(--ink-dim); background: rgba(255, 255, 255, 0.03); }
 .g-fix-team.home { justify-content: flex-end; }
 .g-fix-team .flag { width: 20px; height: 15px; }
 .g-fix-score {
@@ -232,17 +236,23 @@ html, body {
 .k-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 10.5px;
+  gap: 8px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink);
   margin-bottom: 8px;
 }
-.k-city { color: var(--ink-faint); }
+.k-city { color: var(--ink); white-space: nowrap; }
+.k-live { color: var(--live); font-weight: 800; }
 
 .today-tag { color: var(--accent); font-weight: 800; }
 .g-fix.today .g-fix-date { color: var(--accent); font-weight: 700; }
+
+/* played matches recede so upcoming ones stand out */
+.ko-card.is-done .k-meta, .ko-card.is-done .k-city { color: var(--ink-faint); }
+.ko-card.is-done .k-name { color: var(--ink-dim); }
+.ko-card.is-done .k-row.win .k-name { color: var(--accent); opacity: 0.85; }
+.ko-card.is-done .k-score { color: var(--ink-dim); }
 
 .k-row {
   display: flex;
@@ -277,8 +287,12 @@ html, body {
 .pens::before { content: "("; }
 .pens::after { content: " p)"; }
 
-.ko-card.is-today { box-shadow: 0 0 0 1.5px rgba(47, 224, 140, 0.4), 0 18px 40px -18px rgba(0, 0, 0, 0.55); }
-.ko-card.is-live { box-shadow: 0 0 0 1.5px rgba(255, 77, 106, 0.55), 0 0 30px -6px rgba(255, 77, 106, 0.35); }
+.ko-card.is-today { box-shadow: 0 0 0 1.5px rgba(47, 224, 140, 0.4), 0 6px 16px -8px rgba(0, 0, 0, 0.5); }
+.ko-card.is-live { animation: card-pulse 1.6s ease-in-out infinite; }
+@keyframes card-pulse {
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(255, 77, 106, 0.5), 0 0 20px -6px rgba(255, 77, 106, 0.3); }
+  50% { box-shadow: 0 0 0 2.5px rgba(255, 77, 106, 0.95), 0 0 34px -4px rgba(255, 77, 106, 0.65); }
+}
 
 .live-dot {
   display: inline-block;
@@ -363,6 +377,13 @@ html, body {
   background: rgba(47, 224, 140, 0.12);
   border-color: rgba(47, 224, 140, 0.4);
 }
+.nav-chips button.active {
+  background: rgba(47, 224, 140, 0.14);
+  border-color: rgba(47, 224, 140, 0.5);
+  color: var(--accent);
+}
+.side-chips { display: none; }
+.side-chips[hidden] { display: none; }
 
 .chrome-zoom {
   bottom: 18px;
@@ -412,6 +433,46 @@ html, body {
 
 /* ── mobile ────────────────────────────────────────────────────────────── */
 
+.rotate-tip {
+  position: fixed;
+  z-index: 11;
+  right: 12px;
+  bottom: 218px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  max-width: 230px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  background: rgba(20, 24, 38, 0.96);
+  border: 1px solid rgba(47, 224, 140, 0.4);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+}
+.rotate-tip::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  rotate: 45deg;
+  background: rgba(20, 24, 38, 0.96);
+  border-right: 1px solid rgba(47, 224, 140, 0.4);
+  border-bottom: 1px solid rgba(47, 224, 140, 0.4);
+}
+.rotate-tip button {
+  background: none;
+  border: 0;
+  color: var(--ink-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px;
+}
+.rotate-tip[hidden] { display: none; }
+
 @media (max-width: 700px) {
   .chrome-top { padding: 10px 12px; flex-wrap: wrap; }
   .brand-text span { display: none; }
@@ -421,6 +482,8 @@ html, body {
   .chrome-zoom { bottom: 14px; right: 12px; }
   .chrome-zoom button { width: 40px; height: 40px; }
   #rotate { display: block; font-size: 17px; }
+  .side-chips:not([hidden]) { display: flex; }
+  .rotate-tip:not([hidden]) { display: flex; }
   .chrome-status { bottom: 16px; left: 12px; }
   .hint { bottom: 64px; }
 }

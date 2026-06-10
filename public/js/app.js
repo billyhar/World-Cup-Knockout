@@ -68,8 +68,9 @@ function groupCardHTML(g, standings) {
     const score = scoreText(r);
     const live = r?.status === "LIVE";
     const today = isToday(m.kickoff);
+    const done = !!score && !live;
     return `
-    <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""}">
+    <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""} ${done ? "done" : ""}">
       <span class="g-fix-date">${today ? "Today" : fmtDate(m.kickoff).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}">${score ?? fmtTime(m.kickoff)}</span>
@@ -113,16 +114,17 @@ function koCardHTML(m, resolved) {
   const { winner } = matchWinner(m, resolved, state.results);
   const live = r?.status === "LIVE";
   const today = isToday(m.kickoff);
+  const done = r?.hs != null && !live;
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
-    live ? "is-live" : "", today ? "is-today" : "",
+    live ? "is-live" : "", today ? "is-today" : "", done ? "is-done" : "",
   ].join(" ");
   return `
   <div class="${cls}" id="match-${m.id}">
     <div class="k-meta">
       <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(m.kickoff)} · ${fmtTime(m.kickoff)}</span>
-      <span class="k-city">${live ? '<span class="live-dot"></span> LIVE' : m.city}</span>
+      <span class="k-city">${live ? '<span class="live-dot"></span> <b class="k-live">Live</b>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
@@ -237,6 +239,9 @@ function render() {
   sectionsNarrow.r32 = colRect(COL_X.r32L, R32_L);
   sectionsNarrow.r16 = colRect(COL_X.r16L, R16_L);
   sectionsNarrow.qf = colRect(COL_X.qfL, QF_L);
+  sectionsNarrow.r32R = colRect(COL_X.r32R, R32_R);
+  sectionsNarrow.r16R = colRect(COL_X.r16R, R16_R);
+  sectionsNarrow.qfR = colRect(COL_X.qfR, QF_R);
   sectionsNarrow.sf = colRect(COL_X.sfL, ["101"]);
   sectionsNarrow.final = colRect(COL_X.final, ["104", "103"]);
   sectionsNarrow.all = sections.all;
@@ -245,19 +250,45 @@ function render() {
 // ---- chrome ------------------------------------------------------------------
 
 function bindChrome() {
+  const sideRow = document.getElementById("side-chips");
+  let currentRound = null;
+
   document.getElementById("nav-chips").addEventListener("click", (e) => {
     const goto = e.target.dataset.goto;
+    if (!goto) return;
     const narrow = panzoom.view().w < 700;
     const rects = narrow ? sectionsNarrow : sections;
-    if (goto && rects[goto]) panzoom.flyTo(rects[goto], narrow ? 14 : 60);
+    if (rects[goto]) panzoom.flyTo(rects[goto], narrow ? 14 : 60);
+    for (const b of e.currentTarget.children) b.classList.toggle("active", b === e.target);
+    // on phones, two-column rounds get a side 1 / side 2 switcher
+    currentRound = goto;
+    const sided = narrow && ["r32", "r16", "qf"].includes(goto);
+    sideRow.hidden = !sided;
+    if (sided) for (const b of sideRow.children) b.classList.toggle("active", b.dataset.side === "1");
+  });
+
+  sideRow.addEventListener("click", (e) => {
+    const side = e.target.dataset.side;
+    if (!side || !currentRound) return;
+    const rect = sectionsNarrow[side === "2" ? `${currentRound}R` : currentRound];
+    if (rect) panzoom.flyTo(rect, 14);
+    for (const b of sideRow.children) b.classList.toggle("active", b === e.target);
   });
   document.getElementById("zoom-in").onclick = () => panzoom.zoomCenter(1.35);
   document.getElementById("zoom-out").onclick = () => panzoom.zoomCenter(1 / 1.35);
   document.getElementById("zoom-fit").onclick = () => panzoom.flyTo(sections.all, 40);
 
+  // one-time rotate tip on phones
+  const tip = document.getElementById("rotate-tip");
+  if (innerWidth < 700 && !localStorage.getItem("wc-rotate-tip")) tip.hidden = false;
+  const dismissTip = () => { tip.hidden = true; localStorage.setItem("wc-rotate-tip", "1"); };
+  document.getElementById("rotate-tip-close").onclick = dismissTip;
+
   document.getElementById("rotate").onclick = () => {
+    dismissTip();
     const vp = document.getElementById("viewport");
     panzoom.rotated = vp.classList.toggle("rotated");
+    sideRow.hidden = true;
     // refit: rotated mode reads like landscape, so show everything
     if (panzoom.rotated) panzoom.flyTo(sections.all, 24, 0);
     else phoneGroupsView();

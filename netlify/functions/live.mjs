@@ -8,13 +8,15 @@
 const NAME_TO_CODE = {
   mexico: "MEX", "south africa": "RSA", "south korea": "KOR", "korea republic": "KOR",
   czechia: "CZE", "czech republic": "CZE", canada: "CAN", "bosnia and herzegovina": "BIH",
-  "bosnia & herzegovina": "BIH", qatar: "QAT", switzerland: "SUI", brazil: "BRA",
+  "bosnia & herzegovina": "BIH", "bosnia-herzegovina": "BIH", qatar: "QAT",
+  switzerland: "SUI", brazil: "BRA",
   morocco: "MAR", haiti: "HAI", scotland: "SCO", "united states": "USA", usa: "USA",
   paraguay: "PAR", australia: "AUS", turkey: "TUR", "türkiye": "TUR", germany: "GER",
   "curaçao": "CUW", curacao: "CUW", "ivory coast": "CIV", "côte d'ivoire": "CIV",
   ecuador: "ECU", netherlands: "NED", japan: "JPN", sweden: "SWE", tunisia: "TUN",
   belgium: "BEL", egypt: "EGY", iran: "IRN", "ir iran": "IRN", "new zealand": "NZL",
-  spain: "ESP", "cape verde": "CPV", "cabo verde": "CPV", "saudi arabia": "KSA",
+  spain: "ESP", "cape verde": "CPV", "cabo verde": "CPV", "cape verde islands": "CPV",
+  "saudi arabia": "KSA",
   uruguay: "URU", france: "FRA", senegal: "SEN", iraq: "IRQ", norway: "NOR",
   argentina: "ARG", algeria: "ALG", austria: "AUT", jordan: "JOR", portugal: "POR",
   "dr congo": "COD", "congo dr": "COD", uzbekistan: "UZB", colombia: "COL",
@@ -40,12 +42,16 @@ export default async function handler(req) {
   if (!res.ok) return json({ enabled: true, error: `upstream ${res.status}`, results: {} }, 502);
   const data = await res.json();
 
-  // Load our seed to map team pairs -> match ids
+  // Load our seed to map API matches -> our match ids. Group games map by
+  // team pair; knockout pairings aren't known upfront, so those map by
+  // kickoff datetime (unique across the knockout schedule).
   const seedUrl = new URL("/data/seed.json", req.url);
   const seed = await (await fetch(seedUrl)).json();
   const byPair = {};
+  const koByDate = {};
   for (const m of seed.matches) {
     if (m.stage === "group") byPair[`${m.home}|${m.away}`] = m.id;
+    else koByDate[m.kickoff] = m.id;
   }
 
   const results = {};
@@ -53,10 +59,12 @@ export default async function handler(req) {
     if (!["IN_PLAY", "PAUSED", "FINISHED"].includes(m.status)) continue;
     const h = normalize(m.homeTeam?.name);
     const a = normalize(m.awayTeam?.name);
-    if (!h || !a) continue;
-    const id = byPair[`${h}|${a}`] ?? byPair[`${a}|${h}`];
+    const isGroup = m.stage === "GROUP_STAGE";
+    const id = isGroup
+      ? (h && a && (byPair[`${h}|${a}`] ?? byPair[`${a}|${h}`]))
+      : koByDate[m.utcDate];
     if (!id) continue;
-    const flipped = !byPair[`${h}|${a}`];
+    const flipped = isGroup && !byPair[`${h}|${a}`];
     const ft = m.score?.fullTime ?? {};
     const pens = m.score?.penalties ?? {};
     const entry = {
