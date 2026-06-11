@@ -1,0 +1,30 @@
+# World Cup Knockout 2026
+
+> Real-time bracket and results tracker for the 2026 FIFA World Cup
+
+## About
+
+World Cup Knockout (worldcupknockout.football) is a live interactive canvas showing all 104 matches, 12 groups, and the complete knockout bracket for the 2026 FIFA World Cup, hosted across Canada, Mexico, and the USA (June–July 2026).
+
+## Content
+
+- Live and final match scores, updated every 60 seconds
+- Group standings with points, goal difference, and qualification status
+- Full knockout bracket: Round of 32 → Round of 16 → Quarter-finals → Semi-finals → Final
+- Match events: goals, yellow cards, and red cards with player names and minute
+- Kickoff times in the viewer's local timezone
+- 48 group-stage matches across 12 groups (A–L)
+- 56 knockout matches including Third Place play-off
+- Schedule corrections applied automatically when kickoff times change
+
+## Teams & Groups
+
+32 nations across 12 groups. Host nations: Canada (Group F), Mexico (Group A), USA (Group C).
+
+## Data
+
+Scores sourced from football-data.org (per-match detail endpoint) and ESPN public scoreboard. Schedule from official FIFA 2026 fixture list. Finished results are persisted server-side so they survive upstream outages.
+
+## Usage
+
+Public read-only tracker. No user accounts. Anonymous page-view analytics only.

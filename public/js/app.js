@@ -45,8 +45,9 @@ const sectionsNarrow = {}; // phone variant: one column per round, readable zoom
 
 const flagImg = (code) => {
   const f = seed.teams[code]?.flag;
+  const name = seed.teams[code]?.name ?? code;
   return f
-    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="" loading="lazy" decoding="async">`
+    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="${esc(name)}" loading="lazy" decoding="async">`
     : `<span class="flag flag-tbd"></span>`;
 };
 
