@@ -2,8 +2,15 @@
 // World Cup). Set FOOTBALL_DATA_TOKEN in Netlify env to enable; without it
 // the site runs purely on manually-entered results.
 //
-// Maps football-data.org matches onto our match ids by stage + team pair and
-// returns the same shape as manually-entered results.
+// football-data.org's bulk list endpoints serve aggressively cached
+// responses: statuses can be stale and scores are often stripped (null)
+// even for FINISHED matches. The per-match detail endpoint is fresh. So we
+// use the bulk list only to map API matches onto our match ids and catch
+// schedule changes, fetch details for matches that are (or should be, by
+// the clock) live or just finished, and persist finished scores to Netlify
+// Blobs so they survive upstream cache weirdness and outages.
+
+import { getStore } from "@netlify/blobs";
 
 const NAME_TO_CODE = {
   mexico: "MEX", "south africa": "RSA", "south korea": "KOR", "korea republic": "KOR",
@@ -32,15 +39,45 @@ const json = (body, status = 200) =>
 const normalize = (name) =>
   NAME_TO_CODE[name?.toLowerCase().replace(/\s+fc$/, "").trim()] ?? null;
 
+// Convert an API match into our result entry shape, or null if it carries
+// no usable score yet.
+const buildEntry = (m, byPair) => {
+  if (!["IN_PLAY", "PAUSED", "FINISHED"].includes(m.status)) return null;
+  const flipped = m.stage === "GROUP_STAGE" &&
+    !byPair[`${normalize(m.homeTeam?.name)}|${normalize(m.awayTeam?.name)}`];
+  const ft = m.score?.fullTime ?? {};
+  const pens = m.score?.penalties ?? {};
+  const entry = {
+    hs: flipped ? ft.away : ft.home,
+    as: flipped ? ft.home : ft.away,
+    status: m.status === "FINISHED" ? "FT" : "LIVE",
+  };
+  if (pens.home != null) {
+    entry.hp = flipped ? pens.away : pens.home;
+    entry.ap = flipped ? pens.home : pens.away;
+  }
+  if (m.score?.duration && m.score.duration !== "REGULAR") entry.et = true;
+  return entry.hs != null && entry.as != null ? entry : null;
+};
+
 export default async function handler(req) {
   const token = process.env.FOOTBALL_DATA_TOKEN;
   if (!token) return json({ enabled: false, results: {} });
+  const headers = { "X-Auth-Token": token };
 
-  const res = await fetch("https://api.football-data.org/v4/competitions/WC/matches", {
-    headers: { "X-Auth-Token": token },
-  });
-  if (!res.ok) return json({ enabled: true, error: `upstream ${res.status}`, results: {} }, 502);
-  const data = await res.json();
+  const store = getStore("worldcup");
+  const saved = (await store.get("live-api", { type: "json" }).catch(() => null)) ??
+    { results: {}, kicks: {} };
+
+  let data;
+  try {
+    const res = await fetch("https://api.football-data.org/v4/competitions/WC/matches", { headers });
+    if (!res.ok) throw new Error(`upstream ${res.status}`);
+    data = await res.json();
+  } catch (err) {
+    // Upstream down or rate-limited: serve last-known-good instead of nothing.
+    return json({ enabled: true, error: String(err?.message ?? err), results: saved.results, kicks: saved.kicks ?? {} });
+  }
 
   // Load our seed to map API matches -> our match ids. Group games map by
   // team pair; knockout pairings aren't known upfront, so those map by
@@ -80,33 +117,62 @@ export default async function handler(req) {
     return best;
   };
 
-  const results = {};
-  const kicks = {}; // schedule corrections: our id -> updated kickoff
+  const results = { ...saved.results };
+  const kicks = {};
+  const idOfApi = {};
+  const needDetail = [];
+  const now = Date.now();
   const apiMatches = (data.matches ?? [])
     .slice()
     .sort((x, y) => Date.parse(x.utcDate) - Date.parse(y.utcDate));
+
   for (const m of apiMatches) {
     const id = matchId(m);
     if (!id) continue;
-
+    idOfApi[m.id] = id;
     if (m.utcDate && m.utcDate !== kickoffOf[id]) kicks[id] = m.utcDate;
 
-    if (!["IN_PLAY", "PAUSED", "FINISHED"].includes(m.status)) continue;
-    const flipped = m.stage === "GROUP_STAGE" &&
-      !byPair[`${normalize(m.homeTeam?.name)}|${normalize(m.awayTeam?.name)}`];
-    const ft = m.score?.fullTime ?? {};
-    const pens = m.score?.penalties ?? {};
-    const entry = {
-      hs: flipped ? ft.away : ft.home,
-      as: flipped ? ft.home : ft.away,
-      status: m.status === "FINISHED" ? "FT" : "LIVE",
-    };
-    if (pens.home != null) {
-      entry.hp = flipped ? pens.away : pens.home;
-      entry.ap = flipped ? pens.home : pens.away;
-    }
-    if (m.score?.duration && m.score.duration !== "REGULAR") entry.et = true;
-    if (entry.hs != null && entry.as != null) results[id] = entry;
+    // Already locked in from a fresh detail fetch — nothing more to do.
+    if (saved.results[id]?.status === "FT") continue;
+
+    const entry = buildEntry(m, byPair);
+    if (entry) results[id] = entry;
+
+    // Decide whether this match needs a fresh detail lookup: the list says
+    // it's live, it says FINISHED but the score was stripped, or the clock
+    // says it should be underway regardless of the (possibly stale) status.
+    const ko = Date.parse(m.utcDate);
+    const inLiveWindow = now >= ko - 10 * 60e3 && now <= ko + 4.5 * 3600e3;
+    const liveStatus = ["IN_PLAY", "PAUSED"].includes(m.status);
+    const finishedNoScore = m.status === "FINISHED" && !entry;
+    if (inLiveWindow || liveStatus || finishedNoScore) needDetail.push(m.id);
   }
+
+  // Free tier allows 10 requests/min and we already spent one on the list;
+  // cap detail lookups and tolerate individual failures (e.g. 429s) —
+  // anything missed is retried on the next invocation.
+  let savedDirty = false;
+  await Promise.all(needDetail.slice(0, 6).map(async (apiId) => {
+    try {
+      const r = await fetch(`https://api.football-data.org/v4/matches/${apiId}`, { headers });
+      if (!r.ok) return;
+      const m = await r.json();
+      const entry = buildEntry(m, byPair);
+      if (!entry) return;
+      const id = idOfApi[apiId];
+      results[id] = entry;
+      if (entry.status === "FT") {
+        saved.results[id] = entry;
+        savedDirty = true;
+      }
+    } catch {}
+  }));
+
+  if (savedDirty || JSON.stringify(kicks) !== JSON.stringify(saved.kicks ?? {})) {
+    await store.setJSON("live-api", {
+      results: saved.results, kicks, updatedAt: new Date().toISOString(),
+    }).catch(() => {});
+  }
+
   return json({ enabled: true, results, kicks });
 }
