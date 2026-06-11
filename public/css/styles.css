@@ -208,7 +208,7 @@ html, body {
   font-variant-numeric: tabular-nums;
 }
 .g-fix.done .g-fix-date, .g-fix.done .g-fix-team { color: var(--ink-faint); }
-.g-fix.done .g-fix-score.has { font-size: 16px; color: var(--accent); background: rgba(47, 224, 140, 0.07); }
+.g-fix.done .g-fix-score.has { font-size: 16px; color: var(--amber); background: rgba(242, 185, 61, 0.07); }
 .g-fix-team.home { justify-content: flex-end; }
 .g-fix-team .flag { width: 20px; height: 15px; }
 .g-fix-score {
@@ -251,7 +251,7 @@ html, body {
 .ko-card.is-done .k-meta, .ko-card.is-done .k-city { color: var(--ink-faint); }
 .ko-card.is-done .k-name { color: var(--ink-dim); }
 .ko-card.is-done .k-row.win .k-name { color: var(--accent); opacity: 0.85; }
-.ko-card.is-done .k-score { font-size: 19px; color: var(--accent); }
+.ko-card.is-done .k-score { font-size: 19px; color: var(--amber); }
 
 .k-row {
   display: flex;
