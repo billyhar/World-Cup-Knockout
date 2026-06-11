@@ -194,9 +194,12 @@ export const fmtDate = (iso) =>
   new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric" })
     .format(new Date(iso));
 
+// Zero-padded hours (03:00, not 3:00). Intl ignores hour: "2-digit" in some
+// 12-hour locales, so pad the leading hour digit ourselves.
 export const fmtTime = (iso) =>
   new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" })
-    .format(new Date(iso));
+    .format(new Date(iso))
+    .replace(/^(\d):/, "0$1:");
 
 export const isToday = (iso) => {
   const d = new Date(iso), now = new Date();

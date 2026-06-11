@@ -30,8 +30,12 @@ const FEEDERS = {
   97: ["89", "90"], 98: ["93", "94"], 99: ["91", "92"], 100: ["95", "96"],
   101: ["97", "98"], 102: ["99", "100"], 104: ["101", "102"],
 };
-const GROUPS_L = ["A", "B", "C", "D", "E", "F"];
-const GROUPS_R = ["G", "H", "I", "J", "K", "L"];
+// Groups sit on the side of the bracket their WINNER enters, ordered by the
+// row of that R32 match (each runner-up crosses to the other side by design,
+// so a perfect split doesn't exist). Left winners: 1E(74) 1I(77) 1F(75)
+// 1H(84) 1D(81) 1G(82); right winners: 1C(76) 1A(79) 1L(80) 1J(86) 1B(85) 1K(87).
+const GROUPS_L = ["E", "I", "F", "H", "D", "G"];
+const GROUPS_R = ["C", "A", "L", "J", "B", "K"];
 
 let seed, panzoom;
 let state = { results: {}, overrides: {} };
@@ -47,6 +51,38 @@ const flagImg = (code) => {
 };
 
 const scoreText = (r) => (r == null || r.hs == null ? null : `${r.hs}–${r.as}`);
+
+// ---- match events (goals/cards from the live API) --------------------------
+
+const esc = (s) => String(s)
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+
+const EV_ICON = { G: "⚽", P: "⚽", O: "⚽", Y: "🟨", R: "🟥" };
+const evLine = (e, codes) => {
+  const extra = e.t === "P" ? " (pen)" : e.t === "O" ? " (og)" : "";
+  return `${e.m} ${EV_ICON[e.t]} ${e.p}${extra}${codes ? ` · ${codes[e.s]}` : ""}`;
+};
+
+// subtle hanging yellow/red tags; hovering lists everything we know
+function evTagsHTML(r, codes) {
+  const ev = r?.ev ?? [];
+  const y = ev.filter((e) => e.t === "Y").length;
+  const red = ev.filter((e) => e.t === "R").length;
+  if (!y && !red) return "";
+  const tip = ev.map((e) => evLine(e, codes)).join("\n");
+  return `<span class="evtags" data-tip="${esc(tip)}">${
+    y ? `<span class="evtag y">${y > 1 ? y : ""}</span>` : ""}${
+    red ? `<span class="evtag r">${red > 1 ? red : ""}</span>` : ""}</span>`;
+}
+
+// scorer list shown when hovering a score
+const goalsTipAttr = (r, codes, side) => {
+  const gs = (r?.ev ?? []).filter((e) =>
+    ["G", "P", "O"].includes(e.t) && (!side || e.s === side));
+  return gs.length
+    ? ` data-tip="${esc(gs.map((e) => evLine(e, side ? null : codes)).join("\n"))}"`
+    : "";
+};
 
 // kickoff with any live schedule correction from the API applied
 const kick = (m) => state.kicks?.[m.id] ?? m.kickoff;
@@ -73,12 +109,14 @@ function groupCardHTML(g, standings) {
     const ko = kick(m);
     const today = isToday(ko);
     const done = !!score && !live;
+    const codes = { h: m.home, a: m.away };
     return `
     <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""} ${done ? "done" : ""}">
       <span class="g-fix-date">${today ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
-      <span class="g-fix-score ${score ? "has" : ""}">${score ?? fmtTime(ko)}</span>
+      <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
+      ${evTagsHTML(r, codes)}
       ${live ? '<span class="live-dot"></span>' : ""}
     </div>`;
   }).join("");
@@ -104,7 +142,7 @@ function teamRowHTML(code, slot, r, side, winner) {
   if (code) {
     return `<div class="k-row ${isWin ? "win" : winner ? "lose" : ""}">
       ${flagImg(code)}<span class="k-name">${seed.teams[code].name}</span>
-      ${pens}<span class="k-score">${score}</span>
+      ${pens}<span class="k-score"${goalsTipAttr(r, null, side)}>${score}</span>
     </div>`;
   }
   return `<div class="k-row tbd">
@@ -126,8 +164,10 @@ function koCardHTML(m, resolved) {
     live ? "is-live" : "", today ? "is-today" : "", done ? "is-done" : "",
   ].join(" ");
   const aet = r?.et ? ' · <span class="aet">aet</span>' : "";
+  const codes = { h: teams.home ?? "—", a: teams.away ?? "—" };
   return `
   <div class="${cls}" id="match-${m.id}">
+    ${evTagsHTML(r, codes)}
     <div class="k-meta">
       <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
       <span class="k-city">${live ? '<span class="live-dot"></span> <b class="k-live">Live</b>' : m.city}</span>
@@ -349,4 +389,8 @@ async function refresh() {
   else panzoom.flyTo(sections.all, 50, 0);
 
   setInterval(refresh, 60_000);
+  // returning to the tab mid-match: don't wait out the interval
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) refresh();
+  });
 })();
