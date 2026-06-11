@@ -364,6 +364,47 @@ function phoneGroupsView() {
   panzoom.animateTo(14 - (COL_X.groupsL[0] - 8) * s, 128 - (groupsTop - 56) * s, s, 0);
 }
 
+// ---- tooltip (fixed overlay so it escapes all card stacking contexts) ------
+
+function setupTooltip() {
+  const tip = document.createElement("div");
+  tip.id = "ev-tooltip";
+  tip.hidden = true;
+  document.body.appendChild(tip);
+
+  let tipTarget = null;
+
+  const show = (el) => {
+    if (el === tipTarget) return;
+    tipTarget = el;
+    if (!el?.dataset.tip) { tip.hidden = true; return; }
+    tip.textContent = el.dataset.tip;
+    tip.hidden = false;
+    const r = el.getBoundingClientRect();
+    // Default: right-aligned below the element
+    tip.style.top = `${r.bottom + 6}px`;
+    tip.style.left = `${r.right}px`;
+    tip.style.transform = "translateX(-100%)";
+    // Keep inside viewport bounds
+    requestAnimationFrame(() => {
+      const tr = tip.getBoundingClientRect();
+      if (tr.left < 8) { tip.style.left = "8px"; tip.style.transform = "none"; }
+      if (tr.right > innerWidth - 8) { tip.style.left = `${innerWidth - 8 - tr.width}px`; tip.style.transform = "none"; }
+      if (tr.bottom > innerHeight - 8) tip.style.top = `${r.top - tr.height - 6}px`;
+    });
+  };
+
+  world.addEventListener("mouseover", (e) => show(e.target.closest("[data-tip]")));
+  world.addEventListener("mouseout", (e) => {
+    if (e.target === tipTarget && !e.relatedTarget?.closest?.("[data-tip]")) {
+      tipTarget = null;
+      tip.hidden = true;
+    }
+  });
+  // Hide during pan/pinch
+  world.addEventListener("pointerdown", () => { tipTarget = null; tip.hidden = true; });
+}
+
 async function refresh() {
   try {
     state = await loadResults();
@@ -382,6 +423,7 @@ async function refresh() {
 
   panzoom = new PanZoom(document.getElementById("viewport"), world, WORLD);
   bindChrome();
+  setupTooltip();
 
   // initial view: everything on desktop; on mobile fill the width with the
   // first group column, anchored just below the header
