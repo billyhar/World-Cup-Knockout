@@ -88,43 +88,55 @@ const goalsTipAttr = (r, codes, side) => {
 // kickoff with any live schedule correction from the API applied
 const kick = (m) => state.kicks?.[m.id] ?? m.kickoff;
 
-// ---- live panel (top-right, only while matches are in play) ----------------
+// ---- live dock (bottom centre, only while matches are in play) -------------
 
 const STAGE_LABEL = {
   r32: "Round of 32", r16: "Round of 16", qf: "Quarter-final",
   sf: "Semi-final", third: "Third place", final: "Final",
 };
 
+let liveDockOpen = null; // null until first shown: open on desktop, pill on phones
+
 function renderLivePanel(resolved) {
   const panel = document.getElementById("live-panel");
   const live = seed.matches.filter((m) => state.results[m.id]?.status === "LIVE");
   panel.hidden = !live.length;
   if (!live.length) return;
+  liveDockOpen ??= innerWidth >= 700;
 
-  const rows = live.map((m) => {
+  const cards = live.map((m) => {
     const r = state.results[m.id];
     const h = m.stage === "group" ? m.home : resolved[m.id]?.home;
     const a = m.stage === "group" ? m.away : resolved[m.id]?.away;
     const ev = r.ev ?? [];
-    const goals = ev.filter((e) => ["G", "P", "O"].includes(e.t)).slice(-3);
+    const lastGoal = ev.filter((e) => ["G", "P", "O"].includes(e.t)).at(-1);
     const y = ev.filter((e) => e.t === "Y").length;
     const red = ev.filter((e) => e.t === "R").length;
     const where = m.stage === "group" ? `Group ${m.group}` : STAGE_LABEL[m.stage];
+    const tip = ` data-tip="${esc(`${m.city}${ev.length ? "\n" : ""}${
+      ev.map((e) => evLine(e, { h: h ?? "—", a: a ?? "—" })).join("\n")}`)}"`;
+    const row = (code, score) => `
+      <span class="ld-team">${flagImg(code)}<span>${code ?? "—"}</span><b class="ld-score">${score}</b></span>`;
     return `
-    <button class="lp-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}">
-      <span class="lp-meta">
-        <span>${where} · ${esc(m.city)}</span>
-        <span class="lp-min">${esc(r.min ?? "")}</span>
+    <button class="ld-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}"${tip}>
+      <span class="ld-meta">
+        <span>${where}</span>
+        ${y ? `<span class="evtag y">${y > 1 ? y : ""}</span>` : ""}
+        ${red ? `<span class="evtag r">${red > 1 ? red : ""}</span>` : ""}
+        <span class="ld-min">${esc(r.min ?? "")}</span>
       </span>
-      <span class="lp-line">
-        ${flagImg(h)} ${h ?? "—"} <b class="lp-score">${r.hs}–${r.as}</b> ${a ?? "—"} ${flagImg(a)}
-      </span>
-      ${goals.map((e) => `<span class="lp-goal">${esc(evLine(e, { h, a }))}</span>`).join("")}
-      ${y || red ? `<span class="lp-goal">${y ? `🟨 ${y}` : ""}${y && red ? " · " : ""}${red ? `🟥 ${red}` : ""}</span>` : ""}
+      ${row(h, r.hs)}
+      ${row(a, r.as)}
+      ${lastGoal ? `<span class="ld-event">⚽ ${esc(`${lastGoal.m} ${lastGoal.p}`)}</span>` : ""}
     </button>`;
   }).join("");
 
-  panel.innerHTML = `<div class="lp-head"><span class="live-dot"></span>Live now</div>${rows}`;
+  panel.classList.toggle("open", liveDockOpen);
+  panel.innerHTML = `
+    <button class="ld-pill" id="ld-toggle" aria-expanded="${liveDockOpen}">
+      <span class="live-dot"></span>LIVE${live.length > 1 ? `<b>${live.length}</b>` : ""}
+    </button>
+    <div class="ld-strip">${cards}</div>`;
 }
 
 // ---- group cards -----------------------------------------------------------
@@ -382,8 +394,15 @@ function bindChrome() {
     else phoneGroupsView();
   };
 
-  // live panel: tap a match to fly to its card on the canvas
-  document.getElementById("live-panel").addEventListener("click", (e) => {
+  // live dock: pill collapses/expands; tap a match to fly to its card
+  const dock = document.getElementById("live-panel");
+  dock.addEventListener("click", (e) => {
+    if (e.target.closest("#ld-toggle")) {
+      liveDockOpen = !liveDockOpen;
+      dock.classList.toggle("open", liveDockOpen);
+      document.getElementById("ld-toggle").setAttribute("aria-expanded", liveDockOpen);
+      return;
+    }
     const btn = e.target.closest("[data-target]");
     const el = btn && document.getElementById(btn.dataset.target);
     if (!el) return;
@@ -404,8 +423,11 @@ function setStatus() {
   const pill = document.getElementById("status-pill");
   const n = Object.values(state.results).filter((r) => r.hs != null).length;
   pill.hidden = false;
+  // phones: the pill sits beside the brand, so keep it short
   pill.textContent = tzAbbr
-    ? `All times ${tzAbbr}${n ? ` · ${n} result${n === 1 ? "" : "s"} in` : ""}`
+    ? innerWidth < 700
+      ? `All times ${tzAbbr}`
+      : `All times ${tzAbbr}${n ? ` · ${n} result${n === 1 ? "" : "s"} in` : ""}`
     : n ? `${n} result${n === 1 ? "" : "s"} in` : "";
   if (!pill.textContent) pill.hidden = true;
 }
@@ -448,8 +470,8 @@ function setupTooltip() {
     });
   };
 
-  world.addEventListener("mouseover", (e) => show(e.target.closest("[data-tip]")));
-  world.addEventListener("mouseout", (e) => {
+  document.addEventListener("mouseover", (e) => show(e.target.closest?.("[data-tip]")));
+  document.addEventListener("mouseout", (e) => {
     if (e.target === tipTarget && !e.relatedTarget?.closest?.("[data-tip]")) {
       tipTarget = null;
       tip.hidden = true;
