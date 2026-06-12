@@ -100,6 +100,7 @@ let liveDockOpen = null; // null until first shown: open on desktop, pill on pho
 function renderLivePanel(resolved) {
   const panel = document.getElementById("live-panel");
   const live = seed.matches.filter((m) => state.results[m.id]?.status === "LIVE");
+  const appeared = panel.hidden && live.length > 0;
   panel.hidden = !live.length;
   if (!live.length) return;
   liveDockOpen ??= innerWidth >= 700;
@@ -113,12 +114,10 @@ function renderLivePanel(resolved) {
     const y = ev.filter((e) => e.t === "Y").length;
     const red = ev.filter((e) => e.t === "R").length;
     const where = m.stage === "group" ? `Group ${m.group}` : STAGE_LABEL[m.stage];
-    const tip = ` data-tip="${esc(`${m.city}${ev.length ? "\n" : ""}${
-      ev.map((e) => evLine(e, { h: h ?? "—", a: a ?? "—" })).join("\n")}`)}"`;
     const row = (code, score) => `
       <span class="ld-team">${flagImg(code)}<span>${code ?? "—"}</span><b class="ld-score">${score}</b></span>`;
     return `
-    <button class="ld-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}"${tip}>
+    <button class="ld-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}">
       <span class="ld-meta">
         <span>${where}</span>
         ${y ? `<span class="evtag y">${y > 1 ? y : ""}</span>` : ""}
@@ -133,10 +132,24 @@ function renderLivePanel(resolved) {
 
   panel.classList.toggle("open", liveDockOpen);
   panel.innerHTML = `
+    <div class="ld-strip">${cards}</div>
     <button class="ld-pill" id="ld-toggle" aria-expanded="${liveDockOpen}">
-      <span class="live-dot"></span>LIVE${live.length > 1 ? `<b>${live.length}</b>` : ""}
-    </button>
-    <div class="ld-strip">${cards}</div>`;
+      <span class="live-dot"></span>Live${live.length > 1 ? `<b>${live.length}</b>` : ""}
+      <svg class="ld-caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
+        <path d="M1 5l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>`;
+  if (appeared) animateDock(panel);
+}
+
+// replays the entrance (pill pop + cards rising) — used on first appearance
+// and on expand, never on the 60s refresh re-render
+function animateDock(panel) {
+  panel.classList.remove("anim");
+  void panel.offsetWidth; // restart CSS animations
+  panel.classList.add("anim");
+  clearTimeout(animateDock.t);
+  animateDock.t = setTimeout(() => panel.classList.remove("anim"), 800);
 }
 
 // ---- group cards -----------------------------------------------------------
@@ -401,6 +414,7 @@ function bindChrome() {
       liveDockOpen = !liveDockOpen;
       dock.classList.toggle("open", liveDockOpen);
       document.getElementById("ld-toggle").setAttribute("aria-expanded", liveDockOpen);
+      if (liveDockOpen) animateDock(dock);
       return;
     }
     const btn = e.target.closest("[data-target]");
