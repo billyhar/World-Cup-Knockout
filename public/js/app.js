@@ -88,6 +88,45 @@ const goalsTipAttr = (r, codes, side) => {
 // kickoff with any live schedule correction from the API applied
 const kick = (m) => state.kicks?.[m.id] ?? m.kickoff;
 
+// ---- live panel (top-right, only while matches are in play) ----------------
+
+const STAGE_LABEL = {
+  r32: "Round of 32", r16: "Round of 16", qf: "Quarter-final",
+  sf: "Semi-final", third: "Third place", final: "Final",
+};
+
+function renderLivePanel(resolved) {
+  const panel = document.getElementById("live-panel");
+  const live = seed.matches.filter((m) => state.results[m.id]?.status === "LIVE");
+  panel.hidden = !live.length;
+  if (!live.length) return;
+
+  const rows = live.map((m) => {
+    const r = state.results[m.id];
+    const h = m.stage === "group" ? m.home : resolved[m.id]?.home;
+    const a = m.stage === "group" ? m.away : resolved[m.id]?.away;
+    const ev = r.ev ?? [];
+    const goals = ev.filter((e) => ["G", "P", "O"].includes(e.t)).slice(-3);
+    const y = ev.filter((e) => e.t === "Y").length;
+    const red = ev.filter((e) => e.t === "R").length;
+    const where = m.stage === "group" ? `Group ${m.group}` : STAGE_LABEL[m.stage];
+    return `
+    <button class="lp-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}">
+      <span class="lp-meta">
+        <span>${where} · ${esc(m.city)}</span>
+        <span class="lp-min">${esc(r.min ?? "")}</span>
+      </span>
+      <span class="lp-line">
+        ${flagImg(h)} ${h ?? "—"} <b class="lp-score">${r.hs}–${r.as}</b> ${a ?? "—"} ${flagImg(a)}
+      </span>
+      ${goals.map((e) => `<span class="lp-goal">${esc(evLine(e, { h, a }))}</span>`).join("")}
+      ${y || red ? `<span class="lp-goal">${y ? `🟨 ${y}` : ""}${y && red ? " · " : ""}${red ? `🟥 ${red}` : ""}</span>` : ""}
+    </button>`;
+  }).join("");
+
+  panel.innerHTML = `<div class="lp-head"><span class="live-dot"></span>Live now</div>${rows}`;
+}
+
 // ---- group cards -----------------------------------------------------------
 
 function groupCardHTML(g, standings) {
@@ -254,6 +293,7 @@ function render() {
   }
 
   world.innerHTML = html;
+  renderLivePanel(resolved);
 
   for (const [id, p] of Object.entries(pos)) {
     const el = document.getElementById(id);
@@ -341,6 +381,18 @@ function bindChrome() {
     if (panzoom.rotated) panzoom.flyTo(sections.all, 24, 0);
     else phoneGroupsView();
   };
+
+  // live panel: tap a match to fly to its card on the canvas
+  document.getElementById("live-panel").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-target]");
+    const el = btn && document.getElementById(btn.dataset.target);
+    if (!el) return;
+    const narrow = panzoom.view().w < 700;
+    panzoom.flyTo(
+      { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight },
+      narrow ? 20 : 140,
+    );
+  });
 
   const hint = document.getElementById("hint");
   setTimeout(() => hint.classList.add("fade"), 6000);

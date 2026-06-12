@@ -435,6 +435,71 @@ html, body {
 .side-chips { display: none; }
 .side-chips[hidden] { display: none; }
 
+.live-panel {
+  top: 14px;
+  right: 18px;
+  z-index: 11;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  width: 252px;
+  padding: 11px 12px 12px;
+  background: rgba(13, 16, 26, 0.93);
+  border: 1px solid rgba(229, 72, 77, 0.4);
+  border-radius: 14px;
+  box-shadow: 0 0 36px -10px rgba(229, 72, 77, 0.45), 0 14px 30px -14px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.lp-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ff6b70;
+}
+.lp-head .live-dot { width: 8px; height: 8px; background: #e5484d; }
+.lp-match {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-edge);
+  border-radius: 10px;
+  padding: 8px 9px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.lp-match:hover { background: rgba(229, 72, 77, 0.08); border-color: rgba(229, 72, 77, 0.35); }
+.lp-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.lp-min { color: #ff6b70; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lp-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.lp-line .flag { width: 21px; height: 15.75px; }
+.lp-score { margin: 0 3px; font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lp-goal { font-size: 11px; color: var(--ink-dim); }
+
 .chrome-zoom {
   bottom: 18px;
   right: 18px;
@@ -536,4 +601,5 @@ html, body {
   .rotate-tip:not([hidden]) { display: flex; }
   .chrome-status { bottom: 16px; left: 12px; }
   .hint { bottom: 64px; }
+  .live-panel { top: 104px; right: 10px; width: 224px; }
 }

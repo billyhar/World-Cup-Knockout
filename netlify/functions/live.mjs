@@ -224,6 +224,13 @@ export default async function handler(req) {
         for (const c of comp.competitors ?? []) {
           sides[c.team?.id] = (c.homeAway === "home") !== flip ? "h" : "a";
         }
+        // ESPN also knows the match clock, which football-data's free tier
+        // doesn't expose — ride it along on live entries as `min`.
+        const target = results[id];
+        const clock = event.status?.displayClock;
+        if (target?.status === "LIVE" && event.status?.type?.state === "in" && clock) {
+          target.min = clock;
+        }
         const ev = [];
         for (const d of comp.details ?? []) {
           const t = d.redCard ? "R" : d.yellowCard ? "Y"
@@ -238,7 +245,6 @@ export default async function handler(req) {
           });
         }
         if (!ev.length) continue;
-        const target = results[id];
         if (target) {
           const changed = JSON.stringify(target.ev ?? null) !== JSON.stringify(ev);
           target.ev = ev;
