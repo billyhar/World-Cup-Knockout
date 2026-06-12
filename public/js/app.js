@@ -110,10 +110,11 @@ function groupCardHTML(g, standings) {
     const ko = kick(m);
     const today = isToday(ko);
     const done = !!score && !live;
+    const showToday = today && !done && !live;
     const codes = { h: m.home, a: m.away };
     return `
-    <div class="g-fix ${live ? "live" : ""} ${today ? "today" : ""} ${done ? "done" : ""}">
-      <span class="g-fix-date">${today ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
+    <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}">
+      <span class="g-fix-date">${live ? "Live" : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
@@ -159,10 +160,11 @@ function koCardHTML(m, resolved) {
   const ko = kick(m);
   const today = isToday(ko);
   const done = r?.hs != null && !live;
+  const showToday = today && !done && !live;
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
-    live ? "is-live" : "", today ? "is-today" : "", done ? "is-done" : "",
+    live ? "is-live" : "", showToday ? "is-today" : "", done ? "is-done" : "",
   ].join(" ");
   const aet = r?.et ? ' · <span class="aet">aet</span>' : "";
   const codes = { h: teams.home ?? "—", a: teams.away ?? "—" };
@@ -170,7 +172,7 @@ function koCardHTML(m, resolved) {
   <div class="${cls}" id="match-${m.id}">
     ${evTagsHTML(r, codes)}
     <div class="k-meta">
-      <span>M${m.id} · ${today ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
+      <span>M${m.id} · ${live ? '<b class="k-live">Live</b>' : showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
       <span class="k-city">${live ? '<span class="live-dot"></span> <b class="k-live">Live</b>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
