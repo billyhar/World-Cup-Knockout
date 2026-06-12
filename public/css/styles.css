@@ -197,7 +197,7 @@ html, body {
   font-size: 12.5px;
 }
 .g-fix.today { background: rgba(47, 224, 140, 0.05); box-shadow: inset 0 0 0 1px rgba(47, 224, 140, 0.18); }
-.g-fix.live { background: rgba(47, 224, 140, 0.07); box-shadow: inset 0 0 0 1px rgba(47, 224, 140, 0.18); }
+.g-fix.live { background: rgba(229, 72, 77, 0.07); box-shadow: inset 0 0 0 1px rgba(229, 72, 77, 0.2); }
 .g-fix-date { color: var(--ink); font-size: 11px; }
 .g-fix-team {
   display: flex;
@@ -289,8 +289,8 @@ html, body {
 .ko-card.is-today { box-shadow: 0 0 0 1.5px rgba(47, 224, 140, 0.4), 0 6px 16px -8px rgba(0, 0, 0, 0.5); }
 .ko-card.is-live { animation: card-pulse 1.6s ease-in-out infinite; }
 @keyframes card-pulse {
-  0%, 100% { box-shadow: 0 0 0 1.5px rgba(47, 224, 140, 0.5), 0 0 20px -6px rgba(47, 224, 140, 0.3); }
-  50% { box-shadow: 0 0 0 2.5px rgba(47, 224, 140, 0.95), 0 0 34px -4px rgba(47, 224, 140, 0.65); }
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(229, 72, 77, 0.5), 0 0 20px -6px rgba(229, 72, 77, 0.3); }
+  50% { box-shadow: 0 0 0 2.5px rgba(229, 72, 77, 0.95), 0 0 34px -4px rgba(229, 72, 77, 0.65); }
 }
 
 /* ── match events: hanging card tags + hover tooltips ─────────────────── */
@@ -332,7 +332,7 @@ html, body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--live);
   animation: pulse 1.4s ease-in-out infinite;
 }
 .g-fix .live-dot { position: absolute; right: 4px; top: 50%; translate: 0 -50%; }
@@ -342,9 +342,9 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(229, 72, 77, 0.18);
-  border: 1px solid rgba(229, 72, 77, 0.55);
-  color: #e5484d;
+  background: #e5484d;
+  border: 1px solid #c43336;
+  color: #fff;
   font-weight: 800;
   font-size: 10px;
   padding: 1px 6px 1px 4px;
