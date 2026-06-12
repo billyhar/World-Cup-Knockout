@@ -495,10 +495,23 @@ function setupTooltip() {
   world.addEventListener("pointerdown", () => { tipTarget = null; tip.hidden = true; });
 }
 
+// Stale-data guard: no match is still running ~5h after kickoff. If the
+// upstream feed wedges mid-match and never reports FINISHED, demote the
+// entry to a plain result so all LIVE UI (badges, dock) clears itself.
+function sanitizeLive() {
+  for (const m of seed.matches) {
+    const r = state.results[m.id];
+    if (r?.status === "LIVE" && Date.now() - Date.parse(kick(m)) > 4.75 * 3600e3) {
+      delete r.status;
+    }
+  }
+}
+
 async function refresh() {
   try {
     state = await loadResults();
   } catch { /* offline → keep last known */ }
+  sanitizeLive();
   render();
   setStatus();
 }
@@ -508,6 +521,7 @@ async function refresh() {
 (async function boot() {
   seed = await loadSeed();
   state = await loadResults().catch(() => state);
+  sanitizeLive();
   render();
   setStatus();
 
