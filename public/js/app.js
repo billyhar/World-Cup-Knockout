@@ -114,12 +114,11 @@ function groupCardHTML(g, standings) {
     const codes = { h: m.home, a: m.away };
     return `
     <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}">
-      <span class="g-fix-date">${live ? "Live" : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
+      <span class="g-fix-date">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
       ${evTagsHTML(r, codes)}
-      ${live ? '<span class="live-dot"></span>' : ""}
     </div>`;
   }).join("");
 
@@ -172,8 +171,8 @@ function koCardHTML(m, resolved) {
   <div class="${cls}" id="match-${m.id}">
     ${evTagsHTML(r, codes)}
     <div class="k-meta">
-      <span>M${m.id} · ${live ? '<b class="k-live">Live</b>' : showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
-      <span class="k-city">${live ? '<span class="live-dot"></span> <b class="k-live">Live</b>' : m.city}</span>
+      <span>M${m.id} · ${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
+      <span class="k-city">${live ? '<b class="k-live">Live</b>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
