@@ -332,11 +332,11 @@ html, body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--live);
+  background: rgba(255, 255, 255, 0.9);
   animation: pulse 1.4s ease-in-out infinite;
 }
 .g-fix .live-dot { position: absolute; right: 4px; top: 50%; translate: 0 -50%; }
-@keyframes pulse { 50% { opacity: 0.35; } }
+@keyframes pulse { 50% { opacity: 0.2; } }
 
 .live-badge {
   display: inline-flex;
