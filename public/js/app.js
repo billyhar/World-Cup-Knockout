@@ -171,8 +171,8 @@ function koCardHTML(m, resolved) {
   <div class="${cls}" id="match-${m.id}">
     ${evTagsHTML(r, codes)}
     <div class="k-meta">
-      <span>M${m.id} · ${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
-      <span class="k-city">${live ? '<b class="k-live">Live</b>' : m.city}</span>
+      <span>M${m.id} · ${showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
+      <span class="k-city">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
