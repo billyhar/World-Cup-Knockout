@@ -394,7 +394,7 @@ function teamArticle(team) {
     .join("\n    ");
 
   const heroImg = photo
-    ? `<img class="g-hero-photo" src="${photo}" alt="${esc(name)} at the 2026 World Cup" width="1280" height="698" loading="eager" decoding="async">`
+    ? `<img class="g-hero-photo" src="${photo}" alt="${esc(name)} at the 2026 World Cup" width="1280" height="720" loading="lazy" decoding="async">`
     : "";
 
   const html = head({ title, desc, url, jsonld, image: ogImage }) + siteHeader + `
@@ -403,13 +403,14 @@ function teamArticle(team) {
     <a href="/">Home</a> › <a href="/guides/">Route guides</a> › <span>${esc(name)}</span>
   </nav>
   <article>
-    ${heroImg}
     <header class="g-hero">
       <div class="g-hero-flag">${flag(team)}</div>
       <h1>${esc(poss(name))} Route to the 2026 World Cup Final</h1>
       <p class="g-standfirst">${esc(intro)}</p>
       <p class="g-meta">Group ${grp} · Projected knockout path · Updated ${fmtDate(`${TODAY}T12:00:00Z`)}</p>
     </header>
+
+    ${heroImg}
 
     <section class="g-table-wrap" aria-label="Projected knockout route">
       <h2>${esc(poss(name))} projected knockout route</h2>
