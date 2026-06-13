@@ -22,19 +22,19 @@ In the Round of 32, United States would meet a third-placed team (from Group B, 
 
 ## What is United States’ Round of 16 path?
 
-A Round-of-16 place would pit United States against the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include Belgium, Mexico, South Korea or Germany.
+A Round-of-16 place would pit United States against the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include Belgium, Mexico, South Korea or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## United States’ potential quarter-final
 
-Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 93. Heavyweights lurking in that quarter include Portugal, Colombia, England or Croatia.
+Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 93. Heavyweights lurking in that quarter include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or Croatia.
 
 ## Could United States reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include Germany, Ivory Coast, Mexico, South Korea or Switzerland.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea or Switzerland.
 
 ## United States’ route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of United States’ projected route. Anyone from Brazil, Morocco, Netherlands, Japan, Germany or Ivory Coast could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of United States’ projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
 
 ## United States’ Group D fixtures
 

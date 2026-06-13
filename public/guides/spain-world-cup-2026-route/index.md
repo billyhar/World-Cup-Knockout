@@ -22,19 +22,19 @@ In the Round of 32, Spain would meet the Group J runner-up. The tie is scheduled
 
 ## What is Spain’s Round of 16 path?
 
-A Round-of-16 place would pit Spain against the winner of Match 83 (the Group K runner-up vs the Group L runner-up), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include Portugal, Colombia, England or Croatia.
+A Round-of-16 place would pit Spain against the winner of Match 83 (the Group K runner-up vs the Group L runner-up), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or Croatia.
 
 ## Spain’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 94. Heavyweights lurking in that quarter include United States, Switzerland, Germany or Ivory Coast.
+Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 94. Heavyweights lurking in that quarter include [United States](/guides/united-states-world-cup-2026-route/), Switzerland, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast.
 
 ## Could Spain reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include Germany, Ivory Coast, Mexico, South Korea or Switzerland.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea or Switzerland.
 
 ## Spain’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Spain’s projected route. Anyone from Brazil, Morocco, Netherlands, Japan, Germany or Ivory Coast could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Spain’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
 
 ## Spain’s Group H fixtures
 

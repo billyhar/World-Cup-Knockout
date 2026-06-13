@@ -59,7 +59,37 @@ for (const m of seed.matches.filter((m) => m.stage !== "group")) {
   const away = seed.teams[m.away] ? teamName(m.away) : slotText(m.away);
   ns += `<li>${STAGE_LABEL[m.stage]} (M${m.id}, ${fmtDay(m.kickoff)}): ${home} v ${away} — ${m.stadium}, ${m.city}</li>\n`;
 }
-ns += `</ul>\n</main>\n</noscript>`;
+ns += `</ul>\n`;
+
+// ---- head-term FAQ (answer blocks for "when is the world cup 2026" etc.) ----
+
+const faqs = [
+  {
+    q: "When is the 2026 FIFA World Cup?",
+    a: "The 2026 FIFA World Cup runs from 11 June to 19 July 2026, co-hosted by Canada, Mexico and the United States.",
+  },
+  {
+    q: "Where is the 2026 World Cup final?",
+    a: "The 2026 World Cup final is at MetLife Stadium in New York / New Jersey on Sunday 19 July 2026.",
+  },
+  {
+    q: "How many teams are in the 2026 World Cup?",
+    a: "48 teams play in the 2026 World Cup — the first 48-team edition — drawn into 12 groups of four. The top two from each group plus the eight best third-placed teams advance to a 32-team knockout bracket.",
+  },
+  {
+    q: "How does the 2026 World Cup knockout bracket work?",
+    a: "After the group stage, 32 teams enter a straight knockout: Round of 32, Round of 16, quarter-finals, semi-finals and the final, plus a third-place play-off. Lose once and you are out.",
+  },
+  {
+    q: "Which teams could win the 2026 World Cup?",
+    a: "Pre-tournament favourites include Argentina, France, Brazil, England, Spain, Portugal, Germany and the Netherlands. See each side's projected knockout route at worldcupknockout.football/guides.",
+  },
+];
+
+ns += `<h2>World Cup 2026 FAQ</h2>\n`;
+for (const f of faqs) ns += `<h3>${f.q}</h3>\n<p>${f.a}</p>\n`;
+ns += `<p>Projected knockout routes for the favourites: <a href="/guides/">World Cup 2026 route guides</a>.</p>\n`;
+ns += `</main>\n</noscript>`;
 
 // ---- JSON-LD ----------------------------------------------------------------
 
@@ -95,6 +125,14 @@ const ld = {
         { "@type": "Country", name: "United States" },
       ],
       subEvent: events,
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
     },
   ],
 };

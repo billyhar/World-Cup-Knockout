@@ -9,9 +9,10 @@
 //   public/guides/<slug>-world-cup-2026-route/    -> one per team
 // and rewrites sitemap.xml + the llms.txt Guides section.
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { Resvg } from "@resvg/resvg-js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = join(ROOT, "public");
@@ -38,6 +39,41 @@ const esc = (s) => String(s)
 
 // "England's" but "Netherlands'" / "United States'"
 const poss = (name) => name.endsWith("s") ? `${name}’` : `${name}’s`;
+
+const slugFor = (name) =>
+  `${name.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}-world-cup-2026-route`;
+
+// team name -> guide slug, for in-content cross-linking between guides
+const GUIDE_BY_NAME = Object.fromEntries(
+  TEAMS.map((t) => [teamName(t), slugFor(teamName(t))]));
+// longest names first so "United States" matches before any substring
+const GUIDE_NAMES = Object.keys(GUIDE_BY_NAME).sort((a, b) => b.length - a.length);
+
+// Wrap mentions of *other* guide teams in links. `self` is excluded so an
+// article never links to itself. Operates on already-escaped HTML (team names
+// carry no HTML-special chars) or on plain markdown.
+function crosslink(text, self, md = false) {
+  const seen = new Set([self]);
+  for (const nm of GUIDE_NAMES) {
+    if (seen.has(nm)) continue;
+    const re = new RegExp(`\\b${nm}\\b`, "g");
+    let first = true;
+    text = text.replace(re, (m) => {
+      if (!first) return m;       // link only the first mention per section
+      first = false;
+      seen.add(nm);
+      const href = `/guides/${GUIDE_BY_NAME[nm]}/`;
+      return md ? `[${m}](${href})` : `<a href="${href}">${m}</a>`;
+    });
+  }
+  return text;
+}
+
+// In-page hero photo, if the user dropped one at public/<name>.jpeg
+const heroPhoto = (name) => {
+  const file = `${name.toLowerCase().replace(/[^a-z]+/g, "")}.jpeg`;
+  return existsSync(join(PUB, file)) ? `/${file}` : null;
+};
 
 const ROUND = {
   r32: "Round of 32", r16: "Round of 16", qf: "Quarter-final",
@@ -170,7 +206,7 @@ function roundProse(team, leg) {
 
 // ---- HTML building blocks --------------------------------------------------
 
-function head({ title, desc, url, jsonld }) {
+function head({ title, desc, url, jsonld, image = `${ORIGIN}/og.png` }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -183,14 +219,16 @@ function head({ title, desc, url, jsonld }) {
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${ORIGIN}/og.png">
+<meta property="og:image" content="${image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
-<meta name="twitter:image" content="${ORIGIN}/og.png">
+<meta name="twitter:image" content="${image}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽️</text></svg>">
 <link rel="stylesheet" href="/css/guides.css">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="c63b4d7f-d188-4b09-87df-bbcbb0b744a8"></script>
@@ -232,8 +270,10 @@ const siteFooter = (links) => `
 function teamArticle(team) {
   const name = teamName(team);
   const grp = groupOf(team);
-  const slug = `${name.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}-world-cup-2026-route`;
+  const slug = slugFor(name);
   const url = `${ORIGIN}/guides/${slug}/`;
+  const ogImage = `${ORIGIN}/og/${slug}.png`;
+  const photo = heroPhoto(name);
   const route = trace(`1${grp}`);
   const final = route.at(-1).match;
   const r32 = route[0].match;
@@ -258,22 +298,22 @@ function teamArticle(team) {
     return x.length ? `Potentially ${oxford(x.slice(0, 3))}` : describeSlot(leg.opp);
   };
 
-  // route table
+  // route table (opponent cells cross-link to other guides)
   const routeRows = route.map((leg) => {
     const m = leg.match;
     return `<tr>
       <td>${ROUND[m.stage]}</td>
       <td>${fmtDate(m.kickoff)}</td>
       <td>${esc(m.city)}</td>
-      <td>${esc(routeOpp(leg))}</td>
+      <td>${crosslink(esc(routeOpp(leg)), name)}</td>
     </tr>`;
   }).join("\n");
 
-  // per-round prose
+  // per-round prose (mentions of other guide teams become contextual links)
   const roundData = route.map((leg) => roundProse(team, leg));
   const sections = roundData.map(({ q, body }) => `<section class="g-round">
       <h2>${esc(q)}</h2>
-      <p>${esc(body)}</p>
+      <p>${crosslink(esc(body), name)}</p>
     </section>`).join("\n");
 
   // group fixtures table
@@ -349,18 +389,21 @@ function teamArticle(team) {
   ];
 
   // sibling links (everyone except this team)
-  const siblingLinks = TEAMS.filter((t) => t !== team).map((t) => {
-    const n = teamName(t);
-    const s = `${n.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}-world-cup-2026-route`;
-    return `<a href="/guides/${s}/">${esc(n)}</a>`;
-  }).join("\n    ");
+  const siblingLinks = TEAMS.filter((t) => t !== team)
+    .map((t) => `<a href="/guides/${slugFor(teamName(t))}/">${esc(teamName(t))}</a>`)
+    .join("\n    ");
 
-  const html = head({ title, desc, url, jsonld }) + siteHeader + `
+  const heroImg = photo
+    ? `<img class="g-hero-photo" src="${photo}" alt="${esc(name)} at the 2026 World Cup" width="1280" height="698" loading="eager" decoding="async">`
+    : "";
+
+  const html = head({ title, desc, url, jsonld, image: ogImage }) + siteHeader + `
 <main class="g-article">
   <nav class="g-crumbs" aria-label="Breadcrumb">
     <a href="/">Home</a> › <a href="/guides/">Route guides</a> › <span>${esc(name)}</span>
   </nav>
   <article>
+    ${heroImg}
     <header class="g-hero">
       <div class="g-hero-flag">${flag(team)}</div>
       <h1>${esc(poss(name))} Route to the 2026 World Cup Final</h1>
@@ -425,7 +468,7 @@ ${mdRoute}
 
 *Route assumes ${name} win Group ${grp}. Opponents are bracket projections until group positions are confirmed.*
 
-${roundData.map(({ q, body }) => `## ${q}\n\n${body}`).join("\n\n")}
+${roundData.map(({ q, body }) => `## ${q}\n\n${crosslink(body, name, true)}`).join("\n\n")}
 
 ## ${poss(name)} Group ${grp} fixtures
 
@@ -440,7 +483,51 @@ ${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}
 Live bracket: ${ORIGIN}/ · All route guides: ${ORIGIN}/guides/
 `;
 
-  return { slug, html, md, title, desc, name, grp, url };
+  return { team, slug, html, md, title, desc, name, grp, url, ogImage };
+}
+
+// ---- per-team OG image (1200×630, country flag + name) ---------------------
+
+async function buildOG({ team, name, slug }) {
+  const code = seed.teams[team]?.flag;
+  let flagTag = "";
+  if (code) {
+    try {
+      const res = await fetch(`https://flagcdn.com/w1280/${code}.png`);
+      if (res.ok) {
+        const b64 = Buffer.from(await res.arrayBuffer()).toString("base64");
+        flagTag = `<image href="data:image/png;base64,${b64}" x="720" y="171" width="410" height="288" preserveAspectRatio="xMidYMid slice" clip-path="url(#fc)"/>`;
+      }
+    } catch { /* no flag → text-only card */ }
+  }
+  const FONT = "Helvetica Neue, Arial, sans-serif";
+  const nameSize = name.length > 9 ? 76 : 100;
+  const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g1" cx="14%" cy="-12%" r="85%">
+      <stop offset="0%" stop-color="#2fe08c" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#2fe08c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="98%" cy="112%" r="85%">
+      <stop offset="0%" stop-color="#3d6eff" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#3d6eff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="fc"><rect x="720" y="171" width="410" height="288" rx="18"/></clipPath>
+  </defs>
+  <rect width="1200" height="630" fill="#07090f"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  ${flagTag}
+  <rect x="720" y="171" width="410" height="288" rx="18" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+  <text x="80" y="168" font-family="${FONT}" font-size="26" font-weight="700" letter-spacing="5" fill="#2fe08c">WORLD CUP 2026 · ROUTE GUIDE</text>
+  <text x="76" y="312" font-family="${FONT}" font-size="${nameSize}" font-weight="800" fill="#ffffff">${esc(name)}</text>
+  <text x="80" y="384" font-family="${FONT}" font-size="46" font-weight="600" fill="#eef1f7">Route to the Final</text>
+  <text x="80" y="560" font-family="${FONT}" font-size="26" font-weight="600" fill="#8b93a7">worldcupknockout.football</text>
+</svg>`;
+  const png = new Resvg(svg, {
+    font: { loadSystemFonts: true, defaultFontFamily: "Helvetica Neue" },
+  }).render().asPng();
+  writeFileSync(join(PUB, "og", `${slug}.png`), png);
 }
 
 // ---- hub index -------------------------------------------------------------
@@ -543,12 +630,15 @@ ${articles.map((a) => `- [${poss(a.name)} route to the final](${ORIGIN}/guides/$
 const articles = TEAMS.map(teamArticle);
 
 mkdirSync(join(PUB, "guides"), { recursive: true });
+mkdirSync(join(PUB, "og"), { recursive: true });
 for (const a of articles) {
   const dir = join(PUB, "guides", a.slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), a.html);
   writeFileSync(join(dir, "index.md"), a.md);
 }
+// per-team OG images (flag-based); fetches flags so do it once, in parallel
+await Promise.all(articles.map(buildOG));
 const hub = hubPage(articles);
 writeFileSync(join(PUB, "guides", "index.html"), hub.html);
 writeFileSync(join(PUB, "guides", "index.md"), hub.md);

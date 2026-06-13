@@ -22,19 +22,19 @@ In the Round of 32, France would meet a third-placed team (from Group C, Group D
 
 ## What is France’s Round of 16 path?
 
-A Round-of-16 place would pit France against the winner of Match 74 (the Group E winner vs a third-placed team (from Group A, Group B, Group C, Group D or Group F)), played Sat, 4 July 2026, 5:00 PM ET at Lincoln Financial Field, Philadelphia (Match 89). Likely contenders from that side include Germany, Ivory Coast, Mexico or South Korea.
+A Round-of-16 place would pit France against the winner of Match 74 (the Group E winner vs a third-placed team (from Group A, Group B, Group C, Group D or Group F)), played Sat, 4 July 2026, 5:00 PM ET at Lincoln Financial Field, Philadelphia (Match 89). Likely contenders from that side include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico or South Korea.
 
 ## France’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 90. Heavyweights lurking in that quarter include Mexico, South Korea, Switzerland or Netherlands.
+Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 90. Heavyweights lurking in that quarter include Mexico, South Korea, Switzerland or [Netherlands](/guides/netherlands-world-cup-2026-route/).
 
 ## Could France reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include Portugal, Colombia, England, Croatia or Spain.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/), Croatia or [Spain](/guides/spain-world-cup-2026-route/).
 
 ## France’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of France’s projected route. Anyone from Brazil, Morocco, Netherlands, Japan, Germany or Ivory Coast could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of France’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
 
 ## France’s Group I fixtures
 

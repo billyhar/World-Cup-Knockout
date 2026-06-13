@@ -10,7 +10,7 @@
   --accent: #2fe08c;
   --accent-soft: rgba(47, 224, 140, 0.12);
   --gold: #ffd166;
-  --font-display: "Outfit", system-ui, sans-serif;
+  --font-display: "Google Sans", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -78,6 +78,16 @@ a:hover { text-decoration: underline; }
 }
 .g-crumbs a { color: var(--ink-dim); }
 
+.g-hero-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1280 / 698;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--card-edge);
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.8);
+  margin-bottom: 28px;
+}
 .g-hero { margin-bottom: 34px; }
 .g-hero-flag { margin-bottom: 14px; }
 .g-hero-flag .flag {

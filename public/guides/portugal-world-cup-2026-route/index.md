@@ -22,19 +22,19 @@ In the Round of 32, Portugal would meet a third-placed team (from Group D, Group
 
 ## What is Portugal’s Round of 16 path?
 
-A Round-of-16 place would pit Portugal against the winner of Match 85 (the Group B winner vs a third-placed team (from Group E, Group F, Group G, Group I or Group J)), played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include Switzerland, Germany, Ivory Coast or Netherlands.
+A Round-of-16 place would pit Portugal against the winner of Match 85 (the Group B winner vs a third-placed team (from Group E, Group F, Group G, Group I or Group J)), played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include Switzerland, [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast or [Netherlands](/guides/netherlands-world-cup-2026-route/).
 
 ## Portugal’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 100 on Sun, 12 July 2026, 9:00 PM ET at Arrowhead Stadium, Kansas City, against the winner of Round-of-16 Match 95. Heavyweights lurking in that quarter include Argentina, Spain, Uruguay or United States.
+Reaching the quarter-finals would set up Match 100 on Sun, 12 July 2026, 9:00 PM ET at Arrowhead Stadium, Kansas City, against the winner of Round-of-16 Match 95. Heavyweights lurking in that quarter include [Argentina](/guides/argentina-world-cup-2026-route/), [Spain](/guides/spain-world-cup-2026-route/), Uruguay or [United States](/guides/united-states-world-cup-2026-route/).
 
 ## Could Portugal reach the semi-finals?
 
-The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include Brazil, Morocco, Netherlands, Japan or Germany.
+The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Portugal’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Portugal’s projected route. Anyone from Germany, Ivory Coast, Mexico, South Korea, Switzerland or Brazil could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Portugal’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or [Brazil](/guides/brazil-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## Portugal’s Group K fixtures
 

@@ -22,19 +22,19 @@ In the Round of 32, England would meet a third-placed team (from Group E, Group 
 
 ## What is England’s Round of 16 path?
 
-A Round-of-16 place would pit England against the winner of Match 79 (the Group A winner vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)), played Mon, 6 July 2026, 8:00 PM ET at Estadio Azteca, Mexico City (Match 92). Likely contenders from that side include Mexico, South Korea, Brazil or Morocco.
+A Round-of-16 place would pit England against the winner of Match 79 (the Group A winner vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)), played Mon, 6 July 2026, 8:00 PM ET at Estadio Azteca, Mexico City (Match 92). Likely contenders from that side include Mexico, South Korea, [Brazil](/guides/brazil-world-cup-2026-route/) or Morocco.
 
 ## England’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 91. Heavyweights lurking in that quarter include Brazil, Morocco, Netherlands or Japan.
+Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 91. Heavyweights lurking in that quarter include [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/) or Japan.
 
 ## Could England reach the semi-finals?
 
-The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include Argentina, Spain, Uruguay, United States or Belgium.
+The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include [Argentina](/guides/argentina-world-cup-2026-route/), [Spain](/guides/spain-world-cup-2026-route/), Uruguay, [United States](/guides/united-states-world-cup-2026-route/) or Belgium.
 
 ## England’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of England’s projected route. Anyone from Germany, Ivory Coast, Mexico, South Korea, Switzerland or Brazil could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of England’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or [Brazil](/guides/brazil-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## England’s Group L fixtures
 

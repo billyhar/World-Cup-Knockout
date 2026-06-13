@@ -22,19 +22,19 @@ In the Round of 32, Scotland would meet the Group F runner-up. The tie is schedu
 
 ## What is Scotland’s Round of 16 path?
 
-A Round-of-16 place would pit Scotland against the winner of Match 78 (the Group E runner-up vs the Group I runner-up), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include Germany, Ivory Coast, France or Senegal.
+A Round-of-16 place would pit Scotland against the winner of Match 78 (the Group E runner-up vs the Group I runner-up), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, [France](/guides/france-world-cup-2026-route/) or Senegal.
 
 ## Scotland’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 92. Heavyweights lurking in that quarter include Mexico, South Korea, Brazil or Morocco.
+Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 92. Heavyweights lurking in that quarter include Mexico, South Korea, [Brazil](/guides/brazil-world-cup-2026-route/) or Morocco.
 
 ## Could Scotland reach the semi-finals?
 
-The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include Argentina, Spain, Uruguay, United States or Belgium.
+The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include [Argentina](/guides/argentina-world-cup-2026-route/), [Spain](/guides/spain-world-cup-2026-route/), Uruguay, [United States](/guides/united-states-world-cup-2026-route/) or Belgium.
 
 ## Scotland’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Scotland’s projected route. Anyone from Germany, Ivory Coast, Mexico, South Korea, Switzerland or Brazil could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Scotland’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or [Brazil](/guides/brazil-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## Scotland’s Group C fixtures
 

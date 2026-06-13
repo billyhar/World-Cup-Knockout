@@ -22,19 +22,19 @@ In the Round of 32, Argentina would meet the Group H runner-up. The tie is sched
 
 ## What is Argentina’s Round of 16 path?
 
-A Round-of-16 place would pit Argentina against the winner of Match 88 (the Group D runner-up vs the Group G runner-up), played Tue, 7 July 2026, 12:00 PM ET at Mercedes-Benz Stadium, Atlanta (Match 95). Likely contenders from that side include United States or Belgium.
+A Round-of-16 place would pit Argentina against the winner of Match 88 (the Group D runner-up vs the Group G runner-up), played Tue, 7 July 2026, 12:00 PM ET at Mercedes-Benz Stadium, Atlanta (Match 95). Likely contenders from that side include [United States](/guides/united-states-world-cup-2026-route/) or Belgium.
 
 ## Argentina’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 100 on Sun, 12 July 2026, 9:00 PM ET at Arrowhead Stadium, Kansas City, against the winner of Round-of-16 Match 96. Heavyweights lurking in that quarter include Switzerland, Germany, Ivory Coast or Netherlands.
+Reaching the quarter-finals would set up Match 100 on Sun, 12 July 2026, 9:00 PM ET at Arrowhead Stadium, Kansas City, against the winner of Round-of-16 Match 96. Heavyweights lurking in that quarter include Switzerland, [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast or [Netherlands](/guides/netherlands-world-cup-2026-route/).
 
 ## Could Argentina reach the semi-finals?
 
-The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include Brazil, Morocco, Netherlands, Japan or Germany.
+The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Argentina’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Argentina’s projected route. Anyone from Germany, Ivory Coast, Mexico, South Korea, Switzerland or Brazil could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Argentina’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or [Brazil](/guides/brazil-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## Argentina’s Group J fixtures
 

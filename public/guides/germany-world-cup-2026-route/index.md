@@ -22,19 +22,19 @@ In the Round of 32, Germany would meet a third-placed team (from Group A, Group 
 
 ## What is Germany’s Round of 16 path?
 
-A Round-of-16 place would pit Germany against the winner of Match 77 (the Group I winner vs a third-placed team (from Group C, Group D, Group F, Group G or Group H)), played Sat, 4 July 2026, 5:00 PM ET at Lincoln Financial Field, Philadelphia (Match 89). Likely contenders from that side include France, Senegal, Brazil or Morocco.
+A Round-of-16 place would pit Germany against the winner of Match 77 (the Group I winner vs a third-placed team (from Group C, Group D, Group F, Group G or Group H)), played Sat, 4 July 2026, 5:00 PM ET at Lincoln Financial Field, Philadelphia (Match 89). Likely contenders from that side include [France](/guides/france-world-cup-2026-route/), Senegal, [Brazil](/guides/brazil-world-cup-2026-route/) or Morocco.
 
 ## Germany’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 90. Heavyweights lurking in that quarter include Mexico, South Korea, Switzerland or Netherlands.
+Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 90. Heavyweights lurking in that quarter include Mexico, South Korea, Switzerland or [Netherlands](/guides/netherlands-world-cup-2026-route/).
 
 ## Could Germany reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include Portugal, Colombia, England, Croatia or Spain.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/), Croatia or [Spain](/guides/spain-world-cup-2026-route/).
 
 ## Germany’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Germany’s projected route. Anyone from Brazil, Morocco, Netherlands, Japan, Ivory Coast or France could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Germany’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, Ivory Coast or [France](/guides/france-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## Germany’s Group E fixtures
 

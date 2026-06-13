@@ -22,19 +22,19 @@ In the Round of 32, Brazil would meet the Group F runner-up. The tie is schedule
 
 ## What is Brazil’s Round of 16 path?
 
-A Round-of-16 place would pit Brazil against the winner of Match 78 (the Group E runner-up vs the Group I runner-up), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include Germany, Ivory Coast, France or Senegal.
+A Round-of-16 place would pit Brazil against the winner of Match 78 (the Group E runner-up vs the Group I runner-up), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, [France](/guides/france-world-cup-2026-route/) or Senegal.
 
 ## Brazil’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 92. Heavyweights lurking in that quarter include Mexico, South Korea, Morocco or Germany.
+Reaching the quarter-finals would set up Match 99 on Sat, 11 July 2026, 5:00 PM ET at Hard Rock Stadium, Miami, against the winner of Round-of-16 Match 92. Heavyweights lurking in that quarter include Mexico, South Korea, Morocco or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Could Brazil reach the semi-finals?
 
-The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include Argentina, Spain, Uruguay, United States or Belgium.
+The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-Benz Stadium, Atlanta. Possible opponents from the other half include [Argentina](/guides/argentina-world-cup-2026-route/), [Spain](/guides/spain-world-cup-2026-route/), Uruguay, [United States](/guides/united-states-world-cup-2026-route/) or Belgium.
 
 ## Brazil’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Brazil’s projected route. Anyone from Germany, Ivory Coast, Mexico, South Korea, Switzerland or Morocco could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Brazil’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or Morocco could be waiting on the other side of the draw.
 
 ## Brazil’s Group C fixtures
 

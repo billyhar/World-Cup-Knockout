@@ -442,7 +442,7 @@ function setStatus() {
   // phones: the pill sits beside the brand, so keep it short
   pill.textContent = tzAbbr
     ? innerWidth < 700
-      ? `All times ${tzAbbr}`
+      ? tzAbbr
       : `All times ${tzAbbr}${n ? ` · ${n} result${n === 1 ? "" : "s"} in` : ""}`
     : n ? `${n} result${n === 1 ? "" : "s"} in` : "";
   if (!pill.textContent) pill.hidden = true;

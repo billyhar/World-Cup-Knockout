@@ -26,15 +26,15 @@ A Round-of-16 place would pit Netherlands against the winner of Match 73 (the Gr
 
 ## Netherlands’ potential quarter-final
 
-Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 89. Heavyweights lurking in that quarter include Germany, Ivory Coast, Mexico or South Korea.
+Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM ET at Gillette Stadium, Boston, against the winner of Round-of-16 Match 89. Heavyweights lurking in that quarter include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico or South Korea.
 
 ## Could Netherlands reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include Portugal, Colombia, England, Croatia or Spain.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/), Croatia or [Spain](/guides/spain-world-cup-2026-route/).
 
 ## Netherlands’ route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Netherlands’ projected route. Anyone from Brazil, Morocco, Japan, Germany, Ivory Coast or France could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Netherlands’ projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, Japan, [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast or [France](/guides/france-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## Netherlands’ Group F fixtures
 
