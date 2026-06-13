@@ -1,0 +1,264 @@
+/* ── World Cup 2026 route guides — standalone article pages ────────────── */
+
+:root {
+  --bg: #07090f;
+  --card: #10131e;
+  --card-edge: rgba(255, 255, 255, 0.08);
+  --ink: #eef1f7;
+  --ink-dim: #b3bacb;
+  --ink-faint: #7b8398;
+  --accent: #2fe08c;
+  --accent-soft: rgba(47, 224, 140, 0.12);
+  --gold: #ffd166;
+  --font-display: "Outfit", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(1100px 600px at 12% -8%, rgba(47, 224, 140, 0.06), transparent 60%),
+    radial-gradient(900px 600px at 98% 4%, rgba(61, 110, 255, 0.07), transparent 55%),
+    var(--bg);
+  color: var(--ink);
+  font: 17px/1.7 var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── top bar ───────────────────────────────────────────────────────────── */
+
+.g-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 18px 22px;
+}
+.brand { display: flex; align-items: center; gap: 11px; color: var(--ink); }
+.brand:hover { text-decoration: none; }
+.brand-ball { font-size: 24px; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong { font-size: 15px; font-weight: 800; }
+.brand-text span {
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.g-cta {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--accent-soft);
+  border: 1px solid rgba(47, 224, 140, 0.35);
+  border-radius: 99px;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+.g-cta:hover { background: rgba(47, 224, 140, 0.18); text-decoration: none; }
+
+/* ── article shell ─────────────────────────────────────────────────────── */
+
+.g-article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 8px 22px 40px;
+}
+.g-crumbs {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  margin-bottom: 26px;
+}
+.g-crumbs a { color: var(--ink-dim); }
+
+.g-hero { margin-bottom: 34px; }
+.g-hero-flag { margin-bottom: 14px; }
+.g-hero-flag .flag {
+  width: 56px;
+  height: 42px;
+  border-radius: 7px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.g-standfirst {
+  font-size: 19px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+.g-meta {
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+/* ── rounds & sections ─────────────────────────────────────────────────── */
+
+.g-round {
+  margin: 26px 0;
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--accent);
+}
+h2 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.g-round p { color: var(--ink-dim); }
+
+.g-table-wrap, .g-faq-wrap { margin: 40px 0; }
+.g-table-wrap h2, .g-faq-wrap h2 { margin-bottom: 16px; }
+
+/* ── tables ────────────────────────────────────────────────────────────── */
+
+.g-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.g-table th, .g-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--card-edge);
+  vertical-align: top;
+}
+.g-table thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: rgba(255, 255, 255, 0.02);
+}
+.g-table tbody tr:last-child td { border-bottom: 0; }
+.g-table tbody tr:hover { background: rgba(255, 255, 255, 0.025); }
+.g-table .flag {
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  vertical-align: -3px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+.g-note {
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ── FAQ ───────────────────────────────────────────────────────────────── */
+
+.g-faq {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 11px;
+  padding: 4px 16px;
+  margin-bottom: 10px;
+}
+.g-faq summary {
+  font-size: 16.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px 0;
+  list-style: none;
+  position: relative;
+  padding-right: 28px;
+}
+.g-faq summary::-webkit-details-marker { display: none; }
+.g-faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--accent);
+  transition: rotate 0.2s;
+}
+.g-faq[open] summary::after { rotate: 45deg; }
+.g-faq p {
+  color: var(--ink-dim);
+  font-size: 15.5px;
+  padding: 0 0 14px;
+}
+
+/* ── hub grid ──────────────────────────────────────────────────────────── */
+
+.g-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.g-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 13px;
+  padding: 15px 16px;
+  transition: border-color 0.15s, translate 0.15s;
+}
+.g-card:hover { border-color: rgba(47, 224, 140, 0.45); translate: 0 -2px; text-decoration: none; }
+.g-card-flag .flag {
+  width: 38px;
+  height: 28px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+.g-card-text { display: flex; flex-direction: column; line-height: 1.35; }
+.g-card-text strong { font-size: 15.5px; font-weight: 700; }
+.g-card-text span { font-size: 12.5px; color: var(--ink-faint); }
+
+/* ── footer ────────────────────────────────────────────────────────────── */
+
+.g-foot {
+  max-width: 760px;
+  margin: 50px auto 0;
+  padding: 30px 22px 50px;
+  border-top: 1px solid var(--card-edge);
+}
+.g-foot-lead { color: var(--ink-dim); font-size: 16px; margin-bottom: 22px; }
+.g-foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.g-foot-links > span { color: var(--ink-faint); font-weight: 600; }
+.g-foot-fine { font-size: 12.5px; color: var(--ink-faint); line-height: 1.6; }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .g-top { padding: 14px 16px; }
+  .g-cta { padding: 7px 12px; font-size: 12.5px; }
+  .g-article { padding: 4px 16px 30px; }
+  .g-standfirst { font-size: 17px; }
+  .g-table { font-size: 13.5px; }
+  .g-table th, .g-table td { padding: 10px 10px; }
+}

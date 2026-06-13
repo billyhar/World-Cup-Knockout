@@ -7,6 +7,7 @@
   "scripts": {
     "build:seed": "node scripts/build-seed.mjs",
     "build:seo": "node scripts/build-seo.mjs",
+    "build:guides": "node scripts/build-guides.mjs",
     "dev": "netlify dev"
   },
   "dependencies": {

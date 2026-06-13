@@ -6,7 +6,7 @@ import {
 
 // ---- world layout: mirrored bracket, final in the middle -------------------
 // groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
-const G = { w: 380, h: 478, gapX: 44, gapY: 48 };
+const G = { w: 380, h: 540, gapX: 44, gapY: 48 };
 const K = { w: 304, h: 104, gapY: 30 };
 const MID_Y = 980;
 const WORLD = { w: 5260, h: 1960 };
@@ -47,7 +47,7 @@ const flagImg = (code) => {
   const f = seed.teams[code]?.flag;
   const name = seed.teams[code]?.name ?? code;
   return f
-    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="${esc(name)}" loading="lazy" decoding="async">`
+    ? `<img class="flag" src="https://flagcdn.com/w40/${f}.png" srcset="https://flagcdn.com/w80/${f}.png 2x" alt="${esc(name)}" decoding="async">`
     : `<span class="flag flag-tbd"></span>`;
 };
 
@@ -182,7 +182,9 @@ function groupCardHTML(g, standings) {
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
+      <span class="g-fix-spacer" aria-hidden="true"></span>
       ${evTagsHTML(r, codes)}
+      <span class="g-fix-city">${m.city}</span>
     </div>`;
   }).join("");
 

@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+# Content Signals (contentsignals.org) — this is a public live tracker meant
+# to be discovered; allow search indexing and use as AI answer-engine input.
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 Sitemap: https://worldcupknockout.football/sitemap.xml

@@ -25,6 +25,22 @@ World Cup Knockout (worldcupknockout.football) is a live interactive canvas show
 
 Scores sourced from football-data.org (per-match detail endpoint) and ESPN public scoreboard. Schedule from official FIFA 2026 fixture list. Finished results are persisted server-side so they survive upstream outages.
 
+## Route Guides
+
+Projected knockout routes (Round of 32 → Final) for leading contenders, with dates, host cities and likely opponents:
+
+- [England’s route to the final](https://worldcupknockout.football/guides/england-world-cup-2026-route/): Group L knockout path
+- [France’s route to the final](https://worldcupknockout.football/guides/france-world-cup-2026-route/): Group I knockout path
+- [Spain’s route to the final](https://worldcupknockout.football/guides/spain-world-cup-2026-route/): Group H knockout path
+- [Portugal’s route to the final](https://worldcupknockout.football/guides/portugal-world-cup-2026-route/): Group K knockout path
+- [Brazil’s route to the final](https://worldcupknockout.football/guides/brazil-world-cup-2026-route/): Group C knockout path
+- [Argentina’s route to the final](https://worldcupknockout.football/guides/argentina-world-cup-2026-route/): Group J knockout path
+- [Germany’s route to the final](https://worldcupknockout.football/guides/germany-world-cup-2026-route/): Group E knockout path
+- [Netherlands’ route to the final](https://worldcupknockout.football/guides/netherlands-world-cup-2026-route/): Group F knockout path
+- [United States’ route to the final](https://worldcupknockout.football/guides/united-states-world-cup-2026-route/): Group D knockout path
+- [Scotland’s route to the final](https://worldcupknockout.football/guides/scotland-world-cup-2026-route/): Group C knockout path
+- [All route guides](https://worldcupknockout.football/guides/)
+
 ## Usage
 
 Public read-only tracker. No user accounts. Anonymous page-view analytics only.
