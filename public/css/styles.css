@@ -634,8 +634,21 @@ html, body {
 .live-dock.anim .ld-match:nth-last-child(3) { animation-delay: 0.1s; }
 .live-dock.anim .ld-match:nth-last-child(4) { animation-delay: 0.15s; }
 .live-dock.anim .ld-match:nth-last-child(n + 5) { animation-delay: 0.2s; }
+/* ── score-change slide-in animation ──────────────────────────────────── */
+/* Fires on .k-score, .g-fix-score, and .ld-score when a goal is detected  */
+/* between poll cycles. The element already has the new value; we slide it  */
+/* in from below so the update reads as a live event.                       */
+@keyframes score-slide-in {
+  from { transform: translateY(55%); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+.score-changed {
+  animation: score-slide-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ld-pill, .ld-match, .ld-caret, .live-dot { animation: none !important; transition: none !important; }
+  .score-changed { animation: none !important; }
 }
 
 /* the pan/zoom hint shares the bottom edge — hide it while games are live */

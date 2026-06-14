@@ -22,6 +22,13 @@ const linkset = {
       ],
       status: [{ href: `${ORIGIN}/api/results` }],
     },
+    {
+      anchor: `${ORIGIN}/api/odds`,
+      "service-doc": [
+        { href: `${ORIGIN}/llms.txt`, type: "text/plain", title: "Outright winner odds — live bookmaker market (de-vigged) with bracket-model fallback (JSON)" },
+      ],
+      status: [{ href: `${ORIGIN}/api/odds` }],
+    },
   ],
 };
 

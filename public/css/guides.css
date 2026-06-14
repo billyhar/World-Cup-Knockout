@@ -177,6 +177,173 @@ h2 {
   font-style: italic;
 }
 
+/* ── live winner odds ──────────────────────────────────────────────────── */
+
+.g-odds { margin-top: 30px; }
+.g-odds-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+.g-odds-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+.g-odds-status[data-state="live"] { color: var(--accent); }
+.g-odds-status[data-state="live"]::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(47, 224, 140, 0.5);
+  animation: g-odds-pulse 1.8s ease-out infinite;
+}
+@keyframes g-odds-pulse {
+  70% { box-shadow: 0 0 0 7px rgba(47, 224, 140, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(47, 224, 140, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-odds-status[data-state="live"]::before { animation: none; }
+}
+.g-odds-table td { vertical-align: middle; }
+.g-odds-rank {
+  width: 1%;
+  white-space: nowrap;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+.g-odds-team { font-weight: 600; }
+.g-odds-team .flag { margin-right: 9px; }
+.g-odds-dec {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.g-odds-imp {
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.g-odds-table tbody tr:first-child .g-odds-dec { color: var(--gold); }
+.g-odds-model { color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.g-odds-diff { font-variant-numeric: tabular-nums; }
+.g-diff { font-weight: 600; font-size: 13.5px; }
+.g-diff-pos { color: #3d9bff; }
+.g-diff-neg { color: var(--accent); }
+
+/* ── hub teaser (who will win?) ────────────────────────────────────────── */
+
+.g-teaser-odds-wrap {
+  margin: 10px 0 36px;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.g-teaser-odds-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.g-teaser-odds-label { flex: 0 0 auto; }
+.g-teaser-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.g-teaser-status {
+  margin-bottom: 0;
+}
+.g-teaser-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 1 1 auto;
+}
+.g-teaser-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-edge);
+  border-radius: 8px;
+  padding: 7px 13px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.g-teaser-pill .flag { width: 20px; height: 14px; border-radius: 2px; }
+.g-teaser-pill strong { color: var(--ink); }
+.g-teaser-odds {
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  margin-left: 2px;
+  display: inline-block; /* needed for translateY to work */
+}
+
+/* ── odds change animations ─────────────────────────────────────────────── */
+
+/* Teaser pill: slot-machine flip when a number updates */
+@keyframes g-odds-out {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-110%); opacity: 0; }
+}
+@keyframes g-odds-in {
+  from { transform: translateY(110%);  opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* Full table: staggered slide-up when live rows replace the model snapshot */
+@keyframes g-row-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#g-odds-body.is-live tr {
+  animation: g-row-in 0.3s ease both;
+}
+#g-odds-body.is-live tr:nth-child(2)  { animation-delay: 0.03s; }
+#g-odds-body.is-live tr:nth-child(3)  { animation-delay: 0.06s; }
+#g-odds-body.is-live tr:nth-child(4)  { animation-delay: 0.09s; }
+#g-odds-body.is-live tr:nth-child(5)  { animation-delay: 0.12s; }
+#g-odds-body.is-live tr:nth-child(6)  { animation-delay: 0.15s; }
+#g-odds-body.is-live tr:nth-child(7)  { animation-delay: 0.18s; }
+#g-odds-body.is-live tr:nth-child(8)  { animation-delay: 0.21s; }
+#g-odds-body.is-live tr:nth-child(9)  { animation-delay: 0.24s; }
+#g-odds-body.is-live tr:nth-child(10) { animation-delay: 0.27s; }
+#g-odds-body.is-live tr:nth-child(11) { animation-delay: 0.30s; }
+#g-odds-body.is-live tr:nth-child(12) { animation-delay: 0.33s; }
+#g-odds-body.is-live tr:nth-child(13) { animation-delay: 0.36s; }
+#g-odds-body.is-live tr:nth-child(14) { animation-delay: 0.39s; }
+#g-odds-body.is-live tr:nth-child(15) { animation-delay: 0.42s; }
+#g-odds-body.is-live tr:nth-child(16) { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  #g-odds-body.is-live tr { animation: none; }
+  .g-teaser-odds { transition: none; }
+}
+.g-teaser-link {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 8px 16px;
+  background: var(--accent-soft);
+  border: 1px solid rgba(47,224,140,0.25);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.g-teaser-link:hover { background: rgba(47,224,140,0.18); text-decoration: none; }
+@media (max-width: 600px) {
+  .g-teaser-odds-inner { flex-direction: column; align-items: flex-start; }
+  .g-teaser-link { margin-left: 0; width: 100%; text-align: center; }
+}
+
 /* ── FAQ ───────────────────────────────────────────────────────────────── */
 
 .g-faq {

@@ -25,6 +25,18 @@ World Cup Knockout (worldcupknockout.football) is a live interactive canvas show
 
 Scores sourced from football-data.org (per-match detail endpoint) and ESPN public scoreboard. Schedule from official FIFA 2026 fixture list. Finished results are persisted server-side so they survive upstream outages.
 
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
 ## Route Guides
 
 Projected knockout routes (Round of 32 → Final) for leading contenders, with dates, host cities and likely opponents:
@@ -42,6 +54,10 @@ Projected knockout routes (Round of 32 → Final) for leading contenders, with d
 - [Australia’s route to the final](https://worldcupknockout.football/guides/australia-world-cup-2026-route/): Group D knockout path
 - [Croatia’s route to the final](https://worldcupknockout.football/guides/croatia-world-cup-2026-route/): Group L knockout path
 - [All route guides](https://worldcupknockout.football/guides/)
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
 
 ## Usage
 

@@ -189,7 +189,7 @@ function groupCardHTML(g, standings) {
     const codes = { h: m.home, a: m.away };
     const tv = tvHTML(m.id);
     return `
-    <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}">
+    <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}" data-mid="${m.id}">
       <span class="g-fix-date">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
       <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
@@ -523,13 +523,40 @@ function sanitizeLive() {
   }
 }
 
+// After a re-render, find every score element whose value changed and
+// trigger the slide-in animation on it so goals read as live events.
+function markChangedScores(prev) {
+  const flash = (el) => {
+    if (!el) return;
+    el.classList.remove("score-changed");
+    void el.offsetWidth; // force reflow to restart animation
+    el.classList.add("score-changed");
+  };
+  for (const m of seed.matches) {
+    const old = prev[m.id];
+    const cur = state.results[m.id];
+    const oldTxt = old?.hs != null ? `${old.hs}-${old.as}` : null;
+    const newTxt = cur?.hs != null ? `${cur.hs}-${cur.as}` : null;
+    if (!newTxt || newTxt === oldTxt) continue;
+    // Knockout card: two .k-score spans inside #match-{id}
+    document.getElementById(`match-${m.id}`)
+      ?.querySelectorAll(".k-score").forEach(flash);
+    // Group fixture: .g-fix-score inside [data-mid="{id}"]
+    flash(document.querySelector(`.g-fix[data-mid="${m.id}"] .g-fix-score`));
+    // Live dock scores
+    flash(document.querySelector(`#live-panel [data-target="match-${m.id}"] .ld-score`));
+  }
+}
+
 async function refresh() {
+  const prev = { ...state.results };
   try {
     state = await loadResults();
   } catch { /* offline → keep last known */ }
   sanitizeLive();
   render();
   setStatus();
+  markChangedScores(prev);
 }
 
 // ---- boot ----------------------------------------------------------------------

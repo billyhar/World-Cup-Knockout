@@ -2,6 +2,10 @@
 
 > Projected knockout paths for the leading contenders at the 2026 FIFA World Cup — from the Round of 32 to the Final on 19 July, with dates, host cities and the marquee opponents waiting in each round.
 
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/) — live bookmaker odds &amp; bracket model predictions
+
+## Route guides
+
 - [England’s route to the final](https://worldcupknockout.football/guides/england-world-cup-2026-route/) — Group L
 - [France’s route to the final](https://worldcupknockout.football/guides/france-world-cup-2026-route/) — Group I
 - [Spain’s route to the final](https://worldcupknockout.football/guides/spain-world-cup-2026-route/) — Group H

@@ -13,6 +13,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Resvg } from "@resvg/resvg-js";
+import { modelOdds } from "./odds-model.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = join(ROOT, "public");
@@ -578,9 +579,259 @@ async function buildOG({ team, name, slug }) {
   writeFileSync(join(PUB, "og", `${slug}.png`), png);
 }
 
+// ---- live winner odds (hub) ------------------------------------------------
+
+// Shared decimal/implied formatting — kept byte-identical in the client
+// script below so the static snapshot and the live refresh render the same.
+const fmtOdds = (d) => (d < 10 ? d.toFixed(1) : String(Math.round(d)));
+const fmtPct = (p) => `${(p * 100).toFixed(1)}%`;
+
+// ---- dedicated winner-odds page --------------------------------------------
+
+// Full article page: /world-cup-2026-winner/
+// `rows` is the model output baked in as the static snapshot.
+function winnerPage(rows) {
+  const slug = "world-cup-2026-winner";
+  const url = `${ORIGIN}/${slug}/`;
+  const title = "Who is Likely to Win the World Cup 2026? Live Odds & Model Predictions";
+  const desc = "Live bookmaker odds and bracket model predictions for the 2026 FIFA World Cup winner — France, Spain and England lead the market. Updated every 6 hours with the latest outright prices.";
+
+  // Pre-compute model lookup for client script
+  const modelJson = JSON.stringify(Object.fromEntries(rows.map((r) => [r.code, r.prob])));
+
+  // Static body rows (model only, JS upgrades to live)
+  const bodyRows = rows.map((r, i) => `<tr>
+        <td class="g-odds-rank">${i + 1}</td>
+        <td class="g-odds-team">${flag(r.code)} <span>${esc(r.name)}</span></td>
+        <td class="g-odds-dec">${fmtOdds(r.decimal)}</td>
+        <td class="g-odds-imp">${fmtPct(r.prob)}</td>
+        <td class="g-odds-model">${fmtPct(r.prob)}</td>
+        <td class="g-odds-diff">—</td>
+      </tr>`).join("\n");
+
+  // Pick the top few for the intro (from the model at build time; JS will update prose via data attrs)
+  const top1 = rows[0];
+  const top2 = rows[1];
+  const top3 = rows[2];
+
+  const intro = `France, Spain, England and Argentina are the leading names in the outright market for the 2026 FIFA World Cup. Below is a live table of bookmaker odds — the median decimal price across major UK, European and US books, de-vigged to a fair win probability — alongside our Monte&nbsp;Carlo bracket model's prediction for each team.`;
+
+  const faqs = [
+    {
+      q: "Who is the favourite to win the 2026 World Cup?",
+      a: "France and Spain are joint bookmaker favourites according to the current consensus, with England and Argentina also prominent in the market. See the live table above for the latest prices and implied probabilities.",
+    },
+    {
+      q: "How are World Cup winner odds calculated on this page?",
+      a: "We pull outright winner prices from The Odds API across UK, European and US bookmakers, take the median decimal price per team, then de-vig the field so the implied probabilities sum to 100%. Odds are updated every 6 hours.",
+    },
+    {
+      q: "What does the bracket model predict for the 2026 World Cup winner?",
+      a: `The model runs 40,000 Monte Carlo simulations of the full 2026 bracket — simulating all 12 groups using Elo-style team ratings, picking the eight best third-placed teams, then playing out the knockout rounds. ${top1.name} currently top the model at ${fmtPct(top1.prob)} title probability.`,
+    },
+    {
+      q: "What does 'vs Model' mean in the odds table?",
+      a: "The 'vs Model' column shows the difference in percentage points between the bookmaker implied probability (after de-vigging) and our bracket model's prediction. A positive number means the market prices the team higher than the model does; a negative number means the model thinks they have a better chance than the bookmakers are offering.",
+    },
+    {
+      q: "When is the 2026 World Cup Final?",
+      a: "The 2026 FIFA World Cup Final is at MetLife Stadium, East Rutherford, New Jersey (New York area) on 19 July 2026.",
+    },
+  ];
+
+  const faqHtml = faqs.map((f) => `<details class="g-faq">
+    <summary>${esc(f.q)}</summary>
+    <p>${f.a}</p>
+  </details>`).join("\n");
+
+  const jsonld = [
+    {
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN}/` },
+        { "@type": "ListItem", position: 2, name: "Route Guides", item: `${ORIGIN}/guides/` },
+        { "@type": "ListItem", position: 3, name: "Who will win the World Cup 2026?", item: url },
+      ],
+    },
+    {
+      "@context": "https://schema.org", "@type": "Article",
+      headline: title, description: desc,
+      datePublished: TODAY, dateModified: TODAY,
+      mainEntityOfPage: url,
+      image: `${ORIGIN}/og.png`,
+      author: { "@type": "Organization", name: "World Cup Knockout" },
+      publisher: { "@type": "Organization", name: "World Cup Knockout", url: `${ORIGIN}/` },
+      about: { "@type": "SportsEvent", name: "FIFA World Cup 2026" },
+    },
+    {
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question", name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ];
+
+  const siblingLinks = TEAMS
+    .map((t) => `<a href="/guides/${slugFor(teamName(t))}/">${esc(teamName(t))}</a>`)
+    .join("\n    ");
+
+  const html = head({ title, desc, url, jsonld }) + siteHeader + `
+<main class="g-article">
+  <nav class="g-crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/guides/">Route guides</a> › <span>Who will win?</span>
+  </nav>
+  <article>
+    <header class="g-hero">
+      <h1>Who is Likely to Win the World Cup 2026?</h1>
+      <p class="g-standfirst">${intro}</p>
+      <p class="g-meta">Live bookmaker odds · bracket model predictions · Updated ${fmtDate(`${TODAY}T12:00:00Z`)}</p>
+    </header>
+
+    <section class="g-table-wrap g-odds" id="winner-odds" aria-label="World Cup 2026 winner odds">
+      <p class="g-odds-status" id="g-odds-status" data-state="model">Model projection · live bookmaker odds load automatically</p>
+      <table class="g-table g-odds-table">
+        <thead><tr><th>#</th><th>Team</th><th>Odds</th><th>Bookie&nbsp;%</th><th>Model&nbsp;%</th><th>vs&nbsp;Model</th></tr></thead>
+        <tbody id="g-odds-body">
+${bodyRows}
+        </tbody>
+      </table>
+      <p class="g-note">Bookie&nbsp;% is the median decimal price across bookmakers, de-vigged to a fair win probability. Model&nbsp;% is our Monte&nbsp;Carlo of the bracket. Positive vs&nbsp;Model means the market rates the team higher than the model. Odds are projections, not betting advice.</p>
+    </section>
+<script>
+(function(){
+  var modelProb=${modelJson};
+  var fmtOdds=function(d){return d<10?d.toFixed(1):String(Math.round(d));};
+  var fmtPct=function(p){return (p*100).toFixed(1)+"%";};
+  var fmtDiff=function(d){return (d>=0?"+":"")+((d)*100).toFixed(1)+"pp";};
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+  fetch("/api/odds").then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.teams||!d.teams.length) return;
+    var body=document.getElementById("g-odds-body");
+    var status=document.getElementById("g-odds-status");
+    var isLive=d.source==="bookmakers";
+    body.innerHTML=d.teams.slice(0,16).map(function(t,i){
+      var fl=t.flag?'<img class="flag" src="https://flagcdn.com/w40/'+t.flag+'.png" srcset="https://flagcdn.com/w80/'+t.flag+'.png 2x" alt="" width="26" height="19" loading="lazy" decoding="async">':"";
+      var mp=modelProb[t.code];
+      var mCell=mp!=null?fmtPct(mp):"—";
+      var diffVal=isLive&&mp!=null?t.prob-mp:null;
+      var diffCell=diffVal!=null?'<span class="g-diff '+(diffVal>0?"g-diff-pos":"g-diff-neg")+'">'+fmtDiff(diffVal)+"</span>":"—";
+      return '<tr><td class="g-odds-rank">'+(i+1)+'</td><td class="g-odds-team">'+fl+' <span>'+esc(t.name)+'</span></td><td class="g-odds-dec">'+fmtOdds(t.decimal)+'</td><td class="g-odds-imp">'+fmtPct(t.prob)+'</td><td class="g-odds-model">'+mCell+'</td><td class="g-odds-diff">'+diffCell+'</td></tr>';
+    }).join("");
+    body.classList.remove("is-live");
+    body.offsetHeight; // force reflow so animation re-triggers
+    body.classList.add("is-live");
+    if(isLive){
+      var when=d.updatedAt?new Date(d.updatedAt).toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}):"";
+      status.textContent="Live bookmaker odds"+(d.stale?" (last known)":"")+(when?" · updated "+when:"");
+      status.setAttribute("data-state","live");
+    } else {
+      status.textContent="Model projection · live bookmaker odds unavailable";
+    }
+  }).catch(function(){});
+})();
+</script>
+
+    <section class="g-faq-wrap" aria-label="Frequently asked questions">
+      <h2>World Cup 2026 winner — FAQ</h2>
+${faqHtml}
+    </section>
+
+    <section class="g-table-wrap" aria-label="Knockout route guides">
+      <h2>Knockout route guides</h2>
+      <p style="color:var(--ink-dim);margin-bottom:16px">See the full projected path to the Final — Round of 32 dates, host cities and likely opponents — for every leading contender.</p>
+      <nav class="g-foot-links" style="flex-wrap:wrap;gap:10px;margin:0" aria-label="Route guides">
+        ${siblingLinks}
+      </nav>
+    </section>
+  </article>
+</main>` + siteFooter(`<a href="/world-cup-2026-winner/">Who will win?</a>\n    ${TEAMS.map((t) => `<a href="/guides/${slugFor(teamName(t))}/">${esc(teamName(t))}</a>`).join("\n    ")}`);
+
+  const md = `# Who is Likely to Win the World Cup 2026?
+
+> ${top1.name} and ${top2.name} lead the outright market. Live bookmaker odds and bracket model predictions updated every 6 hours. Live JSON: ${ORIGIN}/api/odds
+
+*Updated ${fmtDate(`${TODAY}T12:00:00Z`)}*
+
+## Live winner odds
+
+| # | Team | Odds | Bookie % | Model % |
+|---|---|---|---|---|
+${rows.map((r, i) => `| ${i + 1} | ${r.name} | ${fmtOdds(r.decimal)} | ${fmtPct(r.prob)} | ${fmtPct(r.prob)} |`).join("\n")}
+
+Bookie % = median bookmaker price, de-vigged. Model % = Monte Carlo bracket simulation.
+
+## FAQ
+
+${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}
+
+---
+
+Live bracket: ${ORIGIN}/ · All route guides: ${ORIGIN}/guides/
+`;
+
+  return { html, md, slug, url };
+}
+
+// ---- hub teaser (replaces full odds table on /guides/) ---------------------
+
+// Compact top-3 teaser linking through to the winner page.
+function oddsTeaserSection(rows) {
+  const top3 = rows.slice(0, 3);
+  const pills = top3.map((r) => `<span class="g-teaser-pill">
+      ${flag(r.code)} <strong>${esc(r.name)}</strong> <span class="g-teaser-odds" data-code="${esc(r.code)}">${fmtOdds(r.decimal)}</span>
+    </span>`).join("\n");
+
+  const modelJson = JSON.stringify(Object.fromEntries(rows.map((r) => [r.code, { dec: r.decimal, prob: r.prob }])));
+
+  const html = `
+  <section class="g-teaser-odds-wrap" aria-label="World Cup 2026 winner odds preview">
+    <div class="g-teaser-odds-inner">
+      <div class="g-teaser-odds-label">
+        <p class="g-teaser-title">Who will win the World Cup?</p>
+        <p class="g-odds-status g-teaser-status" id="g-teaser-status" data-state="model">Model projection</p>
+      </div>
+      <div class="g-teaser-pills" id="g-teaser-pills">
+${pills}
+      </div>
+      <a class="g-teaser-link" href="/world-cup-2026-winner/">Full odds &amp; predictions →</a>
+    </div>
+  </section>
+<script>
+(function(){
+  var snap=${modelJson};
+  function flipOdds(el,val){
+    if(!el||el.textContent.trim()===val) return;
+    el.animate([{transform:"translateY(0)",opacity:1},{transform:"translateY(-110%)",opacity:0}],
+      {duration:180,easing:"ease-in",fill:"forwards"}).finished.then(function(){
+        el.textContent=val;
+        el.animate([{transform:"translateY(110%)",opacity:0},{transform:"translateY(0)",opacity:1}],
+          {duration:180,easing:"ease-out"});
+      });
+  }
+  fetch("/api/odds").then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.teams||!d.teams.length) return;
+    d.teams.slice(0,3).forEach(function(t){
+      var el=document.querySelector('.g-teaser-odds[data-code="'+t.code+'"]');
+      var newVal=t.decimal<10?t.decimal.toFixed(1):String(Math.round(t.decimal));
+      flipOdds(el,newVal);
+    });
+    var status=document.getElementById("g-teaser-status");
+    if(d.source==="bookmakers"){
+      var when=d.updatedAt?new Date(d.updatedAt).toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}):"";
+      status.textContent="Live odds"+(when?" · "+when:"");
+      status.setAttribute("data-state","live");
+    }
+  }).catch(function(){});
+})();
+</script>`;
+
+  return { html };
+}
+
 // ---- hub index -------------------------------------------------------------
 
-function hubPage(articles) {
+function hubPage(articles, teaser) {
   const url = `${ORIGIN}/guides/`;
   const title = "World Cup 2026 Route Guides — Every Contender's Knockout Path";
   const desc = "Projected knockout routes for the 2026 World Cup favourites: Round of 32 to the Final, with dates, host cities and likely opponents for England, France, Brazil, Spain, Argentina and more.";
@@ -628,11 +879,16 @@ function hubPage(articles) {
   <section class="g-grid">
 ${cards}
   </section>
+${teaser.html}
 </main>` + siteFooter(`<a href="/">Live bracket</a>`);
 
   const md = `# World Cup 2026 Route Guides
 
 > Projected knockout paths for the leading contenders at the 2026 FIFA World Cup — from the Round of 32 to the Final on 19 July, with dates, host cities and the marquee opponents waiting in each round.
+
+- [Who is likely to win the World Cup 2026?](${ORIGIN}/world-cup-2026-winner/) — live bookmaker odds &amp; bracket model predictions
+
+## Route guides
 
 ${articles.map((a) => `- [${poss(a.name)} route to the final](${ORIGIN}/guides/${a.slug}/) — Group ${a.grp}`).join("\n")}
 
@@ -687,9 +943,16 @@ for (const a of articles) {
 }
 // per-team OG images (flag-based); fetches flags so do it once, in parallel
 await Promise.all(articles.map(buildOG));
-const hub = hubPage(articles);
+const modelRows = modelOdds(seed).slice(0, 16);
+const winner = winnerPage(modelRows);
+const teaser = oddsTeaserSection(modelRows);
+const hub = hubPage(articles, teaser);
 writeFileSync(join(PUB, "guides", "index.html"), hub.html);
 writeFileSync(join(PUB, "guides", "index.md"), hub.md);
+const winnerDir = join(PUB, winner.slug);
+mkdirSync(winnerDir, { recursive: true });
+writeFileSync(join(winnerDir, "index.html"), winner.html);
+writeFileSync(join(winnerDir, "index.md"), winner.md);
 // homepage markdown twin (the canvas HTML can't be meaningfully serialised)
 writeFileSync(join(PUB, "index.md"), homeMarkdown(articles));
 
@@ -697,6 +960,7 @@ writeFileSync(join(PUB, "index.md"), homeMarkdown(articles));
 const urls = [
   { loc: `${ORIGIN}/`, freq: "hourly", pri: "1.0", mod: TODAY },
   { loc: `${ORIGIN}/guides/`, freq: "weekly", pri: "0.8", mod: TODAY },
+  { loc: winner.url, freq: "daily", pri: "0.9", mod: TODAY },
   ...articles.map((a) => ({ loc: `${ORIGIN}/guides/${a.slug}/`, freq: "weekly", pri: "0.7", mod: TODAY })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -720,6 +984,10 @@ Projected knockout routes (Round of 32 → Final) for leading contenders, with d
 
 ${articles.map((a) => `- [${poss(a.name)} route to the final](${ORIGIN}/guides/${a.slug}/): Group ${a.grp} knockout path`).join("\n")}
 - [All route guides](${ORIGIN}/guides/)
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](${ORIGIN}/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: ${ORIGIN}/api/odds
 `;
 // insert before "## Usage" if present, else append
 llms = llms.includes("## Usage")

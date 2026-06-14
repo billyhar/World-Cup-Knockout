@@ -129,6 +129,55 @@
     </span>
   </a>
   </section>
+
+  <section class="g-teaser-odds-wrap" aria-label="World Cup 2026 winner odds preview">
+    <div class="g-teaser-odds-inner">
+      <div class="g-teaser-odds-label">
+        <p class="g-teaser-title">Who will win the World Cup?</p>
+        <p class="g-odds-status g-teaser-status" id="g-teaser-status" data-state="model">Model projection</p>
+      </div>
+      <div class="g-teaser-pills" id="g-teaser-pills">
+<span class="g-teaser-pill">
+      <img class="flag" src="https://flagcdn.com/w40/ar.png" srcset="https://flagcdn.com/w80/ar.png 2x" alt="" width="26" height="19" loading="lazy" decoding="async"> <strong>Argentina</strong> <span class="g-teaser-odds" data-code="ARG">5.7</span>
+    </span>
+<span class="g-teaser-pill">
+      <img class="flag" src="https://flagcdn.com/w40/fr.png" srcset="https://flagcdn.com/w80/fr.png 2x" alt="" width="26" height="19" loading="lazy" decoding="async"> <strong>France</strong> <span class="g-teaser-odds" data-code="FRA">5.7</span>
+    </span>
+<span class="g-teaser-pill">
+      <img class="flag" src="https://flagcdn.com/w40/es.png" srcset="https://flagcdn.com/w80/es.png 2x" alt="" width="26" height="19" loading="lazy" decoding="async"> <strong>Spain</strong> <span class="g-teaser-odds" data-code="ESP">6.4</span>
+    </span>
+      </div>
+      <a class="g-teaser-link" href="/world-cup-2026-winner/">Full odds &amp; predictions →</a>
+    </div>
+  </section>
+<script>
+(function(){
+  var snap={"ARG":{"dec":5.671345526726215,"prob":0.176325},"FRA":{"dec":5.7151021574510645,"prob":0.174975},"ESP":{"dec":6.405124099279423,"prob":0.156125},"BRA":{"dec":8.748906386701663,"prob":0.1143},"ENG":{"dec":9.517011658339282,"prob":0.105075},"POR":{"dec":18.885741265344667,"prob":0.05295},"NED":{"dec":25.92352559948153,"prob":0.038575},"GER":{"dec":30.211480362537767,"prob":0.0331},"BEL":{"dec":31.77124702144559,"prob":0.031475},"URU":{"dec":49.68944099378882,"prob":0.020125},"CRO":{"dec":54.274084124830395,"prob":0.018425},"COL":{"dec":71.55635062611807,"prob":0.013975},"MAR":{"dec":73.12614259597807,"prob":0.013675},"SEN":{"dec":150.37593984962407,"prob":0.00665},"SUI":{"dec":151.51515151515153,"prob":0.0066},"MEX":{"dec":187.79342723004694,"prob":0.005325}};
+  function flipOdds(el,val){
+    if(!el||el.textContent.trim()===val) return;
+    el.animate([{transform:"translateY(0)",opacity:1},{transform:"translateY(-110%)",opacity:0}],
+      {duration:180,easing:"ease-in",fill:"forwards"}).finished.then(function(){
+        el.textContent=val;
+        el.animate([{transform:"translateY(110%)",opacity:0},{transform:"translateY(0)",opacity:1}],
+          {duration:180,easing:"ease-out"});
+      });
+  }
+  fetch("/api/odds").then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.teams||!d.teams.length) return;
+    d.teams.slice(0,3).forEach(function(t){
+      var el=document.querySelector('.g-teaser-odds[data-code="'+t.code+'"]');
+      var newVal=t.decimal<10?t.decimal.toFixed(1):String(Math.round(t.decimal));
+      flipOdds(el,newVal);
+    });
+    var status=document.getElementById("g-teaser-status");
+    if(d.source==="bookmakers"){
+      var when=d.updatedAt?new Date(d.updatedAt).toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}):"";
+      status.textContent="Live odds"+(when?" · "+when:"");
+      status.setAttribute("data-state","live");
+    }
+  }).catch(function(){});
+})();
+</script>
 </main>
 <footer class="g-foot">
   <p class="g-foot-lead">Follow every result live on the <a href="/">interactive World Cup 2026 bracket</a> — all 104 matches on one pannable canvas, scores updated every 60 seconds.</p>
