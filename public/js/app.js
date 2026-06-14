@@ -277,15 +277,23 @@ function render() {
   placeGroups(GROUPS_R, COL_X.groupsR);
 
   // knockout columns
-  const r32Top = MID_Y - (8 * (K.h + K.gapY) - K.gapY) / 2;
-  R32_L.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32L, y: r32Top + i * (K.h + K.gapY) }; });
-  R32_R.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32R, y: r32Top + i * (K.h + K.gapY) }; });
+  const r32GapY = K.gapY + 30;
+  const r32Top = MID_Y - (8 * (K.h + r32GapY) - r32GapY) / 2;
+  R32_L.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32L, y: r32Top + i * (K.h + r32GapY) }; });
+  R32_R.forEach((id, i) => { pos[`match-${id}`] = { x: COL_X.r32R, y: r32Top + i * (K.h + r32GapY) }; });
   const centerOf = (id) => pos[`match-${id}`].y + K.h / 2;
   const place = (ids, x) => ids.forEach((id) => {
     const [a, b] = FEEDERS[id];
     pos[`match-${id}`] = { x, y: (centerOf(a) + centerOf(b)) / 2 - K.h / 2 };
   });
   place(R16_L, COL_X.r16L); place(R16_R, COL_X.r16R);
+  // Fan R16 cards outward from their column centre so they breathe more.
+  // QF/SF/Final use centerOf() on the modified positions, so they follow automatically.
+  const spreadR16 = (ids, bonus) => {
+    const mid = (ids.length - 1) / 2;
+    ids.forEach((id, i) => { pos[`match-${id}`].y += (i - mid) * bonus; });
+  };
+  spreadR16(R16_L, 50); spreadR16(R16_R, 50);
   place(QF_L, COL_X.qfL); place(QF_R, COL_X.qfR);
   place(["101"], COL_X.sfL); place(["102"], COL_X.sfR);
   place(["104"], COL_X.final);
