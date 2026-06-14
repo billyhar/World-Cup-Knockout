@@ -30,7 +30,7 @@ Reaching the quarter-finals would set up Match 97 on Thu, 9 July 2026, 4:00 PM E
 
 ## Could Netherlands reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/), Croatia or [Spain](/guides/spain-world-cup-2026-route/).
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/), [Croatia](/guides/croatia-world-cup-2026-route/) or [Spain](/guides/spain-world-cup-2026-route/).
 
 ## Netherlands’ route to the World Cup 2026 Final
 

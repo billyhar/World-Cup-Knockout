@@ -26,7 +26,7 @@ A Round-of-16 place would pit United States against the winner of Match 82 (the 
 
 ## United States’ potential quarter-final
 
-Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 93. Heavyweights lurking in that quarter include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or Croatia.
+Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 93. Heavyweights lurking in that quarter include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or [Croatia](/guides/croatia-world-cup-2026-route/).
 
 ## Could United States reach the semi-finals?
 

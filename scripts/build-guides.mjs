@@ -26,7 +26,7 @@ const groupOf = (code) =>
 const teamName = (code) => seed.teams[code]?.name ?? code;
 
 // Teams to generate, in display order. Group is derived from the seed.
-const TEAMS = ["ENG", "FRA", "ESP", "POR", "BRA", "ARG", "GER", "NED", "USA", "SCO"];
+const TEAMS = ["ENG", "FRA", "ESP", "POR", "BRA", "ARG", "GER", "NED", "USA", "SCO", "AUS", "CRO"];
 
 // Marquee sides named as "potential opponents" deeper in the bracket.
 const HEADLINE = new Set([

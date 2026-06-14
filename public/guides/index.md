@@ -12,6 +12,8 @@
 - [Netherlands’ route to the final](https://worldcupknockout.football/guides/netherlands-world-cup-2026-route/) — Group F
 - [United States’ route to the final](https://worldcupknockout.football/guides/united-states-world-cup-2026-route/) — Group D
 - [Scotland’s route to the final](https://worldcupknockout.football/guides/scotland-world-cup-2026-route/) — Group C
+- [Australia’s route to the final](https://worldcupknockout.football/guides/australia-world-cup-2026-route/) — Group D
+- [Croatia’s route to the final](https://worldcupknockout.football/guides/croatia-world-cup-2026-route/) — Group L
 
 ---
 

@@ -22,7 +22,7 @@ In the Round of 32, Spain would meet the Group J runner-up. The tie is scheduled
 
 ## What is Spain’s Round of 16 path?
 
-A Round-of-16 place would pit Spain against the winner of Match 83 (the Group K runner-up vs the Group L runner-up), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or Croatia.
+A Round-of-16 place would pit Spain against the winner of Match 83 (the Group K runner-up vs the Group L runner-up), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or [Croatia](/guides/croatia-world-cup-2026-route/).
 
 ## Spain’s potential quarter-final
 

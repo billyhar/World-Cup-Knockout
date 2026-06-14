@@ -1,0 +1,81 @@
+# Australia’s Route to the 2026 World Cup Final
+
+> If Australia win Group D, their knockout route runs from a Round of 32 tie in SF Bay Area on Thu, 2 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+*Group D · Projected knockout path · Updated Sat, 13 June 2026*
+
+## Australia’s projected knockout route
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Thu, 2 July 2026 | SF Bay Area | a third-placed team (from Group B, Group E, Group F, Group I or Group J) |
+| Round of 16 | Tue, 7 July 2026 | Seattle | the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)) |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially Portugal, Colombia or England |
+| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+
+*Route assumes Australia win Group D. Opponents are bracket projections until group positions are confirmed.*
+
+## Who could Australia face in the Round of 32?
+
+In the Round of 32, Australia would meet a third-placed team (from Group B, Group E, Group F, Group I or Group J). The tie is scheduled for Thu, 2 July 2026, 8:00 PM ET at Levi's Stadium, SF Bay Area (Match 81). Win it and Australia reach the last 16 of the 2026 World Cup.
+
+## What is Australia’s Round of 16 path?
+
+A Round-of-16 place would pit Australia against the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include Belgium, Mexico, South Korea or [Germany](/guides/germany-world-cup-2026-route/).
+
+## Australia’s potential quarter-final
+
+Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 93. Heavyweights lurking in that quarter include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or [Croatia](/guides/croatia-world-cup-2026-route/).
+
+## Could Australia reach the semi-finals?
+
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea or Switzerland.
+
+## Australia’s route to the World Cup 2026 Final
+
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Australia’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
+
+## What if Australia finish runner-up in Group D?
+
+As Group D runner-up, Australia would enter the other half of the bracket, opening with a Round of 32 tie against the Group G runner-up in Dallas on Fri, 3 July 2026 (Match 88). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Fri, 3 July 2026 | Dallas | the Group G runner-up |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 86 (the Group J winner vs the Group H runner-up) |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Switzerland, Germany or Ivory Coast |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+
+*Route assumes Australia finish second in Group D. Opponents are bracket projections until group positions are confirmed.*
+
+## Australia’s Group D fixtures
+
+| Date | Kick-off | Match | Venue |
+|---|---|---|---|
+| Sun, 14 June 2026 | 12:00 AM ET | Australia vs Türkiye | BC Place, Vancouver |
+| Fri, 19 June 2026 | 3:00 PM ET | Australia at United States | Lumen Field, Seattle |
+| Fri, 26 June 2026 | 10:00 PM ET | Australia at Paraguay | Levi's Stadium, SF Bay Area |
+
+## Australia at the World Cup 2026: FAQ
+
+### When do Australia play their first 2026 World Cup match?
+
+Australia open their Group D campaign against Türkiye on Sun, 14 June 2026 (12:00 AM ET) at BC Place, Vancouver.
+
+### Where would Australia play the Round of 16?
+
+If Australia win Group D, their Round of 16 tie (Match 94) is at Lumen Field, Seattle on Tue, 7 July 2026.
+
+### What if Australia finish runner-up in Group D?
+
+As Group D runner-up, Australia would drop into the other half of the bracket. Their Round of 32 tie (Match 88) is against the Group G runner-up in Dallas on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+### Where is the 2026 World Cup Final?
+
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET).
+
+---
+
+Live bracket: https://worldcupknockout.football/ · All route guides: https://worldcupknockout.football/guides/
