@@ -3,6 +3,17 @@ import {
   loadSeed, loadResults, allStandings, resolveBracket, matchWinner,
   slotLabel, fmtDate, fmtTime, isToday, tzAbbr,
 } from "./data.js";
+import { loadBroadcasters, watchOn } from "./broadcasters.js";
+
+// "Where to watch" line for a match in the viewer's country (location-based,
+// like the times). Rights split per game, so this resolves per match id and
+// renders only when we know the channel.
+const tvHTML = (matchId) => {
+  const w = watchOn(matchId);
+  return w
+    ? `<span class="tv" data-tip="Broadcasting in ${esc(w.name)}">${esc(w.on)}</span>`
+    : "";
+};
 
 // ---- world layout: mirrored bracket, final in the middle -------------------
 // groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
@@ -176,6 +187,7 @@ function groupCardHTML(g, standings) {
     const done = !!score && !live;
     const showToday = today && !done && !live;
     const codes = { h: m.home, a: m.away };
+    const tv = tvHTML(m.id);
     return `
     <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}">
       <span class="g-fix-date">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
@@ -184,7 +196,7 @@ function groupCardHTML(g, standings) {
       <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
       <span class="g-fix-spacer" aria-hidden="true"></span>
       ${evTagsHTML(r, codes)}
-      <span class="g-fix-city">${m.city}</span>
+      <span class="g-fix-city">${m.city}${tv ? ` · ${tv}` : ""}</span>
     </div>`;
   }).join("");
 
@@ -233,6 +245,7 @@ function koCardHTML(m, resolved) {
   ].join(" ");
   const aet = r?.et ? ' · <span class="aet">aet</span>' : "";
   const codes = { h: teams.home ?? "—", a: teams.away ?? "—" };
+  const tv = tvHTML(m.id);
   return `
   <div class="${cls}" id="match-${m.id}">
     ${evTagsHTML(r, codes)}
@@ -242,6 +255,7 @@ function koCardHTML(m, resolved) {
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
+    ${tv ? `<div class="k-tv">${tv}</div>` : ""}
   </div>`;
 }
 
@@ -521,7 +535,7 @@ async function refresh() {
 // ---- boot ----------------------------------------------------------------------
 
 (async function boot() {
-  seed = await loadSeed();
+  [seed] = await Promise.all([loadSeed(), loadBroadcasters()]);
   state = await loadResults().catch(() => state);
   sanitizeLive();
   render();

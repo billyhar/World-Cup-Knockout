@@ -267,6 +267,29 @@ html, body {
   margin-bottom: 0;
 }
 
+/* "where to watch" — location-based broadcaster line */
+.tv {
+  color: var(--ink);
+  white-space: nowrap;
+  font-variant-numeric: normal;
+  letter-spacing: 0;
+}
+.g-fix-city .tv { color: var(--ink-dim); }
+.k-tv {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-dim);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ko-card.is-done .k-tv { color: var(--ink-faint); }
+
 /* played matches recede so upcoming ones stand out */
 .ko-card.is-done .k-meta, .ko-card.is-done .k-city { color: var(--ink-faint); }
 .ko-card.is-done .k-name { color: var(--ink-dim); }
