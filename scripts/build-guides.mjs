@@ -331,6 +331,33 @@ function teamArticle(team) {
   // runner-up alternative
   const ruRoute = trace(`2${grp}`);
   const ruR32 = ruRoute[0];
+  const ruFinal = ruRoute.at(-1).match;
+
+  const ruRouteOpp = (leg) => {
+    const m = leg.match;
+    if (m.stage === "r32" || m.stage === "r16") return describeSlot(leg.opp);
+    const x = marquee(leg.opp, team);
+    return x.length ? `Potentially ${oxford(x.slice(0, 3))}` : describeSlot(leg.opp);
+  };
+
+  const ruRouteRows = ruRoute.map((leg) => {
+    const m = leg.match;
+    return `<tr>
+      <td>${ROUND[m.stage]}</td>
+      <td>${fmtDate(m.kickoff)}</td>
+      <td>${esc(m.city)}</td>
+      <td>${crosslink(esc(ruRouteOpp(leg)), name)}</td>
+    </tr>`;
+  }).join("\n");
+
+  const ruIntro = `As Group ${grp} runner-up, ${name} would enter the other half of the bracket, opening with a Round of 32 tie against ${describeSlot(ruR32.opp)} in ${ruR32.match.city} on ${fmtDate(ruR32.match.kickoff)} (Match ${ruR32.match.id}). The path still converges on the same Final at ${ruFinal.stadium}, ${ruFinal.city} on ${fmtDate(ruFinal.kickoff)}.`;
+
+  // markdown runner-up table
+  const mdRuRoute = [
+    `| Round | Date | Host city | Likely opponent |`,
+    `|---|---|---|---|`,
+    ...ruRoute.map((leg) => `| ${ROUND[leg.match.stage]} | ${fmtDate(leg.match.kickoff)} | ${leg.match.city} | ${ruRouteOpp(leg)} |`),
+  ].join("\n");
 
   // FAQ
   const faqs = [
@@ -344,7 +371,7 @@ function teamArticle(team) {
     },
     {
       q: `What if ${name} finish runner-up in Group ${grp}?`,
-      a: `As Group ${grp} runner-up, ${name} would drop into the other side of the bracket, starting with a Round of 32 tie against ${describeSlot(ruR32.opp)} in ${ruR32.match.city} on ${fmtDate(ruR32.match.kickoff)} (Match ${ruR32.match.id}).`,
+      a: `As Group ${grp} runner-up, ${name} would drop into the other half of the bracket. Their Round of 32 tie (Match ${ruR32.match.id}) is against ${describeSlot(ruR32.opp)} in ${ruR32.match.city} on ${fmtDate(ruR32.match.kickoff)}, then the path runs through the Round of 16 in ${ruRoute[1].match.city} and on toward the same Final at ${ruFinal.stadium}, ${ruFinal.city} on ${fmtDate(ruFinal.kickoff)}.`,
     },
     {
       q: `Where is the 2026 World Cup Final?`,
@@ -425,6 +452,18 @@ ${routeRows}
 
 ${sections}
 
+    <section class="g-table-wrap" aria-label="Runner-up route">
+      <h2>What if ${esc(name)} finish runner-up in Group ${grp}?</h2>
+      <p style="color:var(--ink-dim);margin-bottom:16px">${crosslink(esc(ruIntro), name)}</p>
+      <table class="g-table">
+        <thead><tr><th>Round</th><th>Date</th><th>Host city</th><th>Likely opponent</th></tr></thead>
+        <tbody>
+${ruRouteRows}
+        </tbody>
+      </table>
+      <p class="g-note">Route assumes ${esc(name)} finish second in Group ${grp}. Opponents are bracket projections until group positions are confirmed.</p>
+    </section>
+
     <section class="g-table-wrap" aria-label="Group stage fixtures">
       <h2>${esc(poss(name))} Group ${grp} fixtures</h2>
       <table class="g-table">
@@ -470,6 +509,14 @@ ${mdRoute}
 *Route assumes ${name} win Group ${grp}. Opponents are bracket projections until group positions are confirmed.*
 
 ${roundData.map(({ q, body }) => `## ${q}\n\n${crosslink(body, name, true)}`).join("\n\n")}
+
+## What if ${name} finish runner-up in Group ${grp}?
+
+${crosslink(ruIntro, name, true)}
+
+${mdRuRoute}
+
+*Route assumes ${name} finish second in Group ${grp}. Opponents are bracket projections until group positions are confirmed.*
 
 ## ${poss(name)} Group ${grp} fixtures
 

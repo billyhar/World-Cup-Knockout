@@ -36,6 +36,20 @@ The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-
 
 The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Portugal’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or [Brazil](/guides/brazil-world-cup-2026-route/) could be waiting on the other side of the draw.
 
+## What if Portugal finish runner-up in Group K?
+
+As Group K runner-up, Portugal would enter the other half of the bracket, opening with a Round of 32 tie against the Group L runner-up in Toronto on Thu, 2 July 2026 (Match 83). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Thu, 2 July 2026 | Toronto | the Group L runner-up |
+| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 84 (the Group H winner vs the Group J runner-up) |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Switzerland or Germany |
+| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+
+*Route assumes Portugal finish second in Group K. Opponents are bracket projections until group positions are confirmed.*
+
 ## Portugal’s Group K fixtures
 
 | Date | Kick-off | Match | Venue |
@@ -56,7 +70,7 @@ If Portugal win Group K, their Round of 16 tie (Match 96) is at BC Place, Vancou
 
 ### What if Portugal finish runner-up in Group K?
 
-As Group K runner-up, Portugal would drop into the other side of the bracket, starting with a Round of 32 tie against the Group L runner-up in Toronto on Thu, 2 July 2026 (Match 83).
+As Group K runner-up, Portugal would drop into the other half of the bracket. Their Round of 32 tie (Match 83) is against the Group L runner-up in Toronto on Thu, 2 July 2026, then the path runs through the Round of 16 in Dallas and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

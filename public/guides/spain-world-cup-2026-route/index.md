@@ -36,6 +36,20 @@ The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stad
 
 The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Spain’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
 
+## What if Spain finish runner-up in Group H?
+
+As Group H runner-up, Spain would enter the other half of the bracket, opening with a Round of 32 tie against the Group J winner in Miami on Fri, 3 July 2026 (Match 86). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Fri, 3 July 2026 | Miami | the Group J winner |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 88 (the Group D runner-up vs the Group G runner-up) |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Switzerland, Germany or Ivory Coast |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+
+*Route assumes Spain finish second in Group H. Opponents are bracket projections until group positions are confirmed.*
+
 ## Spain’s Group H fixtures
 
 | Date | Kick-off | Match | Venue |
@@ -56,7 +70,7 @@ If Spain win Group H, their Round of 16 tie (Match 93) is at AT&T Stadium, Dalla
 
 ### What if Spain finish runner-up in Group H?
 
-As Group H runner-up, Spain would drop into the other side of the bracket, starting with a Round of 32 tie against the Group J winner in Miami on Fri, 3 July 2026 (Match 86).
+As Group H runner-up, Spain would drop into the other half of the bracket. Their Round of 32 tie (Match 86) is against the Group J winner in Miami on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

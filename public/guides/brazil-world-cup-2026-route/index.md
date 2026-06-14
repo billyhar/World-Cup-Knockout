@@ -36,6 +36,20 @@ The semi-final (Match 102) is set for Wed, 15 July 2026, 3:00 PM ET at Mercedes-
 
 The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Brazil’s projected route. Anyone from [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea, Switzerland or Morocco could be waiting on the other side of the draw.
 
+## What if Brazil finish runner-up in Group C?
+
+As Group C runner-up, Brazil would enter the other half of the bracket, opening with a Round of 32 tie against the Group F winner in Monterrey on Tue, 30 June 2026 (Match 75). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Tue, 30 June 2026 | Monterrey | the Group F winner |
+| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 73 (the Group A runner-up vs the Group B runner-up) |
+| Quarter-final | Thu, 9 July 2026 | Boston | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Morocco, Netherlands or Japan |
+
+*Route assumes Brazil finish second in Group C. Opponents are bracket projections until group positions are confirmed.*
+
 ## Brazil’s Group C fixtures
 
 | Date | Kick-off | Match | Venue |
@@ -56,7 +70,7 @@ If Brazil win Group C, their Round of 16 tie (Match 91) is at MetLife Stadium, N
 
 ### What if Brazil finish runner-up in Group C?
 
-As Group C runner-up, Brazil would drop into the other side of the bracket, starting with a Round of 32 tie against the Group F winner in Monterrey on Tue, 30 June 2026 (Match 75).
+As Group C runner-up, Brazil would drop into the other half of the bracket. Their Round of 32 tie (Match 75) is against the Group F winner in Monterrey on Tue, 30 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

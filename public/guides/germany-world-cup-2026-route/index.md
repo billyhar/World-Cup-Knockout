@@ -36,6 +36,20 @@ The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stad
 
 The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Germany’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, Ivory Coast or [France](/guides/france-world-cup-2026-route/) could be waiting on the other side of the draw.
 
+## What if Germany finish runner-up in Group E?
+
+As Group E runner-up, Germany would enter the other half of the bracket, opening with a Round of 32 tie against the Group I runner-up in Dallas on Tue, 30 June 2026 (Match 78). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Tue, 30 June 2026 | Dallas | the Group I runner-up |
+| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | the winner of Match 76 (the Group C winner vs the Group F runner-up) |
+| Quarter-final | Sat, 11 July 2026 | Miami | Potentially Mexico, South Korea or Brazil |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Ivory Coast, Mexico or South Korea |
+
+*Route assumes Germany finish second in Group E. Opponents are bracket projections until group positions are confirmed.*
+
 ## Germany’s Group E fixtures
 
 | Date | Kick-off | Match | Venue |
@@ -56,7 +70,7 @@ If Germany win Group E, their Round of 16 tie (Match 89) is at Lincoln Financial
 
 ### What if Germany finish runner-up in Group E?
 
-As Group E runner-up, Germany would drop into the other side of the bracket, starting with a Round of 32 tie against the Group I runner-up in Dallas on Tue, 30 June 2026 (Match 78).
+As Group E runner-up, Germany would drop into the other half of the bracket. Their Round of 32 tie (Match 78) is against the Group I runner-up in Dallas on Tue, 30 June 2026, then the path runs through the Round of 16 in New York / New Jersey and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

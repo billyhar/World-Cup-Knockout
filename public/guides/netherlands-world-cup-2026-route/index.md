@@ -36,6 +36,20 @@ The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stad
 
 The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Netherlands’ projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, Japan, [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast or [France](/guides/france-world-cup-2026-route/) could be waiting on the other side of the draw.
 
+## What if Netherlands finish runner-up in Group F?
+
+As Group F runner-up, Netherlands would enter the other half of the bracket, opening with a Round of 32 tie against the Group C winner in Houston on Mon, 29 June 2026 (Match 76). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+
+| Round | Date | Host city | Likely opponent |
+|---|---|---|---|
+| Round of 32 | Mon, 29 June 2026 | Houston | the Group C winner |
+| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | the winner of Match 78 (the Group E runner-up vs the Group I runner-up) |
+| Quarter-final | Sat, 11 July 2026 | Miami | Potentially Mexico, South Korea or Brazil |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+
+*Route assumes Netherlands finish second in Group F. Opponents are bracket projections until group positions are confirmed.*
+
 ## Netherlands’ Group F fixtures
 
 | Date | Kick-off | Match | Venue |
@@ -56,7 +70,7 @@ If Netherlands win Group F, their Round of 16 tie (Match 90) is at NRG Stadium, 
 
 ### What if Netherlands finish runner-up in Group F?
 
-As Group F runner-up, Netherlands would drop into the other side of the bracket, starting with a Round of 32 tie against the Group C winner in Houston on Mon, 29 June 2026 (Match 76).
+As Group F runner-up, Netherlands would drop into the other half of the bracket. Their Round of 32 tie (Match 76) is against the Group C winner in Houston on Mon, 29 June 2026, then the path runs through the Round of 16 in New York / New Jersey and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 
