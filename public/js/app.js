@@ -4,6 +4,7 @@ import {
   slotLabel, fmtDate, fmtTime, isToday, tzAbbr,
 } from "./data.js";
 import { loadBroadcasters, watchOn } from "./broadcasters.js";
+import { initPresence } from "./presence.js";
 
 // "Where to watch" line for a match in the viewer's country (location-based,
 // like the times). Rights split per game, so this resolves per match id and
@@ -579,6 +580,9 @@ async function refresh() {
   panzoom = new PanZoom(document.getElementById("viewport"), world, WORLD);
   bindChrome();
   setupTooltip();
+
+  // Figma-style live multiplayer cursors, cursor chat and emoji reactions.
+  initPresence({ world, WORLD });
 
   // initial view: everything on desktop; on mobile fill the width with the
   // first group column, anchored just below the header
