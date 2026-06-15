@@ -104,14 +104,15 @@ export function initPresence({ world, WORLD }) {
     `<div class="pd-picker" hidden>${PICKER.map((e) =>
        `<button data-emoji="${e}">${e}</button>`).join("")}</div>
      <button class="pd-current" title="Tap to choose · hold or press space to spray">${EMOJIS[0]}</button>
-     <div class="pd-tip">Press <kbd>space</kbd> to spray</div>`;
+     <div class="pd-tip">Press <kbd>space</kbd> to spray</div>
+     <div class="pd-count" title="People here now"><span class="pd-dot"></span><span id="pd-n">1</span></div>`;
   document.body.appendChild(dock);
 
   // Reveal the tip briefly on load, then leave it hover-only. Touch devices get
   // a tap hint instead of the spacebar one.
   const tip = dock.querySelector(".pd-tip");
   const isTouch = matchMedia("(hover: none)").matches;
-  if (isTouch) tip.innerHTML = "Tap to react · hold for emojis";
+  if (isTouch) tip.innerHTML = "Tap anywhere to spray";
   tip.classList.add("show");
   setTimeout(() => tip.classList.remove("show"), 4500);
 
@@ -192,6 +193,11 @@ export function initPresence({ world, WORLD }) {
       spawnEmote(payload.emoji, s.x, s.y);
     })
     .on("broadcast", { event: "leave" }, ({ payload }) => dropPeer(payload.id))
+    .on("presence", { event: "sync" }, () => {
+      const n = Object.keys(channel.presenceState()).length || 1;
+      const el = document.getElementById("pd-n");
+      if (el) el.textContent = n;
+    })
     .subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
         await channel.track({ id: me.id, name: me.name, color: me.color });
@@ -238,6 +244,13 @@ export function initPresence({ world, WORLD }) {
       b.classList.toggle("sel", b.dataset.emoji === emoji);
   }
 
+  // Log emoji usage to Umami — once per spray gesture (a tap, a hold, a key),
+  // never per particle, so the fountain doesn't flood analytics. View the
+  // "emoji" event's data breakdown to see the most popular emoji.
+  function trackEmoji(emoji) {
+    try { window.umami && window.umami.track("emoji", { emoji }); } catch {}
+  }
+
   // Where emojis spawn from: the live cursor on desktop, or just above the
   // emoji button on touch devices (which have no hover cursor).
   function anchorWorld() {
@@ -257,11 +270,23 @@ export function initPresence({ world, WORLD }) {
       payload: { id: me.id, emoji, x: wx, y: wy } });
   }
 
-  // A satisfying little burst for a single tap.
-  function fireBurst(emoji, n = 4) {
-    fireEmote(emoji, 0);
+  // Fire an emoji at a specific SCREEN point (used by tap-to-spray on mobile).
+  function fireAt(cx, cy, emoji, spread = 0) {
+    const w = screenToWorld(cx, cy);
+    const wx = w.x + (Math.random() * 2 - 1) * spread;
+    const wy = w.y + (Math.random() * 2 - 1) * spread;
+    const s = worldToScreen(wx, wy);
+    spawnEmote(emoji, s.x, s.y);
+    channel.send({ type: "broadcast", event: "emote",
+      payload: { id: me.id, emoji, x: wx, y: wy } });
+  }
+
+  // A satisfying little burst at a screen point.
+  function burstAt(cx, cy, emoji, n = 4) {
+    trackEmoji(emoji);
+    fireAt(cx, cy, emoji, 0);
     let i = 1;
-    const t = setInterval(() => { fireEmote(emoji, 60); if (++i >= n) clearInterval(t); }, 70);
+    const t = setInterval(() => { fireAt(cx, cy, emoji, 60); if (++i >= n) clearInterval(t); }, 70);
   }
 
   // Hold to spray a fountain of emojis; tap = a single one. This sprays the
@@ -271,6 +296,7 @@ export function initPresence({ world, WORLD }) {
   function startSpray(emoji) {
     sprayEmoji = emoji;
     if (sprayTimer) return;
+    trackEmoji(emoji);
     fireEmote(emoji, 0);                                  // instant first hit
     sprayTimer = setInterval(() => fireEmote(sprayEmoji, 70), 75);
   }
@@ -293,9 +319,11 @@ export function initPresence({ world, WORLD }) {
   }
 
   // The single button: a quick tap opens the picker, a hold sprays.
+  const countEl = dock.querySelector(".pd-count");
   const setPicker = (open) => {
     picker.hidden = !open;
     currentBtn.classList.toggle("open", open);
+    countEl.style.visibility = open ? "hidden" : "";
     if (open) tip.classList.remove("show");
   };
   let holdTimer = null, didHold = false, downTouch = false;
@@ -304,24 +332,38 @@ export function initPresence({ world, WORLD }) {
     e.preventDefault();
     didHold = false;
     downTouch = e.pointerType === "touch";
-    if (downTouch) {
-      // touch: tap sprays, long-press opens the picker
-      holdTimer = setTimeout(() => { didHold = true; setPicker(true); }, 350);
-    } else {
-      // mouse: tap opens picker, hold sprays
-      holdTimer = setTimeout(() => { didHold = true; startSpray(currentEmoji); }, 180);
-    }
+    // mouse: hold sprays. touch: the button only opens the picker (you spray by
+    // tapping the canvas), so no hold action.
+    if (!downTouch) holdTimer = setTimeout(() => { didHold = true; startSpray(currentEmoji); }, 180);
   });
   currentBtn.addEventListener("pointerup", () => {
     clearTimeout(holdTimer);
-    if (downTouch) {
-      if (!didHold) fireBurst(currentEmoji);   // a tap spits out a few emojis
-    } else if (didHold) {
-      stopSpray();
-    } else {
-      setPicker(picker.hidden);                // a tap toggles the picker
-    }
+    if (didHold) stopSpray();
+    else setPicker(picker.hidden);             // a tap toggles the picker
   });
+
+  // Mobile: tap anywhere on the canvas to spray a burst at that spot.
+  const viewport = document.getElementById("viewport");
+  let tx = 0, ty = 0, tStart = 0, tMoved = false, tTouches = 0;
+  viewport.addEventListener("pointerdown", (e) => {
+    if (e.pointerType !== "touch") return;
+    tTouches++;
+    if (tTouches === 1) { tx = e.clientX; ty = e.clientY; tStart = performance.now(); tMoved = false; }
+  }, { passive: true });
+  viewport.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "touch" && Math.hypot(e.clientX - tx, e.clientY - ty) > 12) tMoved = true;
+  }, { passive: true });
+  const endTouch = (e) => {
+    if (e.pointerType !== "touch") return;
+    const wasSingle = tTouches === 1;
+    tTouches = Math.max(0, tTouches - 1);
+    // a quick, still, single-finger tap = spray (not a pan or pinch)
+    if (wasSingle && !tMoved && performance.now() - tStart < 300) {
+      burstAt(e.clientX, e.clientY, currentEmoji);
+    }
+  };
+  viewport.addEventListener("pointerup", endTouch, { passive: true });
+  viewport.addEventListener("pointercancel", () => { tTouches = Math.max(0, tTouches - 1); }, { passive: true });
 
   // Pick an emoji from the collection -> it becomes the current one.
   picker.addEventListener("click", (e) => {
