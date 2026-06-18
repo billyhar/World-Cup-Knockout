@@ -1,8 +1,8 @@
 // Figma-style live multiplayer cursors for the canvas.
 //
-// Uses Supabase Realtime: Broadcast for ephemeral cursor positions, cursor-chat
-// text and emoji reactions, and Presence for the live viewer count. No database
-// tables are touched — every message lives on the namespaced "cursors" channel.
+// Uses Supabase Realtime: Broadcast for ephemeral cursor positions and emoji
+// reactions, and Presence for the live viewer count. No database tables are
+// touched — every message lives on the namespaced "cursors" channel.
 //
 // Cursors are exchanged in WORLD coordinates (canvas space) so a cursor lands on
 // the same match card for everyone regardless of how each viewer has panned or
@@ -88,15 +88,6 @@ export function initPresence({ world, WORLD }) {
   layer.id = "cursor-layer";
   document.body.appendChild(layer);
 
-  // My own cursor-chat input (only I see this; others see the broadcast text).
-  const chatBox = document.createElement("div");
-  chatBox.id = "my-chat";
-  chatBox.hidden = true;
-  chatBox.innerHTML = `<span class="chat-caret" style="background:${me.color}"></span>
-    <input maxlength="80" placeholder="Say something…" aria-label="Cursor chat">`;
-  document.body.appendChild(chatBox);
-  const chatInput = chatBox.querySelector("input");
-
   // Reaction dock + viewer count.
   const dock = document.createElement("div");
   dock.id = "presence-dock";
@@ -104,17 +95,26 @@ export function initPresence({ world, WORLD }) {
     `<div class="pd-picker" hidden>${PICKER.map((e) =>
        `<button data-emoji="${e}">${e}</button>`).join("")}</div>
      <button class="pd-current" title="Tap to choose · hold or press space to spray">${EMOJIS[0]}</button>
-     <div class="pd-tip">Press <kbd>space</kbd> to spray</div>
+     <div class="pd-tip"><span class="pd-tip-text">Press <kbd>space</kbd> to spray</span><button class="pd-tip-x" aria-label="Dismiss">×</button></div>
      <div class="pd-count" title="People here now"><span class="pd-dot"></span><span id="pd-n">1</span></div>`;
   document.body.appendChild(dock);
 
-  // Reveal the tip briefly on load, then leave it hover-only. Touch devices get
-  // a tap hint instead of the spacebar one.
+  // Show the tip on load and keep it until the user dismisses it (× button) or
+  // sprays for the first time; the dismissal is remembered across visits.
   const tip = dock.querySelector(".pd-tip");
   const isTouch = matchMedia("(hover: none)").matches;
-  if (isTouch) tip.innerHTML = "Tap anywhere to spray";
-  tip.classList.add("show");
-  setTimeout(() => tip.classList.remove("show"), 4500);
+  if (isTouch) tip.querySelector(".pd-tip-text").textContent = "Tap anywhere to spray";
+
+  const TIP_KEY = "wck-tip-dismissed";
+  function dismissTip() {
+    if (!tip.classList.contains("show")) return;
+    tip.classList.remove("show");
+    try { localStorage.setItem(TIP_KEY, "1"); } catch {}
+  }
+  let tipDismissed = false;
+  try { tipDismissed = localStorage.getItem(TIP_KEY) === "1"; } catch {}
+  if (!tipDismissed) tip.classList.add("show");
+  tip.querySelector(".pd-tip-x").addEventListener("click", (e) => { e.stopPropagation(); dismissTip(); });
 
   // ---- coordinate helpers ------------------------------------------------
   const worldToScreen = (wx, wy) => {
@@ -127,7 +127,7 @@ export function initPresence({ world, WORLD }) {
   };
 
   // ---- remote cursor state -----------------------------------------------
-  const peers = new Map(); // id -> { el, label, msgEl, x, y, msg, color, name, last }
+  const peers = new Map(); // id -> { el, label, x, y, color, name, last }
 
   function ensurePeer(id, color, name) {
     let p = peers.get(id);
@@ -135,11 +135,10 @@ export function initPresence({ world, WORLD }) {
     const el = document.createElement("div");
     el.className = "rc";
     el.innerHTML = `${cursorSVG(color)}
-      <div class="rc-label" style="background:${color}">${escapeHtml(name)}</div>
-      <div class="rc-msg" style="--c:${color}" hidden></div>`;
+      <div class="rc-label" style="background:${color}">${escapeHtml(name)}</div>`;
     layer.appendChild(el);
-    p = { el, label: el.querySelector(".rc-label"), msgEl: el.querySelector(".rc-msg"),
-          x: 0, y: 0, msg: "", color, name, last: performance.now() };
+    p = { el, label: el.querySelector(".rc-label"),
+          x: 0, y: 0, color, name, last: performance.now() };
     peers.set(id, p);
     return p;
   }
@@ -180,12 +179,6 @@ export function initPresence({ world, WORLD }) {
       if (payload.name && payload.name !== p.name) {
         p.name = payload.name; p.label.textContent = payload.name;
       }
-      const msg = payload.msg || "";
-      if (msg !== p.msg) {
-        p.msg = msg;
-        p.msgEl.textContent = msg;
-        p.msgEl.hidden = !msg;
-      }
     })
     .on("broadcast", { event: "emote" }, ({ payload }) => {
       if (payload.id === me.id) return;
@@ -206,13 +199,11 @@ export function initPresence({ world, WORLD }) {
 
   // ---- local cursor capture + throttled send -----------------------------
   let lastX = 0, lastY = 0, dirty = false, hasPos = false;
-  let liveMsg = "";
 
   addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return; // touch has no hover cursor
     const w = screenToWorld(e.clientX, e.clientY);
     lastX = w.x; lastY = w.y; dirty = true; hasPos = true;
-    if (!chatBox.hidden) positionChat(e.clientX, e.clientY);
   }, { passive: true });
 
   addEventListener("pointerout", (e) => {
@@ -226,7 +217,7 @@ export function initPresence({ world, WORLD }) {
     dirty = false;
     channel.send({
       type: "broadcast", event: "cursor",
-      payload: { id: me.id, name: me.name, color: me.color, x: lastX, y: lastY, msg: liveMsg },
+      payload: { id: me.id, name: me.name, color: me.color, x: lastX, y: lastY },
     });
   }, SEND_MS);
 
@@ -283,6 +274,7 @@ export function initPresence({ world, WORLD }) {
 
   // A satisfying little burst at a screen point.
   function burstAt(cx, cy, emoji, n = 4) {
+    dismissTip();
     trackEmoji(emoji);
     fireAt(cx, cy, emoji, 0);
     let i = 1;
@@ -296,6 +288,7 @@ export function initPresence({ world, WORLD }) {
   function startSpray(emoji) {
     sprayEmoji = emoji;
     if (sprayTimer) return;
+    dismissTip();
     trackEmoji(emoji);
     fireEmote(emoji, 0);                                  // instant first hit
     sprayTimer = setInterval(() => fireEmote(sprayEmoji, 70), 75);
@@ -324,7 +317,6 @@ export function initPresence({ world, WORLD }) {
     picker.hidden = !open;
     currentBtn.classList.toggle("open", open);
     countEl.style.visibility = open ? "hidden" : "";
-    if (open) tip.classList.remove("show");
   };
   let holdTimer = null, didHold = false, downTouch = false;
 
@@ -381,49 +373,22 @@ export function initPresence({ world, WORLD }) {
 
   selectEmoji(currentEmoji);    // set the default (⚽️) for the "f" hotkey
 
-  // ---- cursor chat (press "/") ------------------------------------------
-  function openChat() {
-    chatBox.hidden = false;
-    chatInput.value = "";
-    liveMsg = "";
-    positionChat(toScreenX(lastX), toScreenY(lastY));
-    chatInput.focus();
-  }
-  function closeChat(send) {
-    chatBox.hidden = true;
-    liveMsg = ""; dirty = true;          // clear my bubble for everyone
-    chatInput.blur();
-  }
-  function positionChat(cx, cy) {
-    chatBox.style.transform = `translate(${cx + 18}px, ${cy + 6}px)`;
-  }
-  const toScreenX = (wx) => worldToScreen(wx, 0).x;
-  const toScreenY = (wy) => worldToScreen(0, wy).y;
-
+  // ---- spray hotkeys ----------------------------------------------------
   // any key that started a spray, so the matching keyup stops it
   let sprayKey = null;
 
   addEventListener("keydown", (e) => {
-    const typingElsewhere = /^(input|textarea|select)$/i.test(e.target.tagName)
-      && e.target !== chatInput;
-    if (typingElsewhere) return;
+    if (/^(input|textarea|select)$/i.test(e.target.tagName)) return;
 
-    if (chatBox.hidden) {
-      if (e.key === "/") { e.preventDefault(); openChat(); return; }
-      // Spacebar sprays the currently-selected emoji (hold = fountain).
-      if (e.key === " " || e.code === "Space") {
-        e.preventDefault();                  // don't scroll / activate buttons
-        if (!e.repeat) { startSpray(currentEmoji); sprayKey = " "; }
-        return;
-      }
-      if (e.repeat) return;                  // we run our own spray interval
-      const n = parseInt(e.key, 10);
-      if (n >= 1 && n <= 8) { startSpray(EMOJIS[n - 1]); sprayKey = e.key; }
+    // Spacebar sprays the currently-selected emoji (hold = fountain).
+    if (e.key === " " || e.code === "Space") {
+      e.preventDefault();                  // don't scroll / activate buttons
+      if (!e.repeat) { startSpray(currentEmoji); sprayKey = " "; }
       return;
     }
-    // chat is open
-    if (e.key === "Escape") { closeChat(false); }
-    else if (e.key === "Enter") { closeChat(true); }
+    if (e.repeat) return;                  // we run our own spray interval
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 8) { startSpray(EMOJIS[n - 1]); sprayKey = e.key; }
   });
 
   addEventListener("keyup", (e) => {
@@ -437,11 +402,6 @@ export function initPresence({ world, WORLD }) {
   addEventListener("pointerup", stopSpray);
   addEventListener("pointercancel", stopSpray);
   addEventListener("blur", stopSpray);
-
-  chatInput.addEventListener("input", () => {
-    liveMsg = chatInput.value.slice(0, 80);
-    dirty = true; // push the live text on the next cursor tick
-  });
 
   addEventListener("beforeunload", () => {
     try { channel.send({ type: "broadcast", event: "leave", payload: { id: me.id } }); } catch {}

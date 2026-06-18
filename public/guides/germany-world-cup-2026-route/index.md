@@ -2,7 +2,7 @@
 
 > If Germany win Group E, their knockout route runs from a Round of 32 tie in Boston on Mon, 29 June 2026, through the Round of 16 in Philadelphia (Sat, 4 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group E · Projected knockout path · Updated Sat, 13 June 2026*
+*Group E · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Germany’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Germany win Group E. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Germany win Group E. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Germany face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group E runner-up, Germany would enter the other half of the bracket, opening
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Ivory Coast, Mexico or South Korea |
 
-*Route assumes Germany finish second in Group E. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Germany finish second in Group E. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Germany’s Group E fixtures
 

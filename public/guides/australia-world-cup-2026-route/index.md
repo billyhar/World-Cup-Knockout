@@ -2,7 +2,7 @@
 
 > If Australia win Group D, their knockout route runs from a Round of 32 tie in SF Bay Area on Thu, 2 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group D · Projected knockout path · Updated Sat, 13 June 2026*
+*Group D · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Australia’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Australia win Group D. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Australia win Group D. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Australia face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group D runner-up, Australia would enter the other half of the bracket, openi
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes Australia finish second in Group D. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Australia finish second in Group D. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Australia’s Group D fixtures
 

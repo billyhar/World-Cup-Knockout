@@ -2,7 +2,7 @@
 
 > If Scotland win Group C, their knockout route runs from a Round of 32 tie in Houston on Mon, 29 June 2026, through the Round of 16 in New York / New Jersey (Sun, 5 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group C · Projected knockout path · Updated Sat, 13 June 2026*
+*Group C · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Scotland’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes Scotland win Group C. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Scotland win Group C. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Scotland face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group C runner-up, Scotland would enter the other half of the bracket, openin
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Scotland finish second in Group C. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Scotland finish second in Group C. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Scotland’s Group C fixtures
 

@@ -10,10 +10,14 @@
 // the clock) live or just finished, and persist finished scores to Netlify
 // Blobs so they survive upstream cache weirdness and outages.
 //
-// Match events (goals, yellow/red cards, with player names) aren't in
-// football-data's free tier, so those come from ESPN's public scoreboard,
-// keyed back onto our matches by team pair. Events ride along on each
-// result entry as `ev: [{ t, m, p, s }]` (type, minute, player, side).
+// football-data's free tier also withholds in-play data: fullTime/halfTime
+// stay null for the whole match and only populate at FINISHED. So live scores,
+// the match clock, and match events (goals, yellow/red cards, with player
+// names) all come from ESPN's public scoreboard, keyed back onto our matches
+// by team pair. ESPN seeds the live entry while a match is in progress;
+// football-data's FINISHED feed stays authoritative for the final score (and
+// is persisted to Blobs). Events ride along on each result entry as
+// `ev: [{ t, m, p, s }]` (type, minute, player, side).
 
 import { getStore } from "@netlify/blobs";
 
@@ -224,12 +228,26 @@ export default async function handler(req) {
         for (const c of comp.competitors ?? []) {
           sides[c.team?.id] = (c.homeAway === "home") !== flip ? "h" : "a";
         }
-        // ESPN also knows the match clock, which football-data's free tier
-        // doesn't expose — ride it along on live entries as `min`.
-        const target = results[id];
+        // ESPN is our live source. football-data's free tier withholds in-play
+        // scores, so while ESPN reports a match in progress we build the live
+        // entry straight from its scoreboard — seeding it when football-data
+        // produced nothing (the usual case) and otherwise keeping the score in
+        // lock-step with the scorers. ESPN also exposes the match clock, which
+        // football-data doesn't. Once a match is FINISHED we leave it to
+        // football-data's full-time feed (persisted above), so don't reopen a
+        // result we've already locked in as FT.
+        let target = results[id];
         const clock = event.status?.displayClock;
-        if (target?.status === "LIVE" && event.status?.type?.state === "in" && clock) {
-          target.min = clock;
+        if (event.status?.type?.state === "in" && saved.results[id]?.status !== "FT") {
+          target = results[id] ??= { status: "LIVE" };
+          target.status = "LIVE";
+          for (const c of comp.competitors ?? []) {
+            const n = Number.parseInt(c.score, 10);
+            if (Number.isNaN(n)) continue;
+            if (sides[c.team?.id] === "h") target.hs = n;
+            else if (sides[c.team?.id] === "a") target.as = n;
+          }
+          if (clock) target.min = clock;
         }
         const ev = [];
         for (const d of comp.details ?? []) {

@@ -2,7 +2,7 @@
 
 > If Portugal win Group K, their knockout route runs from a Round of 32 tie in Kansas City on Sat, 4 July 2026, through the Round of 16 in Vancouver (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group K · Projected knockout path · Updated Sat, 13 June 2026*
+*Group K · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Portugal’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes Portugal win Group K. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Portugal win Group K. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Portugal face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group K runner-up, Portugal would enter the other half of the bracket, openin
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Portugal finish second in Group K. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Portugal finish second in Group K. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Portugal’s Group K fixtures
 

@@ -2,7 +2,7 @@
 
 > If Spain win Group H, their knockout route runs from a Round of 32 tie in Los Angeles on Thu, 2 July 2026, through the Round of 16 in Dallas (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group H · Projected knockout path · Updated Sat, 13 June 2026*
+*Group H · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Spain’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Spain win Group H. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Spain win Group H. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Spain face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group H runner-up, Spain would enter the other half of the bracket, opening w
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes Spain finish second in Group H. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Spain finish second in Group H. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Spain’s Group H fixtures
 

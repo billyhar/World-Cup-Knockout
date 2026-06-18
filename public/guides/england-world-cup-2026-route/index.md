@@ -2,7 +2,7 @@
 
 > If England win Group L, their knockout route runs from a Round of 32 tie in Atlanta on Wed, 1 July 2026, through the Round of 16 in Mexico City (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group L · Projected knockout path · Updated Sat, 13 June 2026*
+*Group L · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## England’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes England win Group L. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes England win Group L. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could England face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group L runner-up, England would enter the other half of the bracket, opening
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes England finish second in Group L. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes England finish second in Group L. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## England’s Group L fixtures
 

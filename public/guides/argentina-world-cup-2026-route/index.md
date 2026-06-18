@@ -2,7 +2,7 @@
 
 > If Argentina win Group J, their knockout route runs from a Round of 32 tie in Miami on Fri, 3 July 2026, through the Round of 16 in Atlanta (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group J · Projected knockout path · Updated Sat, 13 June 2026*
+*Group J · Projected knockout path · Updated Thu, 18 June 2026*
 
 ## Argentina’s projected knockout route
 
@@ -14,7 +14,7 @@
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
-*Route assumes Argentina win Group J. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Argentina win Group J. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Who could Argentina face in the Round of 32?
 
@@ -48,7 +48,7 @@ As Group J runner-up, Argentina would enter the other half of the bracket, openi
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
-*Route assumes Argentina finish second in Group J. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes Argentina finish second in Group J. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## Argentina’s Group J fixtures
 

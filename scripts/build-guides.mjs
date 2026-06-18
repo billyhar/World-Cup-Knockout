@@ -14,17 +14,58 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 import { modelOdds } from "./odds-model.mjs";
+import { allStandings, resolveBracket } from "../public/js/data.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = join(ROOT, "public");
 const ORIGIN = "https://worldcupknockout.football";
-const TODAY = "2026-06-13";
+// Stamped onto every guide as the "last updated" date and into the JSON-LD
+// datePublished/dateModified. Dynamic so each rebuild re-dates the pages.
+const TODAY = new Date().toISOString().slice(0, 10);
 
 const seed = JSON.parse(readFileSync(join(PUB, "data/seed.json"), "utf8"));
 const byId = Object.fromEntries(seed.matches.map((m) => [m.id, m]));
 const groupOf = (code) =>
   Object.keys(seed.groups).find((g) => seed.groups[g].includes(code));
 const teamName = (code) => seed.teams[code]?.name ?? code;
+
+// ---- live bracket resolution ----------------------------------------------
+// Pull current results from production and resolve the real bracket so opponent
+// cells can name actual qualified teams ("Spain") instead of slot descriptions
+// ("the Group H winner"). Each slot fills in progressively as its feeding group
+// or match is decided; anything undecided — or an offline build that can't reach
+// the API — falls back cleanly to the projection text.
+const slotToTeam = {};   // seed slot token (e.g. "1H", "3:ABF", "W73") -> team code
+let resolvedCount = 0;
+try {
+  const grab = (path) =>
+    fetch(`${ORIGIN}${path}`, { signal: AbortSignal.timeout(8000) })
+      .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const [live, manual] = await Promise.all([grab("/api/live"), grab("/api/results")]);
+
+  // Manual admin results override the live API (same precedence as the site).
+  const results = {};
+  if (live?.results) Object.assign(results, live.results);
+  let overrides = {};
+  if (manual) { Object.assign(results, manual.results ?? {}); overrides = manual.overrides ?? {}; }
+  // Only completed matches feed standings/resolution — drop anything in play.
+  for (const k of Object.keys(results)) if (results[k]?.status === "LIVE") delete results[k];
+
+  const standings = allStandings(seed, results);
+  const { resolved } = resolveBracket(seed, results, overrides, standings);
+  for (const m of seed.matches) {
+    if (m.stage === "group") continue;
+    const r = resolved[m.id];
+    if (!r) continue;
+    if (r.home) slotToTeam[m.home] = r.home;
+    if (r.away) slotToTeam[m.away] = r.away;
+  }
+  resolvedCount = Object.keys(slotToTeam).length;
+} catch (err) {
+  console.warn(`  live results unavailable (${err?.message ?? err}); using projections`);
+}
+// A slot token -> real team code, or null when the slot isn't decided yet.
+const slotCode = (slot) => slotToTeam[slot] ?? null;
 
 // Teams to generate, in display order. Group is derived from the seed.
 const TEAMS = ["ENG", "FRA", "ESP", "POR", "BRA", "ARG", "GER", "NED", "USA", "SCO", "AUS", "CRO"];
@@ -137,8 +178,11 @@ function marquee(slot, self) {
   return [...new Set(out)];
 }
 
-// Human-readable description of who fills a slot.
+// Human-readable description of who fills a slot — the real team once it's
+// known, otherwise the bracket position it will be filled from.
 function describeSlot(slot) {
+  const code = slotCode(slot);
+  if (code) return teamName(code);
   if (/^1[A-L]$/.test(slot)) return `the Group ${slot[1]} winner`;
   if (/^2[A-L]$/.test(slot)) return `the Group ${slot[1]} runner-up`;
   if (slot.startsWith("3:")) {
@@ -291,12 +335,24 @@ function teamArticle(team) {
 
   const intro = `If ${name} win Group ${grp}, their knockout route runs from a Round of 32 tie in ${r32.city} on ${fmtDate(r32.kickoff)}, through the Round of 16 in ${r16.city} (${fmtDate(r16.kickoff)}), and on toward the Final at ${final.stadium}, ${final.city} on ${fmtDate(final.kickoff)}.`;
 
-  // likely-opponent label for the route table (plain text, reused for markdown)
+  // likely-opponent label for the route table (plain text, reused for markdown).
+  // A confirmed team wins out over the projection at every round.
   const routeOpp = (leg) => {
+    const code = slotCode(leg.opp);
+    if (code) return teamName(code);
     const m = leg.match;
     if (m.stage === "r32" || m.stage === "r16") return describeSlot(leg.opp);
     const x = marquee(leg.opp, team);
     return x.length ? `Potentially ${oxford(x.slice(0, 3))}` : describeSlot(leg.opp);
+  };
+
+  // HTML opponent cell: a flag + linked team name once the slot is decided,
+  // otherwise the projection text (also cross-linked where it names a team).
+  const oppCell = (leg) => {
+    const code = slotCode(leg.opp);
+    return code
+      ? `${flag(code)} ${crosslink(esc(teamName(code)), name)}`
+      : crosslink(esc(routeOpp(leg)), name);
   };
 
   // route table (opponent cells cross-link to other guides)
@@ -306,7 +362,7 @@ function teamArticle(team) {
       <td>${ROUND[m.stage]}</td>
       <td>${fmtDate(m.kickoff)}</td>
       <td>${esc(m.city)}</td>
-      <td>${crosslink(esc(routeOpp(leg)), name)}</td>
+      <td>${oppCell(leg)}</td>
     </tr>`;
   }).join("\n");
 
@@ -335,6 +391,8 @@ function teamArticle(team) {
   const ruFinal = ruRoute.at(-1).match;
 
   const ruRouteOpp = (leg) => {
+    const code = slotCode(leg.opp);
+    if (code) return teamName(code);
     const m = leg.match;
     if (m.stage === "r32" || m.stage === "r16") return describeSlot(leg.opp);
     const x = marquee(leg.opp, team);
@@ -347,7 +405,7 @@ function teamArticle(team) {
       <td>${ROUND[m.stage]}</td>
       <td>${fmtDate(m.kickoff)}</td>
       <td>${esc(m.city)}</td>
-      <td>${crosslink(esc(ruRouteOpp(leg)), name)}</td>
+      <td>${oppCell(leg)}</td>
     </tr>`;
   }).join("\n");
 
@@ -448,7 +506,7 @@ function teamArticle(team) {
 ${routeRows}
         </tbody>
       </table>
-      <p class="g-note">Route assumes ${esc(name)} win Group ${grp}. Opponents are bracket projections until group positions are confirmed.</p>
+      <p class="g-note">Route assumes ${esc(name)} win Group ${grp}. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.</p>
     </section>
 
 ${sections}
@@ -462,7 +520,7 @@ ${sections}
 ${ruRouteRows}
         </tbody>
       </table>
-      <p class="g-note">Route assumes ${esc(name)} finish second in Group ${grp}. Opponents are bracket projections until group positions are confirmed.</p>
+      <p class="g-note">Route assumes ${esc(name)} finish second in Group ${grp}. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.</p>
     </section>
 
     <section class="g-table-wrap" aria-label="Group stage fixtures">
@@ -507,7 +565,7 @@ ${faqHtml}
 
 ${mdRoute}
 
-*Route assumes ${name} win Group ${grp}. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes ${name} win Group ${grp}. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ${roundData.map(({ q, body }) => `## ${q}\n\n${crosslink(body, name, true)}`).join("\n\n")}
 
@@ -517,7 +575,7 @@ ${crosslink(ruIntro, name, true)}
 
 ${mdRuRoute}
 
-*Route assumes ${name} finish second in Group ${grp}. Opponents are bracket projections until group positions are confirmed.*
+*Route assumes ${name} finish second in Group ${grp}. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
 ## ${poss(name)} Group ${grp} fixtures
 
@@ -995,7 +1053,8 @@ llms = llms.includes("## Usage")
   : llms.trimEnd() + "\n" + guidesBlock;
 writeFileSync(llmsPath, llms);
 
-console.log(`Wrote ${articles.length} route guides + hub`);
+console.log(`Wrote ${articles.length} route guides + hub` +
+  (resolvedCount ? ` · ${resolvedCount} bracket slots resolved to real teams` : ` · no results yet, all projections`));
 for (const a of articles) {
   const r = trace(`1${a.grp}`).map((l) => `${ROUND[l.match.stage].replace("Round of ", "R")}→${l.match.city}`).join("  ");
   console.log(`  ${a.name.padEnd(13)} (Grp ${a.grp})  ${r}`);
