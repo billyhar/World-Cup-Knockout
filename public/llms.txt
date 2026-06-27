@@ -45,6 +45,70 @@ Scores sourced from football-data.org (per-match detail endpoint) and ESPN publi
 
 - [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
 
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
 ## Route Guides
 
 Projected knockout routes (Round of 32 → Final) for leading contenders, with dates, host cities and likely opponents:
@@ -58,14 +122,28 @@ Projected knockout routes (Round of 32 → Final) for leading contenders, with d
 - [Germany’s route to the final](https://worldcupknockout.football/guides/germany-world-cup-2026-route/): Group E knockout path
 - [Netherlands’ route to the final](https://worldcupknockout.football/guides/netherlands-world-cup-2026-route/): Group F knockout path
 - [United States’ route to the final](https://worldcupknockout.football/guides/united-states-world-cup-2026-route/): Group D knockout path
-- [Scotland’s route to the final](https://worldcupknockout.football/guides/scotland-world-cup-2026-route/): Group C knockout path
+- [Belgium’s route to the final](https://worldcupknockout.football/guides/belgium-world-cup-2026-route/): Group G knockout path
+- [Morocco’s route to the final](https://worldcupknockout.football/guides/morocco-world-cup-2026-route/): Group C knockout path
+- [Japan’s route to the final](https://worldcupknockout.football/guides/japan-world-cup-2026-route/): Group F knockout path
+- [Norway’s route to the final](https://worldcupknockout.football/guides/norway-world-cup-2026-route/): Group I knockout path
+- [Canada’s route to the final](https://worldcupknockout.football/guides/canada-world-cup-2026-route/): Group B knockout path
+- [Switzerland’s route to the final](https://worldcupknockout.football/guides/switzerland-world-cup-2026-route/): Group B knockout path
+- [Ivory Coast’s route to the final](https://worldcupknockout.football/guides/ivory-coast-world-cup-2026-route/): Group E knockout path
+- [Mexico’s route to the final](https://worldcupknockout.football/guides/mexico-world-cup-2026-route/): Group A knockout path
 - [Australia’s route to the final](https://worldcupknockout.football/guides/australia-world-cup-2026-route/): Group D knockout path
 - [Croatia’s route to the final](https://worldcupknockout.football/guides/croatia-world-cup-2026-route/): Group L knockout path
+- [Cape Verde’s route to the final](https://worldcupknockout.football/guides/cape-verde-world-cup-2026-route/): Group H knockout path
+- [South Africa’s route to the final](https://worldcupknockout.football/guides/south-africa-world-cup-2026-route/): Group A knockout path
+- [Iran’s route to the final](https://worldcupknockout.football/guides/iran-world-cup-2026-route/): Group G knockout path
 - [All route guides](https://worldcupknockout.football/guides/)
 
 ## Winner Odds & Predictions
 
 - [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
 
 ## Usage
 

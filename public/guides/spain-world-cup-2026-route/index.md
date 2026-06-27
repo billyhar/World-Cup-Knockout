@@ -2,7 +2,7 @@
 
 > If Spain win Group H, their knockout route runs from a Round of 32 tie in Los Angeles on Thu, 2 July 2026, through the Round of 16 in Dallas (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group H · Projected knockout path · Updated Thu, 18 June 2026*
+*Group H · Projected knockout path · Updated Sat, 27 June 2026*
 
 ## Spain’s projected knockout route
 
@@ -10,7 +10,7 @@
 |---|---|---|---|
 | Round of 32 | Thu, 2 July 2026 | Los Angeles | the Group J runner-up |
 | Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 83 (the Group K runner-up vs the Group L runner-up) |
-| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Switzerland or Germany |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Canada or Switzerland |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -26,15 +26,15 @@ A Round-of-16 place would pit Spain against the winner of Match 83 (the Group K 
 
 ## Spain’s potential quarter-final
 
-Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 94. Heavyweights lurking in that quarter include [United States](/guides/united-states-world-cup-2026-route/), Switzerland, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast.
+Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles, against the winner of Round-of-16 Match 94. Heavyweights lurking in that quarter include [United States](/guides/united-states-world-cup-2026-route/), [Canada](/guides/canada-world-cup-2026-route/), [Switzerland](/guides/switzerland-world-cup-2026-route/) or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Could Spain reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea or Switzerland.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/), [Mexico](/guides/mexico-world-cup-2026-route/), [South Africa](/guides/south-africa-world-cup-2026-route/) or South Korea.
 
 ## Spain’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Spain’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Spain’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), [Morocco](/guides/morocco-world-cup-2026-route/), [Netherlands](/guides/netherlands-world-cup-2026-route/), [Japan](/guides/japan-world-cup-2026-route/), [Germany](/guides/germany-world-cup-2026-route/) or [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## What if Spain finish runner-up in Group H?
 
@@ -43,8 +43,8 @@ As Group H runner-up, Spain would enter the other half of the bracket, opening w
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
 | Round of 32 | Fri, 3 July 2026 | Miami | the Group J winner |
-| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 88 (the Group D runner-up vs the Group G runner-up) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Switzerland, Germany or Ivory Coast |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 88 (Australia vs Iran) |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Canada, Switzerland or Germany |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 

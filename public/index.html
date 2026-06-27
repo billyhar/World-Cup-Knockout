@@ -48,6 +48,7 @@
         <button data-goto="qf">QF</button>
         <button data-goto="sf">SF</button>
         <button data-goto="final">F</button>
+        <button data-action="scores" id="scores-btn">Scores <svg class="sc-caret" viewBox="0 0 10 6" width="9" height="9" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </nav>
       <nav class="nav-chips side-chips" id="side-chips" hidden>
         <button data-side="1">Side 1</button>
@@ -60,7 +61,14 @@
     </div>
   </header>
 
-  <aside class="chrome live-dock" id="live-panel" hidden></aside>
+  <div class="scores-carousel" id="scores-carousel" hidden>
+    <div class="sc-nav">
+      <button class="sc-arrow" id="sc-prev" aria-label="Previous day">&#8249;</button>
+      <div class="sc-days" id="sc-days"></div>
+      <button class="sc-arrow" id="sc-next" aria-label="Next day">&#8250;</button>
+    </div>
+    <div class="sc-strip" id="sc-strip"></div>
+  </div>
 
   <div class="chrome chrome-zoom">
     <button id="rotate" aria-label="Rotate canvas">⟳</button>

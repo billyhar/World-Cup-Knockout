@@ -2,14 +2,14 @@
 
 > If Australia win Group D, their knockout route runs from a Round of 32 tie in SF Bay Area on Thu, 2 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group D · Projected knockout path · Updated Thu, 18 June 2026*
+*Group D · Projected knockout path · Updated Sat, 27 June 2026*
 
 ## Australia’s projected knockout route
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
 | Round of 32 | Thu, 2 July 2026 | SF Bay Area | a third-placed team (from Group B, Group E, Group F, Group I or Group J) |
-| Round of 16 | Tue, 7 July 2026 | Seattle | the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)) |
+| Round of 16 | Tue, 7 July 2026 | Seattle | the winner of Match 82 (Belgium vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)) |
 | Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially Portugal, Colombia or England |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
@@ -22,7 +22,7 @@ In the Round of 32, Australia would meet a third-placed team (from Group B, Grou
 
 ## What is Australia’s Round of 16 path?
 
-A Round-of-16 place would pit Australia against the winner of Match 82 (the Group G winner vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include Belgium, Mexico, South Korea or [Germany](/guides/germany-world-cup-2026-route/).
+A Round-of-16 place would pit Australia against the winner of Match 82 ([Belgium](/guides/belgium-world-cup-2026-route/) vs a third-placed team (from Group A, Group E, Group H, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include Belgium, [Mexico](/guides/mexico-world-cup-2026-route/), [South Africa](/guides/south-africa-world-cup-2026-route/) or South Korea.
 
 ## Australia’s potential quarter-final
 
@@ -30,21 +30,21 @@ Reaching the quarter-finals would set up Match 98 on Fri, 10 July 2026, 3:00 PM 
 
 ## Could Australia reach the semi-finals?
 
-The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), Ivory Coast, Mexico, South Korea or Switzerland.
+The semi-final (Match 101) is set for Tue, 14 July 2026, 3:00 PM ET at AT&T Stadium, Dallas. Possible opponents from the other half include [Germany](/guides/germany-world-cup-2026-route/), [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/), [Mexico](/guides/mexico-world-cup-2026-route/), [South Africa](/guides/south-africa-world-cup-2026-route/) or South Korea.
 
 ## Australia’s route to the World Cup 2026 Final
 
-The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Australia’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), Morocco, [Netherlands](/guides/netherlands-world-cup-2026-route/), Japan, [Germany](/guides/germany-world-cup-2026-route/) or Ivory Coast could be waiting on the other side of the draw.
+The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026 (3:00 PM ET). It is the last step of Australia’s projected route. Anyone from [Brazil](/guides/brazil-world-cup-2026-route/), [Morocco](/guides/morocco-world-cup-2026-route/), [Netherlands](/guides/netherlands-world-cup-2026-route/), [Japan](/guides/japan-world-cup-2026-route/), [Germany](/guides/germany-world-cup-2026-route/) or [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/) could be waiting on the other side of the draw.
 
 ## What if Australia finish runner-up in Group D?
 
-As Group D runner-up, Australia would enter the other half of the bracket, opening with a Round of 32 tie against the Group G runner-up in Dallas on Fri, 3 July 2026 (Match 88). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group D runner-up, Australia would enter the other half of the bracket, opening with a Round of 32 tie against [Iran](/guides/iran-world-cup-2026-route/) in Dallas on Fri, 3 July 2026 (Match 88). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Fri, 3 July 2026 | Dallas | the Group G runner-up |
-| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 86 (the Group J winner vs the Group H runner-up) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Switzerland, Germany or Ivory Coast |
+| Round of 32 | Fri, 3 July 2026 | Dallas | Iran |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 86 (the Group J winner vs Cape Verde) |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Canada, Switzerland or Germany |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -70,7 +70,7 @@ If Australia win Group D, their Round of 16 tie (Match 94) is at Lumen Field, Se
 
 ### What if Australia finish runner-up in Group D?
 
-As Group D runner-up, Australia would drop into the other half of the bracket. Their Round of 32 tie (Match 88) is against the Group G runner-up in Dallas on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group D runner-up, Australia would drop into the other half of the bracket. Their Round of 32 tie (Match 88) is against Iran in Dallas on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

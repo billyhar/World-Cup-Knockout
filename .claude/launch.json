@@ -4,8 +4,9 @@
     {
       "name": "worldcup",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["netlify", "dev", "--port", "8888"],
-      "port": 8888
+      "runtimeArgs": ["netlify", "dev"],
+      "port": 8888,
+      "autoPort": true
     }
   ]
 }

@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 import { modelOdds } from "./odds-model.mjs";
-import { allStandings, resolveBracket } from "../public/js/data.js";
+import { allStandings, resolveBracket, allocateThirds } from "../public/js/data.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = join(ROOT, "public");
@@ -37,6 +37,11 @@ const teamName = (code) => seed.teams[code]?.name ?? code;
 // the API — falls back cleanly to the projection text.
 const slotToTeam = {};   // seed slot token (e.g. "1H", "3:ABF", "W73") -> team code
 let resolvedCount = 0;
+// Hoisted so the third-place article can read live standings / best-thirds.
+let liveStandings = null;   // { [group]: { table, complete, played } }
+let liveThirds = null;      // allocateThirds() result, or null until groups end
+// All results (including live) for article score display
+let liveResults = {};
 try {
   const grab = (path) =>
     fetch(`${ORIGIN}${path}`, { signal: AbortSignal.timeout(8000) })
@@ -48,10 +53,14 @@ try {
   if (live?.results) Object.assign(results, live.results);
   let overrides = {};
   if (manual) { Object.assign(results, manual.results ?? {}); overrides = manual.overrides ?? {}; }
+  // Save raw results for article score display before filtering LIVE
+  Object.assign(liveResults, results);
   // Only completed matches feed standings/resolution — drop anything in play.
   for (const k of Object.keys(results)) if (results[k]?.status === "LIVE") delete results[k];
 
   const standings = allStandings(seed, results);
+  liveStandings = standings;
+  liveThirds = allocateThirds(seed, results, standings);
   const { resolved } = resolveBracket(seed, results, overrides, standings);
   for (const m of seed.matches) {
     if (m.stage === "group") continue;
@@ -68,12 +77,17 @@ try {
 const slotCode = (slot) => slotToTeam[slot] ?? null;
 
 // Teams to generate, in display order. Group is derived from the seed.
-const TEAMS = ["ENG", "FRA", "ESP", "POR", "BRA", "ARG", "GER", "NED", "USA", "SCO", "AUS", "CRO"];
+const TEAMS = [
+  "ENG", "FRA", "ESP", "POR", "BRA", "ARG", "GER", "NED", "USA",
+  "BEL", "MAR", "JPN", "NOR", "CAN", "SUI", "CIV", "MEX", "AUS", "CRO",
+  "CPV", "RSA", "IRN",
+];
 
 // Marquee sides named as "potential opponents" deeper in the bracket.
 const HEADLINE = new Set([
   "ARG", "BRA", "FRA", "ENG", "ESP", "POR", "GER", "NED", "BEL", "CRO",
   "URU", "USA", "MEX", "MAR", "JPN", "SEN", "COL", "CIV", "SUI", "KOR",
+  "NOR", "CAN", "RSA",
 ]);
 
 const esc = (s) => String(s)
@@ -198,6 +212,95 @@ function describeSlot(slot) {
 
 const oxford = (arr) => arr.length <= 1 ? (arr[0] ?? "")
   : `${arr.slice(0, -1).join(", ")} or ${arr.at(-1)}`;
+
+// ---- match card HTML -------------------------------------------------------
+
+// Knockout route card for one round of the path.
+// `leg` is a { match, opp } entry from trace().
+function routeCard(team, leg) {
+  const { match, opp } = leg;
+  const r = liveResults[match.id];
+  const isDone = r?.hs != null && r?.status !== "LIVE";
+  const isLive = r?.status === "LIVE";
+  // opp = the opponent's slot → team is on the OTHER side
+  const teamIsHome = match.away === opp;
+  const teamScore = r?.hs != null ? (teamIsHome ? r.hs : r.as) : null;
+  const oppScore  = r?.hs != null ? (teamIsHome ? r.as : r.hs) : null;
+  let winSide = null;
+  if (isDone) {
+    if (r.pen) winSide = r.pen.h > r.pen.a ? "h" : "a";
+    else winSide = r.hs > r.as ? "h" : r.as > r.hs ? "a" : null;
+  }
+  const teamWon = winSide === (teamIsHome ? "h" : "a");
+  const oppWon  = winSide === (teamIsHome ? "a" : "h");
+  const oppCode = slotCode(opp);
+  const teamRowCls = isDone ? (teamWon ? "win" : "lose") : "";
+  const oppRowCls  = isDone ? (oppWon  ? "win" : "lose") : (oppCode ? "" : "tbd");
+  const oppFlagHtml = oppCode ? flag(oppCode) : `<span class="g-flag-tbd"></span>`;
+  const oppNameHtml = oppCode
+    ? crosslink(esc(teamName(oppCode)), teamName(team))
+    : esc(describeSlot(opp));
+  const pens = r?.pen;
+  const teamPen = pens ? (teamIsHome ? pens.h : pens.a) : null;
+  const oppPen  = pens ? (teamIsHome ? pens.a : pens.h) : null;
+  const penHtml = pens ? ` <span class="g-ko-pens">(${teamPen}–${oppPen} pens)</span>` : "";
+  const etHtml  = r?.et ? ` <span class="g-ko-aet">aet</span>` : "";
+  const cls = ["g-ko-card", isDone ? "is-done" : "", isLive ? "is-live" : ""].filter(Boolean).join(" ");
+  const scoreHtml = (isDone || isLive)
+    ? `<span class="g-ko-score">${teamScore ?? "?"}</span>` : "";
+  const oppScoreHtml = (isDone || isLive)
+    ? `<span class="g-ko-score">${oppScore ?? "?"}</span>` : "";
+  const dateHtml = !isDone
+    ? `<div class="g-ko-date">${fmtDate(match.kickoff)} · ${fmtTime(match.kickoff)}</div>` : "";
+  const venueHtml = isDone ? esc(match.city) : `${esc(match.stadium)}, ${esc(match.city)}`;
+  return `<div class="${cls}">
+    <div class="g-ko-meta">
+      <span><b>${esc(ROUND[match.stage])}</b> · Match ${match.id}${etHtml}</span>
+      <span class="g-ko-city">${venueHtml}</span>
+    </div>
+    <div class="g-ko-row ${teamRowCls}">
+      ${flag(team)}<span class="g-ko-name">${esc(teamName(team))}</span>${scoreHtml}
+    </div>
+    <div class="g-ko-row ${oppRowCls}">
+      ${oppFlagHtml}<span class="g-ko-name">${oppNameHtml}</span>${oppScoreHtml}${penHtml}
+    </div>
+    ${dateHtml}
+  </div>`;
+}
+
+// Group stage fixture card with actual scores where available.
+function fixtureCard(m) {
+  const r = liveResults[m.id];
+  const isDone = r?.hs != null && r?.status !== "LIVE";
+  const isLive = r?.status === "LIVE";
+  const cls = ["g-fix-card", isDone ? "is-done" : isLive ? "is-live" : ""].filter(Boolean).join(" ");
+  const hs = r?.hs;
+  const as_ = r?.as;
+  const resultHtml = isDone
+    ? `<span class="g-fix-result">${hs}–${as_}</span>`
+    : isLive
+    ? `<span class="g-fix-result">${hs ?? "0"}–${as_ ?? "0"}</span>`
+    : `<span class="g-fix-result">vs</span>`;
+  const kickHtml = !isDone
+    ? `<div class="g-fix-kick">${fmtDate(m.kickoff)} · ${fmtTime(m.kickoff)}</div>` : "";
+  const hf = seed.teams[m.home]?.flag;
+  const af = seed.teams[m.away]?.flag;
+  const hFlag = hf ? `<img class="flag" src="https://flagcdn.com/w40/${hf}.png" srcset="https://flagcdn.com/w80/${hf}.png 2x" alt="" width="20" height="15" loading="lazy" decoding="async">` : "";
+  const aFlag = af ? `<img class="flag" src="https://flagcdn.com/w40/${af}.png" srcset="https://flagcdn.com/w80/${af}.png 2x" alt="" width="20" height="15" loading="lazy" decoding="async">` : "";
+  return `<div class="${cls}">
+    <div class="g-fix-team-home">
+      <span class="g-fix-fname">${esc(teamName(m.home))}</span>${hFlag}
+    </div>
+    <div class="g-fix-center">
+      ${resultHtml}
+      ${kickHtml}
+    </div>
+    <div class="g-fix-team-away">
+      ${aFlag}<span class="g-fix-fname">${esc(teamName(m.away))}</span>
+    </div>
+    <div class="g-fix-venue-line">${esc(m.stadium)}, ${esc(m.city)}</div>
+  </div>`;
+}
 
 // ---- per-round prose -------------------------------------------------------
 
@@ -831,6 +934,281 @@ Live bracket: ${ORIGIN}/ · All route guides: ${ORIGIN}/guides/
   return { html, md, slug, url };
 }
 
+// ---- third-placed teams explainer ------------------------------------------
+
+// Full article page: /world-cup-2026-third-place/
+// Explains the 48-team format's eight best third-placed qualifiers and the
+// constraint-matching that decides which third lands in which Round of 32 tie.
+// Static like the route guides — rebuilt as groups finish, so it shows the
+// live third-place race now and the confirmed eight once the groups are done.
+function thirdPlacePage() {
+  const slug = "world-cup-2026-third-place";
+  const url = `${ORIGIN}/${slug}/`;
+  const title = "World Cup 2026 Best Third-Placed Teams: How 8 Thirds Reach the Round of 32";
+  const desc = "How the 2026 World Cup's eight best third-placed teams qualify for the Round of 32 — the ranking criteria, the live third-place race, and why which third plays which group winner is the bracket's most complicated rule.";
+
+  // R32 ties that include a best-third slot, in match order.
+  const thirdTies = seed.matches
+    .filter((m) => m.stage === "r32" && (m.home.startsWith("3:") || m.away.startsWith("3:")))
+    .sort((a, b) => Number(a.id) - Number(b.id));
+
+  // Slot-allocation table: each group winner faces a third from a fixed pool.
+  const slotRows = thirdTies.map((m) => {
+    const thirdSlot = m.home.startsWith("3:") ? m.home : m.away;
+    const winnerSlot = m.home.startsWith("3:") ? m.away : m.home;
+    const allowed = thirdSlot.slice(2).split("");
+    const code = slotCode(thirdSlot);
+    const faces = code
+      ? `${flag(code)} ${crosslink(esc(teamName(code)), null)}`
+      : `3rd from ${oxford(allowed.map((g) => `Group ${g}`))}`;
+    return `<tr>
+      <td>Match ${m.id}</td>
+      <td>${fmtDate(m.kickoff)}</td>
+      <td>${esc(m.city)}</td>
+      <td>${esc(describeSlot(winnerSlot))}</td>
+      <td>${faces}</td>
+    </tr>`;
+  }).join("\n");
+
+  // ---- live third-place race --------------------------------------------
+  const groups = Object.keys(seed.groups).sort();
+  let liveSection = "";
+  let mdLive = "";
+  if (liveStandings) {
+    const doneGroups = groups.filter((g) => liveStandings[g]?.complete).length;
+    const allDone = doneGroups === groups.length;
+
+    // current third-placed team in every group that has kicked off
+    const thirds = groups
+      .filter((g) => (liveStandings[g]?.played ?? 0) > 0)
+      .map((g) => ({ group: g, complete: !!liveStandings[g].complete, ...liveStandings[g].table[2] }))
+      .sort((a, b) =>
+        b.pts - a.pts || b.gd - a.gd || b.gf - a.gf ||
+        teamName(a.team).localeCompare(teamName(b.team)));
+
+    // confirmed eight once every group is done, else the provisional top 8
+    const qualSet = new Set(
+      (liveThirds ? liveThirds.qualified : thirds.slice(0, 8)).map((t) => t.team));
+
+    // which R32 tie each confirmed third drops into
+    const tieOf = {};
+    if (liveThirds) {
+      for (const [mid, code] of Object.entries(liveThirds.assignment)) {
+        const m = byId[mid];
+        const oppSlot = m.home.startsWith("3:") ? m.away : m.home;
+        tieOf[code] = `Match ${mid} vs ${describeSlot(oppSlot)} (${m.city})`;
+      }
+    }
+
+    const raceRows = thirds.map((t, i) => {
+      const inTop = qualSet.has(t.team);
+      const status = allDone
+        ? (inTop ? "✅ Qualified" : "Eliminated")
+        : (inTop ? "In top 8" : "Outside top 8");
+      const prov = t.complete ? "" : " · group in progress";
+      return `<tr${inTop ? ' class="g-q"' : ""}>
+        <td>${i + 1}</td>
+        <td>Group ${t.group}</td>
+        <td>${flag(t.team)} ${crosslink(esc(teamName(t.team)), null)}</td>
+        <td>${t.pts}</td>
+        <td>${t.gd > 0 ? "+" : ""}${t.gd}</td>
+        <td>${t.gf}</td>
+        <td>${status}${prov}</td>
+      </tr>`;
+    }).join("\n");
+
+    const heading = allDone
+      ? "The eight qualified third-placed teams"
+      : `The third-place race so far (${doneGroups} of 12 groups decided)`;
+    const lead = allDone
+      ? "All twelve groups are complete. These are the eight best third-placed teams that advance to the Round of 32, ranked by the FIFA criteria, with the tie each one drops into."
+      : `${doneGroups} of the 12 groups have finished. The table below ranks the current third-placed team in every group that has started — the top eight are on course to reach the Round of 32, but positions stay provisional until the final group games are played.`;
+
+    liveSection = `
+    <section class="g-table-wrap" aria-label="Third-placed teams standings">
+      <h2>${esc(heading)}</h2>
+      <p style="color:var(--ink-dim);margin-bottom:16px">${esc(lead)}</p>
+      <table class="g-table">
+        <thead><tr><th>#</th><th>Group</th><th>Team</th><th>Pts</th><th>GD</th><th>GF</th><th>Status</th></tr></thead>
+        <tbody>
+${raceRows}
+        </tbody>
+      </table>
+      <p class="g-note">Third-placed teams are ranked by points, then goal difference, then goals scored (further FIFA tiebreakers — disciplinary record, then drawing of lots — decide any remaining ties). ${allDone ? "" : "Rankings update as each group finishes."}</p>
+    </section>`;
+
+    mdLive = `\n## ${heading}\n\n${lead}\n\n| # | Group | Team | Pts | GD | GF | Status |\n|---|---|---|---|---|---|---|\n` +
+      thirds.map((t, i) => {
+        const inTop = qualSet.has(t.team);
+        const status = allDone ? (inTop ? "Qualified" : "Eliminated") : (inTop ? "In top 8" : "Outside top 8");
+        return `| ${i + 1} | ${t.group} | ${teamName(t.team)} | ${t.pts} | ${t.gd > 0 ? "+" : ""}${t.gd} | ${t.gf} | ${status}${t.complete ? "" : " (in progress)"} |`;
+      }).join("\n") + "\n";
+  }
+
+  const intro = `At the 2026 World Cup, the eight best third-placed teams from the 12 groups join the 24 group winners and runners-up in the Round of 32 — so only four of the twelve third-placed sides go out. They are ranked by points, goal difference then goals scored, and a fixed FIFA table decides which third plays which group winner.`;
+
+  const faqs = [
+    {
+      q: "How many third-placed teams qualify for the 2026 World Cup knockouts?",
+      a: "Eight of the twelve third-placed teams qualify for the Round of 32. The 24 group winners and runners-up go through automatically; the eight best third-placed sides fill the remaining knockout places, so only four third-placed teams are eliminated.",
+    },
+    {
+      q: "How are the best third-placed teams ranked?",
+      a: "All twelve third-placed teams are compared on the same FIFA criteria, in order: points, then goal difference, then goals scored. If teams are still level, the disciplinary (fair-play) record is used, and finally a drawing of lots. The top eight on that ranking advance.",
+    },
+    {
+      q: "Why is third-place qualification so complicated?",
+      a: "There are 495 different combinations of which eight groups could supply the qualifying thirds (12 groups choose 8). Each Round of 32 slot can only take a third from a fixed set of groups, partly so teams do not meet a group opponent again. FIFA uses a predetermined lookup table to map every combination of qualifying groups onto the bracket positions, which is why the third-placed opponents only lock in once all the groups are finished.",
+    },
+    {
+      q: "Which Round of 32 matches feature a third-placed team?",
+      a: `Eight Round of 32 ties pit a group winner against a best third-placed team: ${oxford(thirdTies.map((m) => `Match ${m.id} in ${m.city}`))}.`,
+    },
+    {
+      q: "Has the best-thirds format been used before?",
+      a: "Yes — UEFA used four best third-placed teams out of six groups at Euro 2016, 2020 and 2024. The 2026 World Cup scales the same idea up to eight of twelve, the first time it has been used at a World Cup since the 24-team format of 1986–1994.",
+    },
+  ];
+  const faqHtml = faqs.map((f) => `<details class="g-faq">
+    <summary>${esc(f.q)}</summary>
+    <p>${esc(f.a)}</p>
+  </details>`).join("\n");
+
+  const jsonld = [
+    {
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN}/` },
+        { "@type": "ListItem", position: 2, name: "Route Guides", item: `${ORIGIN}/guides/` },
+        { "@type": "ListItem", position: 3, name: "Best third-placed teams", item: url },
+      ],
+    },
+    {
+      "@context": "https://schema.org", "@type": "Article",
+      headline: title, description: desc,
+      datePublished: TODAY, dateModified: TODAY,
+      mainEntityOfPage: url,
+      image: `${ORIGIN}/og.png`,
+      author: { "@type": "Organization", name: "World Cup Knockout" },
+      publisher: { "@type": "Organization", name: "World Cup Knockout", url: `${ORIGIN}/` },
+      about: { "@type": "SportsEvent", name: "FIFA World Cup 2026" },
+    },
+    {
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question", name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ];
+
+  const siblingLinks = TEAMS
+    .map((t) => `<a href="/guides/${slugFor(teamName(t))}/">${esc(teamName(t))}</a>`)
+    .join("\n    ");
+
+  const html = head({ title, desc, url, jsonld }) + siteHeader + `
+<main class="g-article">
+  <nav class="g-crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <a href="/guides/">Route guides</a> › <span>Best third-placed teams</span>
+  </nav>
+  <article>
+    <header class="g-hero">
+      <h1>World Cup 2026 Best Third-Placed Teams Explained</h1>
+      <p class="g-standfirst">${esc(intro)}</p>
+      <p class="g-meta">48-team format · best thirds &amp; Round of 32 · Updated ${fmtDate(`${TODAY}T12:00:00Z`)}</p>
+    </header>
+
+    <section class="g-stats" aria-label="Best third-placed teams at a glance">
+      <div class="g-stat">
+        <div class="g-stat-num">8</div>
+        <div class="g-stat-label">best third-placed teams qualify for the Round of 32</div>
+      </div>
+      <div class="g-stat">
+        <div class="g-stat-num">4</div>
+        <div class="g-stat-label">third-placed teams are eliminated</div>
+      </div>
+      <div class="g-stat">
+        <div class="g-stat-num">495</div>
+        <div class="g-stat-label">group combinations FIFA maps with a fixed table</div>
+      </div>
+    </section>
+${liveSection}
+    <section class="g-round">
+      <h2>How the best third-placed teams are decided</h2>
+      <p>All 12 third-placed teams are pooled into a single table and ranked by <strong>points</strong>, then <strong>goal difference</strong>, then <strong>goals scored</strong> (disciplinary record and a drawing of lots break any remaining ties). The top eight reach the Round of 32; the bottom four go out.</p>
+      <p>Which third plays which group winner is the bracket's trickiest rule. Each slot in the table below only takes a third from a fixed pool of groups, so teams avoid a group-stage rematch — and with 495 possible combinations of qualifying groups, FIFA assigns them from a predetermined lookup table. That is why each winner's opponent stays a projection until all 12 groups finish.</p>
+    </section>
+
+    <section class="g-table-wrap" aria-label="Round of 32 third-placed slots">
+      <h2>Round of 32 ties featuring a third-placed team</h2>
+      <table class="g-table">
+        <thead><tr><th>Tie</th><th>Date</th><th>Host city</th><th>Group winner</th><th>Faces 3rd from</th></tr></thead>
+        <tbody>
+${slotRows}
+        </tbody>
+      </table>
+      <p class="g-note">Each group winner can only draw a third-placed team from the listed groups; the named team appears once the groups finish and the combination resolves.</p>
+    </section>
+
+    <section class="g-faq-wrap" aria-label="Frequently asked questions">
+      <h2>Best third-placed teams — FAQ</h2>
+${faqHtml}
+    </section>
+
+    <section class="g-table-wrap" aria-label="Knockout route guides">
+      <h2>Knockout route guides</h2>
+      <p style="color:var(--ink-dim);margin-bottom:16px">Trace the full projected path to the Final for every leading contender, or see who the model and bookmakers make favourites.</p>
+      <nav class="g-foot-links" style="flex-wrap:wrap;gap:10px;margin:0" aria-label="Route guides">
+        <a href="/world-cup-2026-winner/">Who will win?</a>
+        ${siblingLinks}
+      </nav>
+    </section>
+  </article>
+</main>` + siteFooter(`<a href="/world-cup-2026-winner/">Who will win?</a>\n    ${TEAMS.map((t) => `<a href="/guides/${slugFor(teamName(t))}/">${esc(teamName(t))}</a>`).join("\n    ")}`);
+
+  const mdSlots = [
+    `| Tie | Date | Host city | Group winner | Faces 3rd from |`,
+    `|---|---|---|---|---|`,
+    ...thirdTies.map((m) => {
+      const thirdSlot = m.home.startsWith("3:") ? m.home : m.away;
+      const winnerSlot = m.home.startsWith("3:") ? m.away : m.home;
+      const allowed = thirdSlot.slice(2).split("");
+      const code = slotCode(thirdSlot);
+      const faces = code ? teamName(code) : `3rd from ${oxford(allowed.map((g) => `Group ${g}`))}`;
+      return `| Match ${m.id} | ${fmtDate(m.kickoff)} | ${m.city} | ${describeSlot(winnerSlot)} | ${faces} |`;
+    }),
+  ].join("\n");
+
+  const md = `# World Cup 2026 Best Third-Placed Teams Explained
+
+> ${intro}
+
+*48-team format · best thirds & Round of 32 · Updated ${fmtDate(`${TODAY}T12:00:00Z`)}*
+
+**At a glance:** 8 best third-placed teams qualify · 4 are eliminated · 32 teams in the Round of 32 (24 automatic + 8 thirds) · 495 group combinations mapped by a fixed FIFA table.
+${mdLive}
+## How the best third-placed teams are decided
+
+All 12 third-placed teams are pooled into one table and ranked by points, then goal difference, then goals scored (disciplinary record and a drawing of lots break remaining ties). The top eight reach the Round of 32; the bottom four go out.
+
+Each Round of 32 slot only takes a third from a fixed pool of groups, so teams avoid a group-stage rematch. With 495 possible combinations of qualifying groups (12 choose 8), FIFA assigns them from a predetermined lookup table — which is why each winner's opponent stays a projection until all 12 groups finish.
+
+## Round of 32 ties featuring a third-placed team
+
+${mdSlots}
+
+## Best third-placed teams — FAQ
+
+${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}
+
+---
+
+Live bracket: ${ORIGIN}/ · All route guides: ${ORIGIN}/guides/
+`;
+
+  return { html, md, slug, url };
+}
+
 // ---- hub teaser (replaces full odds table on /guides/) ---------------------
 
 // Compact top-3 teaser linking through to the winner page.
@@ -861,11 +1239,12 @@ ${pills}
   function flipOdds(el,val){
     if(!el||el.textContent.trim()===val) return;
     el.animate([{transform:"translateY(0)",opacity:1},{transform:"translateY(-110%)",opacity:0}],
-      {duration:180,easing:"ease-in",fill:"forwards"}).finished.then(function(){
-        el.textContent=val;
-        el.animate([{transform:"translateY(110%)",opacity:0},{transform:"translateY(0)",opacity:1}],
-          {duration:180,easing:"ease-out"});
-      });
+      {duration:180,easing:"ease-in",fill:"forwards"});
+    setTimeout(function(){
+      el.textContent=val;
+      el.animate([{transform:"translateY(110%)",opacity:0},{transform:"translateY(0)",opacity:1}],
+        {duration:180,easing:"ease-out",fill:"forwards"});
+    },180);
   }
   fetch("/api/odds").then(function(r){return r.json();}).then(function(d){
     if(!d||!d.teams||!d.teams.length) return;
@@ -889,7 +1268,7 @@ ${pills}
 
 // ---- hub index -------------------------------------------------------------
 
-function hubPage(articles, teaser) {
+function hubPage(articles, teaser, third) {
   const url = `${ORIGIN}/guides/`;
   const title = "World Cup 2026 Route Guides — Every Contender's Knockout Path";
   const desc = "Projected knockout routes for the 2026 World Cup favourites: Round of 32 to the Final, with dates, host cities and likely opponents for England, France, Brazil, Spain, Argentina and more.";
@@ -938,6 +1317,35 @@ function hubPage(articles, teaser) {
 ${cards}
   </section>
 ${teaser.html}
+  <section aria-label="Format explainers">
+    <h2 style="font-size:20px;font-weight:700;margin:32px 0 12px">Format &amp; predictions</h2>
+    <div class="g-grid">
+      <a class="g-card" href="/world-cup-2026-third-place/">
+        <span class="g-card-flag">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="38" height="38" rx="9" fill="rgba(47,224,140,0.12)"/>
+            <text x="19" y="25" text-anchor="middle" font-size="18" font-family="system-ui,sans-serif" fill="#2fe08c">3rd</text>
+          </svg>
+        </span>
+        <span class="g-card-text">
+          <strong>Best third-placed teams explained</strong>
+          <span>How 8 of 12 thirds reach the Round of 32 · live race</span>
+        </span>
+      </a>
+      <a class="g-card" href="/world-cup-2026-winner/">
+        <span class="g-card-flag">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="38" height="38" rx="9" fill="rgba(255,209,102,0.12)"/>
+            <text x="19" y="26" text-anchor="middle" font-size="20" font-family="system-ui,sans-serif" fill="#ffd166">🏆</text>
+          </svg>
+        </span>
+        <span class="g-card-text">
+          <strong>Who will win the World Cup?</strong>
+          <span>Live bookmaker odds &amp; bracket model predictions</span>
+        </span>
+      </a>
+    </div>
+  </section>
 </main>` + siteFooter(`<a href="/">Live bracket</a>`);
 
   const md = `# World Cup 2026 Route Guides
@@ -945,6 +1353,7 @@ ${teaser.html}
 > Projected knockout paths for the leading contenders at the 2026 FIFA World Cup — from the Round of 32 to the Final on 19 July, with dates, host cities and the marquee opponents waiting in each round.
 
 - [Who is likely to win the World Cup 2026?](${ORIGIN}/world-cup-2026-winner/) — live bookmaker odds &amp; bracket model predictions
+- [World Cup 2026 best third-placed teams](${ORIGIN}/world-cup-2026-third-place/) — how 8 thirds reach the Round of 32
 
 ## Route guides
 
@@ -1003,14 +1412,19 @@ for (const a of articles) {
 await Promise.all(articles.map(buildOG));
 const modelRows = modelOdds(seed).slice(0, 16);
 const winner = winnerPage(modelRows);
+const third = thirdPlacePage();
 const teaser = oddsTeaserSection(modelRows);
-const hub = hubPage(articles, teaser);
+const hub = hubPage(articles, teaser, third);
 writeFileSync(join(PUB, "guides", "index.html"), hub.html);
 writeFileSync(join(PUB, "guides", "index.md"), hub.md);
 const winnerDir = join(PUB, winner.slug);
 mkdirSync(winnerDir, { recursive: true });
 writeFileSync(join(winnerDir, "index.html"), winner.html);
 writeFileSync(join(winnerDir, "index.md"), winner.md);
+const thirdDir = join(PUB, third.slug);
+mkdirSync(thirdDir, { recursive: true });
+writeFileSync(join(thirdDir, "index.html"), third.html);
+writeFileSync(join(thirdDir, "index.md"), third.md);
 // homepage markdown twin (the canvas HTML can't be meaningfully serialised)
 writeFileSync(join(PUB, "index.md"), homeMarkdown(articles));
 
@@ -1019,6 +1433,7 @@ const urls = [
   { loc: `${ORIGIN}/`, freq: "hourly", pri: "1.0", mod: TODAY },
   { loc: `${ORIGIN}/guides/`, freq: "weekly", pri: "0.8", mod: TODAY },
   { loc: winner.url, freq: "daily", pri: "0.9", mod: TODAY },
+  { loc: third.url, freq: "daily", pri: "0.8", mod: TODAY },
   ...articles.map((a) => ({ loc: `${ORIGIN}/guides/${a.slug}/`, freq: "weekly", pri: "0.7", mod: TODAY })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -1046,6 +1461,10 @@ ${articles.map((a) => `- [${poss(a.name)} route to the final](${ORIGIN}/guides/$
 ## Winner Odds & Predictions
 
 - [Who is likely to win the World Cup 2026?](${ORIGIN}/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: ${ORIGIN}/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](${third.url}): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
 `;
 // insert before "## Usage" if present, else append
 llms = llms.includes("## Usage")

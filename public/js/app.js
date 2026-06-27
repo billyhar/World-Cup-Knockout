@@ -18,7 +18,7 @@ const tvHTML = (matchId) => {
 
 // ---- world layout: mirrored bracket, final in the middle -------------------
 // groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
-const G = { w: 380, h: 540, gapX: 44, gapY: 48 };
+const G = { w: 380, h: 590, gapX: 44, gapY: 56 };
 const K = { w: 304, h: 104, gapY: 30 };
 const MID_Y = 980;
 const WORLD = { w: 5260, h: 1960 };
@@ -107,61 +107,106 @@ const STAGE_LABEL = {
   sf: "Semi-final", third: "Third place", final: "Final",
 };
 
-let liveDockOpen = null; // null until first shown: open on desktop, pill on phones
+let scoreDayKey = null;
+let scoresOpen = localStorage.getItem("wc-scores-open") !== "0";
+let lastResolved = {};
+let futureDays = [];
 
-function renderLivePanel(resolved) {
-  const panel = document.getElementById("live-panel");
-  const live = seed.matches.filter((m) => state.results[m.id]?.status === "LIVE");
-  const appeared = panel.hidden && live.length > 0;
-  panel.hidden = !live.length;
-  if (!live.length) return;
-  liveDockOpen ??= innerWidth >= 700;
+const dayKey = (iso) => {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
 
-  const cards = live.map((m) => {
-    const r = state.results[m.id];
-    const h = m.stage === "group" ? m.home : resolved[m.id]?.home;
-    const a = m.stage === "group" ? m.away : resolved[m.id]?.away;
-    const ev = r.ev ?? [];
-    const lastGoal = ev.filter((e) => ["G", "P", "O"].includes(e.t)).at(-1);
-    const y = ev.filter((e) => e.t === "Y").length;
-    const red = ev.filter((e) => e.t === "R").length;
-    const where = m.stage === "group" ? `Group ${m.group}` : STAGE_LABEL[m.stage];
-    const row = (code, score) => `
-      <span class="ld-team">${flagImg(code)}<span>${code ?? "—"}</span><b class="ld-score">${score}</b></span>`;
-    return `
-    <button class="ld-match" data-target="${m.stage === "group" ? `group-${m.group}` : `match-${m.id}`}">
-      <span class="ld-meta">
-        <span>${where}</span>
-        ${y ? `<span class="evtag y">${y > 1 ? y : ""}</span>` : ""}
-        ${red ? `<span class="evtag r">${red > 1 ? red : ""}</span>` : ""}
-        <span class="ld-min">${esc(r.min ?? "")}</span>
-      </span>
-      ${row(h, r.hs)}
-      ${row(a, r.as)}
-      ${lastGoal ? `<span class="ld-event">⚽ ${esc(`${lastGoal.m} ${lastGoal.p}`)}</span>` : ""}
-    </button>`;
+// ---- scores carousel (BBC Sport-style day-by-day match strip) -------------
+
+function renderScoresCarousel(resolved) {
+  lastResolved = resolved;
+  const panel = document.getElementById("scores-carousel");
+  const btn = document.getElementById("scores-btn");
+  panel.hidden = !scoresOpen;
+  btn?.classList.toggle("active", scoresOpen);
+  if (!scoresOpen) return;
+
+  // Group matches by local calendar day
+  const dayMap = new Map();
+  for (const m of seed.matches) {
+    const k = dayKey(kick(m));
+    if (!dayMap.has(k)) dayMap.set(k, []);
+    dayMap.get(k).push(m);
+  }
+  const allDays = [...dayMap.keys()].sort();
+  const todayK = dayKey(new Date().toISOString());
+
+  // Only show today and future days
+  futureDays = allDays.filter((d) => d >= todayK);
+
+  // Auto-select: today if it has matches, else first future day
+  if (!scoreDayKey || !futureDays.includes(scoreDayKey)) {
+    scoreDayKey = futureDays[0] ?? allDays.at(-1);
+  }
+
+  const formatDayTab = (k) => {
+    if (k === todayK) return "Today";
+    const [y, mo, d] = k.split("-").map(Number);
+    return new Intl.DateTimeFormat(undefined, { weekday: "short", day: "numeric", month: "short" })
+      .format(new Date(y, mo - 1, d));
+  };
+
+  // Day tabs — only future days
+  const daysEl = document.getElementById("sc-days");
+  daysEl.innerHTML = futureDays.map((k) => {
+    const hasLive = dayMap.get(k).some((m) => state.results[m.id]?.status === "LIVE");
+    return `<button class="sc-day${k === scoreDayKey ? " active" : ""}${k === todayK ? " today" : ""}" data-k="${k}">${
+      hasLive ? '<span class="live-dot"></span>' : ""
+    }${formatDayTab(k)}</button>`;
   }).join("");
 
-  panel.classList.toggle("open", liveDockOpen);
-  panel.innerHTML = `
-    <div class="ld-strip">${cards}</div>
-    <button class="ld-pill" id="ld-toggle" aria-expanded="${liveDockOpen}">
-      <span class="live-dot"></span>Live${live.length > 1 ? `<b>${live.length}</b>` : ""}
-      <svg class="ld-caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
-        <path d="M1 5l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>`;
-  if (appeared) animateDock(panel);
-}
+  // Scroll active tab into view
+  const activeTab = daysEl.querySelector(".sc-day.active");
+  if (activeTab) {
+    const mid = activeTab.offsetLeft - (daysEl.clientWidth - activeTab.offsetWidth) / 2;
+    daysEl.scrollLeft = Math.max(0, mid);
+  }
 
-// replays the entrance (pill pop + cards rising) — used on first appearance
-// and on expand, never on the 60s refresh re-render
-function animateDock(panel) {
-  panel.classList.remove("anim");
-  void panel.offsetWidth; // restart CSS animations
-  panel.classList.add("anim");
-  clearTimeout(animateDock.t);
-  animateDock.t = setTimeout(() => panel.classList.remove("anim"), 800);
+  // Arrow disabled states
+  const idx = futureDays.indexOf(scoreDayKey);
+  const prevBtn = document.getElementById("sc-prev");
+  const nextBtn = document.getElementById("sc-next");
+  if (prevBtn) prevBtn.disabled = idx <= 0;
+  if (nextBtn) nextBtn.disabled = idx >= futureDays.length - 1;
+
+  // Match cards for selected day, sorted by kickoff
+  const matches = (dayMap.get(scoreDayKey) ?? [])
+    .slice()
+    .sort((a, b) => kick(a).localeCompare(kick(b)));
+
+  document.getElementById("sc-strip").innerHTML = matches.map((m) => {
+    const r = state.results[m.id];
+    const live = r?.status === "LIVE";
+    const score = scoreText(r);
+    const done = !!score && !live;
+
+    const homeCode = m.stage === "group" ? m.home : resolved[m.id]?.home;
+    const awayCode = m.stage === "group" ? m.away : resolved[m.id]?.away;
+    const homeLbl = homeCode ?? slotLabel(m.home);
+    const awayLbl = awayCode ?? slotLabel(m.away);
+    const stageLabel = m.stage === "group" ? `Group ${m.group}` : (STAGE_LABEL[m.stage] ?? "");
+    const target = m.stage === "group" ? `group-${m.group}` : `match-${m.id}`;
+    const minLabel = live && r.min ? esc(r.min) : "";
+
+    const metaLine = live
+      ? `<span class="live-badge"><span class="live-dot"></span>LIVE</span>${minLabel ? `<span class="sc-min">${minLabel}</span>` : ""}`
+      : esc(stageLabel);
+
+    return `<button class="sc-card${live ? " live" : ""}${done ? " done" : ""}" data-target="${target}">
+      <span class="sc-meta">${metaLine}</span>
+      <span class="sc-matchup">
+        <span class="sc-team home">${flagImg(homeCode)}<span class="sc-name">${esc(homeLbl)}</span></span>
+        <span class="sc-result">${score ?? fmtTime(kick(m))}</span>
+        <span class="sc-team away"><span class="sc-name">${esc(awayLbl)}</span>${flagImg(awayCode)}</span>
+      </span>
+    </button>`;
+  }).join("");
 }
 
 // ---- group cards -----------------------------------------------------------
@@ -343,7 +388,7 @@ function render() {
   }
 
   world.innerHTML = html;
-  renderLivePanel(resolved);
+  renderScoresCarousel(resolved);
 
   for (const [id, p] of Object.entries(pos)) {
     const el = document.getElementById(id);
@@ -392,17 +437,52 @@ function bindChrome() {
   let currentRound = null;
 
   document.getElementById("nav-chips").addEventListener("click", (e) => {
+    if (e.target.dataset.action === "scores") {
+      scoresOpen = !scoresOpen;
+      localStorage.setItem("wc-scores-open", scoresOpen ? "1" : "0");
+      renderScoresCarousel(lastResolved);
+      return;
+    }
     const goto = e.target.dataset.goto;
     if (!goto) return;
     const narrow = panzoom.view().w < 700;
     const rects = narrow ? sectionsNarrow : sections;
     if (rects[goto]) panzoom.flyTo(rects[goto], narrow ? 14 : 60);
-    for (const b of e.currentTarget.children) b.classList.toggle("active", b === e.target);
+    for (const b of e.currentTarget.children) {
+      if (b.dataset.action) continue; // preserve scores button state
+      b.classList.toggle("active", b === e.target);
+    }
     // on phones, two-column rounds get a side 1 / side 2 switcher
     currentRound = goto;
     const sided = narrow && ["r32", "r16", "qf"].includes(goto);
     sideRow.hidden = !sided;
     if (sided) for (const b of sideRow.children) b.classList.toggle("active", b.dataset.side === "1");
+  });
+
+  // Scores carousel: arrows, day tab switching + match card fly-to
+  document.getElementById("scores-carousel").addEventListener("click", (e) => {
+    const arrow = e.target.closest(".sc-arrow");
+    if (arrow) {
+      const dir = arrow.id === "sc-next" ? 1 : -1;
+      const next = futureDays[futureDays.indexOf(scoreDayKey) + dir];
+      if (next) { scoreDayKey = next; renderScoresCarousel(lastResolved); }
+      return;
+    }
+    const tab = e.target.closest(".sc-day");
+    if (tab) {
+      scoreDayKey = tab.dataset.k;
+      renderScoresCarousel(lastResolved);
+      return;
+    }
+    const card = e.target.closest("[data-target]");
+    if (!card) return;
+    const el = document.getElementById(card.dataset.target);
+    if (!el) return;
+    const narrow = panzoom.view().w < 700;
+    panzoom.flyTo(
+      { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight },
+      narrow ? 20 : 140,
+    );
   });
 
   sideRow.addEventListener("click", (e) => {
@@ -431,26 +511,6 @@ function bindChrome() {
     if (panzoom.rotated) panzoom.flyTo(sections.all, 24, 0);
     else phoneGroupsView();
   };
-
-  // live dock: pill collapses/expands; tap a match to fly to its card
-  const dock = document.getElementById("live-panel");
-  dock.addEventListener("click", (e) => {
-    if (e.target.closest("#ld-toggle")) {
-      liveDockOpen = !liveDockOpen;
-      dock.classList.toggle("open", liveDockOpen);
-      document.getElementById("ld-toggle").setAttribute("aria-expanded", liveDockOpen);
-      if (liveDockOpen) animateDock(dock);
-      return;
-    }
-    const btn = e.target.closest("[data-target]");
-    const el = btn && document.getElementById(btn.dataset.target);
-    if (!el) return;
-    const narrow = panzoom.view().w < 700;
-    panzoom.flyTo(
-      { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight },
-      narrow ? 20 : 140,
-    );
-  });
 
   const hint = document.getElementById("hint");
   setTimeout(() => hint.classList.add("fade"), 6000);
@@ -552,8 +612,6 @@ function markChangedScores(prev) {
       ?.querySelectorAll(".k-score").forEach(flash);
     // Group fixture: .g-fix-score inside [data-mid="{id}"]
     flash(document.querySelector(`.g-fix[data-mid="${m.id}"] .g-fix-score`));
-    // Live dock scores
-    flash(document.querySelector(`#live-panel [data-target="match-${m.id}"] .ld-score`));
   }
 }
 
@@ -585,9 +643,19 @@ async function refresh() {
   initPresence({ world, WORLD });
 
   // initial view: everything on desktop; on mobile fill the width with the
-  // first group column, anchored just below the header
-  if (innerWidth < 700) phoneGroupsView();
-  else panzoom.flyTo(sections.all, 50, 0);
+  // first group column, anchored just below the header.
+  // Defer until the viewport actually has a size — if this runs before the
+  // first layout pass (a 0-size viewport), the fit math collapses and the
+  // canvas shows blank until a manual refresh.
+  const initialView = () => {
+    if (innerWidth < 700) phoneGroupsView();
+    else panzoom.flyTo(sections.all, 50, 0);
+  };
+  const fitWhenSized = (tries = 0) => {
+    if (panzoom.hasSize() || tries > 30) initialView();
+    else requestAnimationFrame(() => fitWhenSized(tries + 1));
+  };
+  fitWhenSized();
 
   setInterval(refresh, 60_000);
   // returning to the tab mid-match: don't wait out the interval

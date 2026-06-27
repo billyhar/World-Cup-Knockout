@@ -161,5 +161,15 @@ export class PanZoom {
       const c = this.local(e.clientX, e.clientY);
       this.zoomAt(c.x, c.y, 1.6);
     });
+
+    // Keep the world in view when the window resizes / the phone rotates or
+    // the mobile address bar shows-hides (which changes the viewport height).
+    addEventListener("resize", () => { this.clamp(); this.apply(); });
+  }
+
+  // True once the viewport has a real, measurable size. flyTo()/animateTo()
+  // produce a blank/off-screen world if called while this is 0.
+  hasSize() {
+    return this.viewport.clientWidth > 0 && this.viewport.clientHeight > 0;
   }
 }
