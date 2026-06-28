@@ -20,7 +20,7 @@ const tvHTML = (matchId) => {
 // ---- world layout: mirrored bracket, final in the middle -------------------
 // groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
 const G = { w: 380, h: 590, gapX: 44, gapY: 56 };
-const K = { w: 304, h: 148, gapY: 30 };
+const K = { w: 304, h: 148, gapY: 50 };
 const MID_Y = 980;
 const WORLD = { w: 5260, h: 1960 };
 
@@ -328,13 +328,15 @@ function predWidgetHTML(m, teams) {
     <button class="pred-btn" data-mid="${m.id}" data-choice="away">${esc(displayCode(awayCode))}</button>
   </div>`;
 
+  const hCount = pred?.home ?? 0;
+  const aCount = pred?.away ?? 0;
   const bar = (hasVotes || myVote) ? `<div class="pred-bar">
     <div class="pred-fill home${hPick ? " my-pick" : ""}" style="--pct:${hp}"></div>
     <div class="pred-fill away${aPick ? " my-pick" : ""}" style="--pct:${ap};animation-delay:0.08s"></div>
   </div>
   <div class="pred-labels">
-    <span class="home${hPick ? " my-pick" : ""}">${esc(displayCode(homeCode))} ${hp}%</span>
-    <span class="away${aPick ? " my-pick" : ""}">${esc(displayCode(awayCode))} ${ap}%</span>
+    <span class="home${hPick ? " my-pick" : ""}">${esc(displayCode(homeCode))} ${hp}% <em>${hCount.toLocaleString()}</em></span>
+    <span class="away${aPick ? " my-pick" : ""}">${esc(displayCode(awayCode))} ${ap}% <em>${aCount.toLocaleString()}</em></span>
     <span class="pred-total">${total.toLocaleString()} vote${total !== 1 ? "s" : ""}</span>
   </div>` : "";
 

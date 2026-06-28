@@ -455,6 +455,7 @@ html, body {
 .pred-labels .away { color: #4f80ff; opacity: 0.8; }
 .pred-labels .my-pick { opacity: 1; font-weight: 700; }
 .pred-labels .pred-total { margin-left: auto; font-size: 9.5px; }
+.pred-labels em { font-style: normal; opacity: 0.55; font-size: 9px; margin-left: 1px; }
 
 /* onboarding callout — rendered in canvas space, auto-dismissed */
 .pred-hint-callout {
