@@ -380,12 +380,6 @@ html, body {
   padding-top: 8px;
   border-top: 1px solid var(--card-edge);
 }
-.pred-spacer {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid transparent;
-  height: 28px;
-}
 .pred-btns {
   display: flex;
   gap: 5px;
@@ -430,29 +424,30 @@ html, body {
   gap: 2px;
 }
 .pred-fill {
-  /* width comes from --pct CSS var; animation grows from left on insert */
+  /* width comes from --pct CSS var; team colour comes inline. animation grows from left on insert */
   width: calc(var(--pct, 0) * 1%);
   transform-origin: left;
+  opacity: 0.82;
   animation: pred-grow 0.55s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 @keyframes pred-grow {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
 }
-.pred-fill.home { background: var(--accent); opacity: 0.55; }
-.pred-fill.away { background: #4f80ff; opacity: 0.55; }
+.pred-fill.draw { background: #6b7280; }
 .pred-fill.my-pick { opacity: 1; }
 .pred-labels {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
+  row-gap: 3px;
   margin-top: 5px;
   font-size: 10px;
   color: var(--ink-faint);
-  white-space: nowrap;
 }
-.pred-labels .home { color: var(--accent); opacity: 0.8; }
-.pred-labels .away { color: #4f80ff; opacity: 0.8; }
+.pred-labels .home, .pred-labels .away { opacity: 0.85; }
+.pred-labels .draw { color: var(--ink-faint); }
 .pred-labels .my-pick { opacity: 1; font-weight: 700; }
 .pred-labels .pred-total { margin-left: auto; font-size: 9.5px; }
 .pred-labels em { font-style: normal; opacity: 0.55; font-size: 9px; margin-left: 1px; }

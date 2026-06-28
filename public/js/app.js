@@ -70,6 +70,23 @@ const scoreText = (r) => (r == null || r.hs == null ? null : `${r.hs}–${r.as}`
 const DISPLAY_CODE = { COD: "DRC" };
 const displayCode = (code) => DISPLAY_CODE[code] ?? code;
 
+// National colours for the prediction bar — each finalist's primary kit/flag
+// colour, chosen to stay legible on the dark cards. Covers all 48 teams so any
+// knockout pairing that emerges later is coloured automatically.
+const TEAM_COLOR = {
+  MEX: "#00853F", RSA: "#007A4D", KOR: "#CD2E3A", CZE: "#D7141A", CAN: "#D52B1E",
+  BIH: "#0049A8", QAT: "#8A1538", SUI: "#DA291C", BRA: "#FFDF00", MAR: "#C1272D",
+  HAI: "#00209F", SCO: "#005EB8", USA: "#1750B5", PAR: "#D21034", AUS: "#FFCD00",
+  TUR: "#E30A17", GER: "#D9D9D9", CUW: "#0040A0", CIV: "#FF8200", ECU: "#FFD100",
+  NED: "#FF6900", JPN: "#0033A0", SWE: "#006AA7", TUN: "#E70013", BEL: "#E30613",
+  EGY: "#CE1126", IRN: "#239F40", NZL: "#1A3A8F", ESP: "#C60B1E", CPV: "#0033A0",
+  KSA: "#006C35", URU: "#4FA8DE", FRA: "#1546A0", SEN: "#009639", IRQ: "#007A3D",
+  NOR: "#BA0C2F", ARG: "#75AADB", ALG: "#006233", AUT: "#ED2939", JOR: "#007A3D",
+  POR: "#C8102E", COD: "#0085CA", UZB: "#0099B5", COL: "#FCD116", ENG: "#CF142B",
+  CRO: "#E51D1D", GHA: "#006B3F", PAN: "#005293",
+};
+const teamColor = (code) => TEAM_COLOR[code] ?? "#8a93a6";
+
 // ---- match events (goals/cards from the live API) --------------------------
 
 const esc = (s) => String(s)
@@ -312,15 +329,16 @@ function predWidgetHTML(m, teams) {
   const live = r?.status === "LIVE";
   const played = r?.hs != null && !live;
 
-  if (!homeCode || !awayCode || played) return '<div class="pred pred-spacer"></div>';
+  if (!homeCode || !awayCode || played) return "";
 
   const pred = getPrediction(m.id);
   const myVote = getMyVote(m.id);
   const total = pred ? pred.home + pred.draw + pred.away : 0;
   const hasVotes = total > 0;
   const hp = total ? Math.round(pred.home / total * 100) : 0;
+  const dp = total ? Math.round(pred.draw / total * 100) : 0;
   const ap = total ? Math.round(pred.away / total * 100) : 0;
-  const hPick = myVote === "home", aPick = myVote === "away";
+  const hPick = myVote === "home", dPick = myVote === "draw", aPick = myVote === "away";
 
   const btns = myVote ? "" : `<div class="pred-btns">
     <button class="pred-btn" data-mid="${m.id}" data-choice="home">${esc(displayCode(homeCode))}</button>
@@ -329,14 +347,18 @@ function predWidgetHTML(m, teams) {
   </div>`;
 
   const hCount = pred?.home ?? 0;
+  const dCount = pred?.draw ?? 0;
   const aCount = pred?.away ?? 0;
+  const hCol = teamColor(homeCode), aCol = teamColor(awayCode);
   const bar = (hasVotes || myVote) ? `<div class="pred-bar">
-    <div class="pred-fill home${hPick ? " my-pick" : ""}" style="--pct:${hp}"></div>
-    <div class="pred-fill away${aPick ? " my-pick" : ""}" style="--pct:${ap};animation-delay:0.08s"></div>
+    <div class="pred-fill home${hPick ? " my-pick" : ""}" style="--pct:${hp};background:${hCol}"></div>
+    <div class="pred-fill draw${dPick ? " my-pick" : ""}" style="--pct:${dp};animation-delay:0.06s"></div>
+    <div class="pred-fill away${aPick ? " my-pick" : ""}" style="--pct:${ap};background:${aCol};animation-delay:0.12s"></div>
   </div>
   <div class="pred-labels">
-    <span class="home${hPick ? " my-pick" : ""}">${esc(displayCode(homeCode))} ${hp}% <em>${hCount.toLocaleString()}</em></span>
-    <span class="away${aPick ? " my-pick" : ""}">${esc(displayCode(awayCode))} ${ap}% <em>${aCount.toLocaleString()}</em></span>
+    <span class="home${hPick ? " my-pick" : ""}" style="color:${hCol}">${esc(displayCode(homeCode))} ${hp}% <em>${hCount.toLocaleString()}</em></span>
+    <span class="draw${dPick ? " my-pick" : ""}">Draw ${dp}% <em>${dCount.toLocaleString()}</em></span>
+    <span class="away${aPick ? " my-pick" : ""}" style="color:${aCol}">${esc(displayCode(awayCode))} ${ap}% <em>${aCount.toLocaleString()}</em></span>
     <span class="pred-total">${total.toLocaleString()} vote${total !== 1 ? "s" : ""}</span>
   </div>` : "";
 
@@ -835,6 +857,29 @@ let lastResultsStr = "";
 let lastResolvedStr = "";
 let pos104 = { x: COL_X.final, y: 0 }; // updated by render()
 
+// Last-known results snapshot, kept in localStorage so a reload/return paints
+// the fully-resolved bracket instantly instead of flashing blank/TBD cards
+// while the (slow) live feed is still in flight.
+const RESULTS_CACHE_KEY = "wc-results-cache-v1";
+function saveResultsCache(s) {
+  try {
+    localStorage.setItem(RESULTS_CACHE_KEY, JSON.stringify({
+      results: s.results ?? {}, overrides: s.overrides ?? {},
+      kicks: s.kicks ?? {}, updatedAt: s.updatedAt,
+    }));
+  } catch { /* quota / privacy mode — fine, we just fall back to the network */ }
+}
+function loadResultsCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(RESULTS_CACHE_KEY) ?? "null");
+    if (!c || typeof c !== "object") return null;
+    return {
+      results: c.results ?? {}, overrides: c.overrides ?? {},
+      kicks: c.kicks ?? {}, updatedAt: c.updatedAt,
+    };
+  } catch { return null; }
+}
+
 async function refresh() {
   const prev = { ...state.results };
   const prevResolved = { ...lastResolved };
@@ -847,6 +892,7 @@ async function refresh() {
   // are cleared even when the API hasn't updated yet.
   state = newState;
   sanitizeLive();
+  saveResultsCache(state);
 
   const newStr = JSON.stringify(state.results);
   if (newStr === lastResultsStr) {
@@ -903,13 +949,22 @@ function showBootError() {
     showBootError();
     return;
   }
-  // Load results and prediction vote counts in parallel so both are ready
-  // before the first render — avoids a second re-render for predictions.
-  const [loadedState] = await Promise.all([
-    loadResults().catch(() => state),
-    loadPredictions(),
-  ]);
-  state = loadedState;
+  // Prediction vote counts are a small, fast fetch that's independent of the
+  // (slow) live feed, so load them alongside whichever results path we take.
+  const predsReady = loadPredictions().catch(() => {});
+
+  // First paint is decoupled from the live fetch: if we have a snapshot from a
+  // previous load, paint the resolved bracket from it immediately and refresh
+  // in the background. Only a first-ever visitor (no snapshot) waits on the
+  // network — and they wait behind the boot loader, so still no blank cards.
+  const cached = loadResultsCache();
+  if (cached) {
+    state = cached;
+  } else {
+    state = await loadResults().catch(() => state);
+    saveResultsCache(state);
+  }
+  await predsReady;
   sanitizeLive();
   lastResultsStr = JSON.stringify(state.results);
   render();
@@ -941,6 +996,11 @@ function showBootError() {
     }
   };
   fitWhenSized();
+
+  // We painted from the cached snapshot — now pull fresh data (incl. the live
+  // feed) and patch in the background. No blank flash: the bracket is already
+  // on screen with last-known teams, and any changes slot in via patchDOM.
+  if (cached) refresh();
 
   setInterval(refresh, 60_000);
   // returning to the tab mid-match: don't wait out the interval
