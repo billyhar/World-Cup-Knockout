@@ -916,6 +916,7 @@ html, body {
   bottom: 18px;
   right: 18px;
   flex-direction: column;
+  align-items: flex-end;
   gap: 6px;
 }
 .chrome-zoom button {
@@ -927,6 +928,52 @@ html, body {
 }
 #rotate { display: none; }
 #viewport.rotated ~ .chrome-zoom #rotate { color: var(--accent); border-color: rgba(47, 224, 140, 0.4); }
+#preds-btn {
+  width: auto !important;
+  height: auto !important;
+  padding: 6px 8px 6px 10px !important;
+  font-size: 11px !important;
+  border-radius: 99px !important;
+  margin-top: 4px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink-dim);
+}
+#preds-btn.active {
+  background: rgba(47, 224, 140, 0.08);
+  border-color: rgba(47, 224, 140, 0.3);
+  color: var(--ink);
+}
+.preds-toggle-label { white-space: nowrap; }
+.preds-toggle-track {
+  width: 26px;
+  height: 15px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.preds-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  transition: transform 0.18s ease, background 0.18s;
+}
+#preds-btn.active .preds-toggle-track {
+  background: rgba(47, 224, 140, 0.25);
+  border-color: rgba(47, 224, 140, 0.4);
+}
+#preds-btn.active .preds-toggle-thumb {
+  transform: translateX(11px);
+  background: var(--accent);
+}
 
 
 .hint {
@@ -1001,6 +1048,7 @@ html, body {
   .chrome-zoom { bottom: 14px; right: 12px; }
   .chrome-zoom button { width: 40px; height: 40px; }
   #rotate { display: block; font-size: 17px; }
+  #preds-btn { width: auto !important; height: auto !important; padding: 6px 8px 6px 10px !important; font-size: 11px !important; }
   .side-chips:not([hidden]) { display: flex; }
   .rotate-tip:not([hidden]) { display: flex; }
   .hint { bottom: 64px; }

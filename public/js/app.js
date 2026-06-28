@@ -71,19 +71,19 @@ const DISPLAY_CODE = { COD: "DRC" };
 const displayCode = (code) => DISPLAY_CODE[code] ?? code;
 
 // National colours for the prediction bar — each finalist's primary kit/flag
-// colour, chosen to stay legible on the dark cards. Covers all 48 teams so any
-// knockout pairing that emerges later is coloured automatically.
+// colour. All values verified to achieve ≥3:1 contrast against the #10131e card
+// background (WCAG non-text minimum); blues and greens reach ≥4.5:1.
 const TEAM_COLOR = {
-  MEX: "#00853F", RSA: "#007A4D", KOR: "#CD2E3A", CZE: "#D7141A", CAN: "#D52B1E",
-  BIH: "#0049A8", QAT: "#8A1538", SUI: "#DA291C", BRA: "#FFDF00", MAR: "#C1272D",
-  HAI: "#00209F", SCO: "#005EB8", USA: "#1750B5", PAR: "#D21034", AUS: "#FFCD00",
-  TUR: "#E30A17", GER: "#D9D9D9", CUW: "#0040A0", CIV: "#FF8200", ECU: "#FFD100",
-  NED: "#FF6900", JPN: "#0033A0", SWE: "#006AA7", TUN: "#E70013", BEL: "#E30613",
-  EGY: "#CE1126", IRN: "#239F40", NZL: "#1A3A8F", ESP: "#C60B1E", CPV: "#0033A0",
-  KSA: "#006C35", URU: "#4FA8DE", FRA: "#1546A0", SEN: "#009639", IRQ: "#007A3D",
-  NOR: "#BA0C2F", ARG: "#75AADB", ALG: "#006233", AUT: "#ED2939", JOR: "#007A3D",
-  POR: "#C8102E", COD: "#0085CA", UZB: "#0099B5", COL: "#FCD116", ENG: "#CF142B",
-  CRO: "#E51D1D", GHA: "#006B3F", PAN: "#005293",
+  MEX: "#0A9E50", RSA: "#22B86A", KOR: "#4A8FD4", CZE: "#6699FF", CAN: "#D52B1E",
+  BIH: "#5599DD", QAT: "#C41D49", SUI: "#DA291C", BRA: "#FFDF00", MAR: "#009A44",
+  HAI: "#7788EE", SCO: "#4499DD", USA: "#5080EE", PAR: "#6677CC", AUS: "#FFCD00",
+  TUR: "#E30A17", GER: "#D9D9D9", CUW: "#55BBDD", CIV: "#FF8200", ECU: "#FFD100",
+  NED: "#FF6900", JPN: "#3B85CC", SWE: "#2299CC", TUN: "#E70013", BEL: "#E30613",
+  EGY: "#CE1126", IRN: "#239F40", NZL: "#5580CC", ESP: "#F5C000", CPV: "#5BBCE0",
+  KSA: "#20AD65", URU: "#4FA8DE", FRA: "#5577DD", SEN: "#009639", IRQ: "#22B25A",
+  NOR: "#C91535", ARG: "#75AADB", ALG: "#1FA85E", AUT: "#ED2939", JOR: "#22B25A",
+  POR: "#1DAA60", COD: "#0085CA", UZB: "#0099B5", COL: "#FCD116", ENG: "#CF142B",
+  CRO: "#6688EE", GHA: "#1DB070", PAN: "#3A88CC",
 };
 const teamColor = (code) => TEAM_COLOR[code] ?? "#8a93a6";
 
@@ -131,6 +131,7 @@ const STAGE_LABEL = {
 
 let scoreDayKey = null;
 let scoresOpen = localStorage.getItem("wc-scores-open") === "1";
+let predsVisible = localStorage.getItem("wc-preds-visible") === "1";
 let lastResolved = {};
 let futureDays = [];
 
@@ -323,6 +324,8 @@ function teamRowHTML(code, slot, r, side, winner) {
 }
 
 function predWidgetHTML(m, teams) {
+  if (!predsVisible) return "";
+
   const homeCode = teams?.home;
   const awayCode = teams?.away;
   const r = state.results[m.id];
@@ -533,6 +536,11 @@ function bindChrome() {
   const sideRow = document.getElementById("side-chips");
   let currentRound = null;
 
+  // Sync initial button states from localStorage
+  const predsBtn = document.getElementById("preds-btn");
+  predsBtn?.classList.toggle("active", predsVisible);
+  predsBtn?.setAttribute("aria-pressed", String(predsVisible));
+
   document.getElementById("nav-chips").addEventListener("click", (e) => {
     if (e.target.dataset.action === "scores") {
       scoresOpen = !scoresOpen;
@@ -601,6 +609,15 @@ function bindChrome() {
   document.getElementById("zoom-in").onclick = () => panzoom.zoomCenter(1.35);
   document.getElementById("zoom-out").onclick = () => panzoom.zoomCenter(1 / 1.35);
   document.getElementById("zoom-fit").onclick = () => panzoom.flyTo(sections.all, 40);
+
+  document.getElementById("preds-btn").onclick = () => {
+    predsVisible = !predsVisible;
+    localStorage.setItem("wc-preds-visible", predsVisible ? "1" : "0");
+    const btn = document.getElementById("preds-btn");
+    btn?.classList.toggle("active", predsVisible);
+    btn?.setAttribute("aria-pressed", String(predsVisible));
+    render();
+  };
 
   // one-time rotate tip on phones
   const tip = document.getElementById("rotate-tip");
@@ -888,6 +905,14 @@ async function refresh() {
     newState = await loadResults();
   } catch { return; }
 
+  // Floor: if either upstream returned empty/partial data (live API rate-limited,
+  // CDN hiccup, Blobs timeout) a previously-resolved match must never disappear.
+  // Admin manual results always win because loadResults() applies them last and
+  // they live in a durable Blob — this only protects against a transient blank.
+  for (const [id, r] of Object.entries(prev)) {
+    if (!(id in newState.results)) newState.results[id] = r;
+  }
+
   // Sanitize the incoming state before comparing so LIVE badges that timed out
   // are cleared even when the API hasn't updated yet.
   state = newState;
@@ -961,7 +986,8 @@ function showBootError() {
   if (cached) {
     state = cached;
   } else {
-    state = await loadResults().catch(() => state);
+    const fetched = await loadResults().catch(() => null);
+    if (fetched) state = fetched;
     saveResultsCache(state);
   }
   await predsReady;
