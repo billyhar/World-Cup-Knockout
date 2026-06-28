@@ -1,9 +1,9 @@
 import { getStore } from "@netlify/blobs";
 
-const json = (body, status = 200) =>
+const json = (body, status = 200, cache = "no-store") =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { "content-type": "application/json", "cache-control": "no-store" },
+    headers: { "content-type": "application/json", "cache-control": cache },
   });
 
 export default async function handler(req) {
@@ -11,7 +11,10 @@ export default async function handler(req) {
 
   if (req.method === "GET") {
     const data = await store.get("results", { type: "json" });
-    return json(data ?? { results: {}, overrides: {} });
+    // Cache at the CDN for 60s so all users share one invocation per minute.
+    // POST writes bypass caching (see below), and the 60s TTL is acceptable
+    // since the live endpoint is also on a 60s refresh cycle.
+    return json(data ?? { results: {}, overrides: {} }, 200, "public, s-maxage=60, max-age=0");
   }
 
   if (req.method === "POST") {

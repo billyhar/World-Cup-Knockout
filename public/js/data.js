@@ -6,13 +6,31 @@ export async function loadSeed() {
   return res.json();
 }
 
+// Manual results (admin-entered via /admin.html) change rarely — only when an
+// admin submits a correction. Cache them client-side for 5 minutes so we don't
+// hit the serverless function on every 60-second refresh. The CDN also caches
+// the endpoint for 60s (s-maxage), so these two layers together cut invocations
+// by ~99% vs the previous no-store behaviour.
+let _manualCache = null;
+let _manualCachedAt = 0;
+const MANUAL_TTL = 5 * 60 * 1000;
+
 export async function loadResults() {
   // Manual results (Netlify Blobs) + optional live API, merged.
   // Manual entries win over live so mistakes upstream can be corrected.
   const out = { results: {}, overrides: {}, kicks: {} };
+
+  const now = Date.now();
+  const manualPromise =
+    now - _manualCachedAt > MANUAL_TTL
+      ? fetch("/api/results")
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => { _manualCache = d; _manualCachedAt = Date.now(); return d; })
+      : Promise.resolve(_manualCache);
+
   const [live, manual] = await Promise.allSettled([
     fetch("/api/live").then((r) => (r.ok ? r.json() : null)),
-    fetch("/api/results").then((r) => (r.ok ? r.json() : null)),
+    manualPromise,
   ]);
   if (live.status === "fulfilled" && live.value?.results) {
     Object.assign(out.results, live.value.results);

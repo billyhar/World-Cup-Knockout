@@ -320,7 +320,7 @@ function koCardHTML(m, resolved) {
     ${evTagsHTML(r, codes)}
     <div class="k-meta">
       <span>M${m.id} · ${showToday ? '<b class="today-tag">Today</b>' : fmtDate(ko)} · ${fmtTime(ko)}${aet}</span>
-      <span class="k-city">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : m.city}</span>
+      <span class="k-city">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : done ? '<span class="badge done">played</span>' : m.city}</span>
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
