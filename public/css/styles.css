@@ -472,6 +472,7 @@ html, body {
   display: flex;
   gap: 5px;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   flex: 1;
   padding: 0 4px;
   scrollbar-width: none;
@@ -511,6 +512,7 @@ html, body {
   display: flex;
   gap: 7px;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   padding: 0 14px;
   scrollbar-width: none;
 }
@@ -813,8 +815,7 @@ html, body {
 @media (max-width: 700px) {
   .chrome-top { padding: 10px 12px 24px; }
   .chrome-left { gap: 8px; }
-  .brand-text span { display: none; }
-  .brand-text strong { font-size: 14px; }
+  .brand-text { display: none; }
   .nav-chips { overflow-x: auto; max-width: calc(100vw - 110px); scrollbar-width: none; }
   .nav-chips::-webkit-scrollbar { display: none; }
   .nav-chips button { padding: 7px 11px; font-size: 12px; }

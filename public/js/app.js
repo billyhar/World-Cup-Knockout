@@ -108,7 +108,7 @@ const STAGE_LABEL = {
 };
 
 let scoreDayKey = null;
-let scoresOpen = localStorage.getItem("wc-scores-open") !== "0";
+let scoresOpen = localStorage.getItem("wc-scores-open") === "1";
 let lastResolved = {};
 let futureDays = [];
 
