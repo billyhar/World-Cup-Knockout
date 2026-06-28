@@ -2,8 +2,17 @@
 // knockout slot resolution.
 
 export async function loadSeed() {
-  const res = await fetch("/data/seed.json");
-  return res.json();
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      if (attempt > 0) await new Promise((r) => setTimeout(r, 600 * attempt));
+      const res = await fetch("/data/seed.json");
+      if (res.ok) return res.json();
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr ?? new Error("Failed to load seed data");
 }
 
 // Manual results (admin-entered via /admin.html) change rarely — only when an

@@ -27,6 +27,11 @@
 <script defer src="https://cloud.umami.is/script.js" data-website-id="c63b4d7f-d188-4b09-87df-bbcbb0b744a8"></script>
 </head>
 <body>
+  <div id="boot-loader">
+    <div class="bl-spinner"></div>
+    <p class="bl-text">Loading…</p>
+  </div>
+
   <div id="viewport">
     <div id="rotor">
       <div id="world"></div>
@@ -57,7 +62,6 @@
     </div>
     <div class="chrome-right">
       <a href="/guides/" class="nav-guides">Guides <span class="guides-arrow" aria-hidden="true">↗</span></a>
-      <div id="status-pill" hidden></div>
     </div>
   </header>
 
@@ -66,6 +70,7 @@
       <button class="sc-arrow" id="sc-prev" aria-label="Previous day">&#8249;</button>
       <div class="sc-days" id="sc-days"></div>
       <button class="sc-arrow" id="sc-next" aria-label="Next day">&#8250;</button>
+      <div id="status-pill" hidden></div>
     </div>
     <div class="sc-strip-wrap">
       <button class="sc-strip-prev" id="sc-strip-prev" aria-label="Previous matches">‹</button>

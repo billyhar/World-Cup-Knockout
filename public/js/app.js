@@ -5,6 +5,7 @@ import {
 } from "./data.js";
 import { loadBroadcasters, watchOn } from "./broadcasters.js";
 import { initPresence } from "./presence.js";
+import { loadPredictions, getPrediction, getMyVote, castVote } from "./predictions.js";
 
 // "Where to watch" line for a match in the viewer's country (location-based,
 // like the times). Rights split per game, so this resolves per match id and
@@ -19,7 +20,7 @@ const tvHTML = (matchId) => {
 // ---- world layout: mirrored bracket, final in the middle -------------------
 // groups L | R32 | R16 | QF | SF | FINAL | SF | QF | R16 | R32 | groups R
 const G = { w: 380, h: 590, gapX: 44, gapY: 56 };
-const K = { w: 304, h: 104, gapY: 30 };
+const K = { w: 304, h: 148, gapY: 30 };
 const MID_Y = 980;
 const WORLD = { w: 5260, h: 1960 };
 
@@ -64,6 +65,10 @@ const flagImg = (code) => {
 };
 
 const scoreText = (r) => (r == null || r.hs == null ? null : `${r.hs}–${r.as}`);
+
+// Some codes differ from common display usage
+const DISPLAY_CODE = { COD: "DRC" };
+const displayCode = (code) => DISPLAY_CODE[code] ?? code;
 
 // ---- match events (goals/cards from the live API) --------------------------
 
@@ -195,14 +200,16 @@ function renderScoresCarousel(resolved) {
 
     const homeCode = m.stage === "group" ? m.home : resolved[m.id]?.home;
     const awayCode = m.stage === "group" ? m.away : resolved[m.id]?.away;
-    const homeLbl = homeCode ?? slotLabel(m.home);
-    const awayLbl = awayCode ?? slotLabel(m.away);
+    const homeLbl = displayCode(homeCode ?? slotLabel(m.home));
+    const awayLbl = displayCode(awayCode ?? slotLabel(m.away));
     const stageLabel = m.stage === "group" ? `Group ${m.group}` : (STAGE_LABEL[m.stage] ?? "");
     const target = m.stage === "group" ? `group-${m.group}` : `match-${m.id}`;
     const minLabel = live && r.min ? esc(r.min) : "";
 
     const metaLine = live
       ? `<span class="live-badge"><span class="live-dot"></span>LIVE</span>${minLabel ? `<span class="sc-min">${minLabel}</span>` : ""}`
+      : done
+      ? `${esc(stageLabel)}<span class="badge done sc-badge-ft">Played</span>`
       : esc(stageLabel);
 
     return `<button class="sc-card${live ? " live" : ""}${done ? " done" : ""}" data-target="${target}">
@@ -255,9 +262,9 @@ function groupFixturesHTML(matches) {
     return `
     <div class="g-fix ${live ? "live" : ""} ${showToday ? "today" : ""} ${done ? "done" : ""}" data-mid="${m.id}">
       <span class="g-fix-date">${live ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : showToday ? "Today" : fmtDate(ko).replace(/^\w+ /, "")}</span>
-      <span class="g-fix-team home">${m.home} ${flagImg(m.home)}</span>
+      <span class="g-fix-team home">${displayCode(m.home)} ${flagImg(m.home)}</span>
       <span class="g-fix-score ${score ? "has" : ""}"${goalsTipAttr(r, codes)}>${score ?? fmtTime(ko)}</span>
-      <span class="g-fix-team away">${flagImg(m.away)} ${m.away}</span>
+      <span class="g-fix-team away">${flagImg(m.away)} ${displayCode(m.away)}</span>
       <span class="g-fix-spacer" aria-hidden="true"></span>
       ${evTagsHTML(r, codes)}
       <span class="g-fix-city">${m.city}${tv ? ` · ${tv}` : ""}</span>
@@ -298,6 +305,45 @@ function teamRowHTML(code, slot, r, side, winner) {
   </div>`;
 }
 
+function predWidgetHTML(m, teams) {
+  const homeCode = teams?.home;
+  const awayCode = teams?.away;
+  const r = state.results[m.id];
+  const live = r?.status === "LIVE";
+  const played = r?.hs != null && !live;
+
+  if (!homeCode || !awayCode || played) return '<div class="pred pred-spacer"></div>';
+
+  const pred = getPrediction(m.id);
+  const myVote = getMyVote(m.id);
+  const total = pred ? pred.home + pred.draw + pred.away : 0;
+  const hasVotes = total > 0;
+  const hp = total ? Math.round(pred.home / total * 100) : 0;
+  const ap = total ? Math.round(pred.away / total * 100) : 0;
+  const hPick = myVote === "home", aPick = myVote === "away";
+
+  const btns = myVote ? "" : `<div class="pred-btns">
+    <button class="pred-btn" data-mid="${m.id}" data-choice="home">${esc(displayCode(homeCode))}</button>
+    <button class="pred-btn pred-btn-draw" data-mid="${m.id}" data-choice="draw">Draw</button>
+    <button class="pred-btn" data-mid="${m.id}" data-choice="away">${esc(displayCode(awayCode))}</button>
+  </div>`;
+
+  const bar = (hasVotes || myVote) ? `<div class="pred-bar">
+    <div class="pred-fill home${hPick ? " my-pick" : ""}" style="--pct:${hp}"></div>
+    <div class="pred-fill away${aPick ? " my-pick" : ""}" style="--pct:${ap};animation-delay:0.08s"></div>
+  </div>
+  <div class="pred-labels">
+    <span class="home${hPick ? " my-pick" : ""}">${esc(displayCode(homeCode))} ${hp}%</span>
+    <span class="away${aPick ? " my-pick" : ""}">${esc(displayCode(awayCode))} ${ap}%</span>
+    <span class="pred-total">${total.toLocaleString()} vote${total !== 1 ? "s" : ""}</span>
+  </div>` : "";
+
+  return `<div class="pred${myVote ? " pred-voted" : ""}" data-mid="${m.id}">
+    ${btns}
+    ${bar}
+  </div>`;
+}
+
 function koCardHTML(m, resolved) {
   const r = state.results[m.id];
   const teams = resolved[m.id];
@@ -325,6 +371,7 @@ function koCardHTML(m, resolved) {
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
     ${tv ? `<div class="k-tv">${tv}</div>` : ""}
+    ${predWidgetHTML(m, teams)}
   </div>`;
 }
 
@@ -551,6 +598,79 @@ function bindChrome() {
   setTimeout(() => hint.classList.add("fade"), 6000);
   ["pointerdown", "wheel"].forEach((ev) =>
     addEventListener(ev, () => hint.classList.add("fade"), { once: true, capture: true }));
+
+  // Prediction vote buttons.
+  // We use pointerdown/pointerup (not click) because touch-action:none on the
+  // viewport suppresses synthetic click events on touch devices, and the panzoom
+  // captures the pointer which can also swallow clicks on desktop.
+  let predTapStart = null;
+  world.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest(".pred-btn")) return;
+    e.stopPropagation(); // prevent panzoom from capturing this pointer
+    predTapStart = { x: e.clientX, y: e.clientY, id: e.pointerId };
+  });
+  world.addEventListener("pointercancel", () => { predTapStart = null; });
+
+  world.addEventListener("pointerup", async (e) => {
+    if (!predTapStart || predTapStart.id !== e.pointerId) return;
+    const start = predTapStart;
+    predTapStart = null;
+    if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) return; // drag, not tap
+
+    const btn = e.target.closest(".pred-btn[data-choice]");
+    if (!btn) return;
+    e.stopPropagation();
+
+    const mid = Number(btn.dataset.mid);
+    const choice = btn.dataset.choice;
+
+    const widget = world.querySelector(`.pred[data-mid="${mid}"]`);
+    if (widget) widget.innerHTML = `<div class="pred-loading">…</div>`;
+
+    await castVote(mid, choice);
+
+    // eslint-disable-next-line eqeqeq
+    const m = seed.matches.find((x) => x.id == mid);
+    if (m && widget?.isConnected) {
+      widget.outerHTML = predWidgetHTML(m, lastResolved[mid]);
+    }
+  });
+}
+
+function showPredHint() {
+  if (localStorage.getItem("wc-pred-hint")) return;
+
+  // Find first upcoming knockout match with both teams already known
+  const m = seed.matches.find((x) =>
+    x.stage !== "group" &&
+    !state.results[x.id]?.hs &&
+    lastResolved[x.id]?.home &&
+    lastResolved[x.id]?.away,
+  );
+  if (!m) return;
+
+  localStorage.setItem("wc-pred-hint", "1");
+
+  const el = document.getElementById(`match-${m.id}`);
+  if (!el) return;
+
+  const hint = document.createElement("div");
+  hint.className = "pred-hint-callout";
+  hint.textContent = "✦ New — tap to predict the winner";
+  // Position in canvas space, centred below the card's pred widget
+  hint.style.left = `${el.offsetLeft + el.offsetWidth / 2}px`;
+  hint.style.top = `${el.offsetTop + el.offsetHeight + 8}px`;
+  world.appendChild(hint);
+
+  // Fly to this card so the user sees it
+  panzoom.flyTo(
+    { x: el.offsetLeft, y: el.offsetTop - 30, w: el.offsetWidth, h: el.offsetHeight + 80 },
+    60, 700,
+  );
+
+  const remove = () => hint.remove();
+  setTimeout(remove, 6000);
+  world.addEventListener("pointerdown", remove, { once: true });
 }
 
 function setStatus() {
@@ -756,12 +876,42 @@ async function refresh() {
 
 // ---- boot ----------------------------------------------------------------------
 
+function hideLoader() {
+  const loader = document.getElementById("boot-loader");
+  if (!loader) return;
+  loader.classList.add("done");
+  loader.addEventListener("transitionend", () => loader.remove(), { once: true });
+}
+
+function showBootError() {
+  const loader = document.getElementById("boot-loader");
+  if (loader) {
+    loader.style.pointerEvents = "auto";
+    loader.innerHTML = `
+      <p class="bl-text">Failed to load — check your connection</p>
+      <button onclick="location.reload()" style="padding:8px 22px;border-radius:8px;border:none;background:var(--accent);color:#07090f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Try again</button>
+    `;
+  }
+}
+
 (async function boot() {
-  [seed] = await Promise.all([loadSeed(), loadBroadcasters()]);
-  state = await loadResults().catch(() => state);
+  try {
+    [seed] = await Promise.all([loadSeed(), loadBroadcasters()]);
+  } catch {
+    showBootError();
+    return;
+  }
+  // Load results and prediction vote counts in parallel so both are ready
+  // before the first render — avoids a second re-render for predictions.
+  const [loadedState] = await Promise.all([
+    loadResults().catch(() => state),
+    loadPredictions(),
+  ]);
+  state = loadedState;
   sanitizeLive();
   lastResultsStr = JSON.stringify(state.results);
   render();
+  hideLoader();
   setStatus();
 
   panzoom = new PanZoom(document.getElementById("viewport"), world, WORLD);
@@ -781,8 +931,12 @@ async function refresh() {
     else panzoom.flyTo(sections.all, 50, 0);
   };
   const fitWhenSized = (tries = 0) => {
-    if (panzoom.hasSize() || tries > 30) initialView();
-    else requestAnimationFrame(() => fitWhenSized(tries + 1));
+    if (panzoom.hasSize() || tries > 30) {
+      initialView();
+      setTimeout(showPredHint, 1800); // show after user has oriented
+    } else {
+      requestAnimationFrame(() => fitWhenSized(tries + 1));
+    }
   };
   fitWhenSized();
 
