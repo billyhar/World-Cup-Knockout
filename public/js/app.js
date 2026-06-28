@@ -211,10 +211,8 @@ function renderScoresCarousel(resolved) {
 
 // ---- group cards -----------------------------------------------------------
 
-function groupCardHTML(g, standings) {
-  const { table, complete } = standings[g];
-  const matches = seed.matches.filter((m) => m.stage === "group" && m.group === g);
-  const rows = table.map((row, i) => `
+function groupTableRowsHTML(table) {
+  return table.map((row, i) => `
     <div class="g-row q${i < 2 ? "1" : i === 2 ? "3" : "0"}">
       <span class="pos">${i + 1}</span>
       ${flagImg(row.team)}
@@ -223,8 +221,10 @@ function groupCardHTML(g, standings) {
       <span class="g-stat">${row.gd > 0 ? "+" : ""}${row.gd}</span>
       <span class="g-stat g-pts">${row.pts}</span>
     </div>`).join("");
+}
 
-  const fixtures = matches.map((m) => {
+function groupFixturesHTML(matches) {
+  return matches.map((m) => {
     const r = state.results[m.id];
     const score = scoreText(r);
     const live = r?.status === "LIVE";
@@ -245,6 +245,11 @@ function groupCardHTML(g, standings) {
       <span class="g-fix-city">${m.city}${tv ? ` · ${tv}` : ""}</span>
     </div>`;
   }).join("");
+}
+
+function groupCardHTML(g, standings) {
+  const { table, complete } = standings[g];
+  const matches = seed.matches.filter((m) => m.stage === "group" && m.group === g);
 
   return `
   <div class="card group-card" id="group-${g}">
@@ -253,8 +258,8 @@ function groupCardHTML(g, standings) {
       ${complete ? '<span class="badge done">final</span>' : ""}
     </div>
     <div class="g-cols"><span></span><span></span><span></span><span>P</span><span>GD</span><span>Pts</span></div>
-    ${rows}
-    <div class="g-fixtures">${fixtures}</div>
+    <div class="g-table">${groupTableRowsHTML(table)}</div>
+    <div class="g-fixtures">${groupFixturesHTML(matches)}</div>
   </div>`;
 }
 
@@ -310,6 +315,8 @@ function koCardHTML(m, resolved) {
 function render() {
   const standings = allStandings(seed, state.results);
   const { resolved } = resolveBracket(seed, state.results, state.overrides, standings);
+  lastResolved = resolved;
+  lastResolvedStr = JSON.stringify(resolved);
   const ko = Object.fromEntries(seed.matches.filter((m) => m.stage !== "group").map((m) => [m.id, m]));
 
   const pos = {};
@@ -344,6 +351,7 @@ function render() {
   place(["101"], COL_X.sfL); place(["102"], COL_X.sfR);
   place(["104"], COL_X.final);
   pos["match-103"] = { x: COL_X.final, y: pos["match-104"].y + K.h + 130 };
+  pos104 = pos["match-104"];
 
   let html = "";
 
@@ -615,15 +623,108 @@ function markChangedScores(prev) {
   }
 }
 
+// Incremental DOM update: only patches elements whose underlying data changed.
+// Much cheaper than a full render (no innerHTML wipe, flags aren't re-fetched).
+function patchDOM(prev, prevResolved, standings, resolved) {
+  // Group cards
+  for (const g of Object.keys(seed.groups)) {
+    const matches = seed.matches.filter((m) => m.stage === "group" && m.group === g);
+    const changed = matches.some(
+      (m) => JSON.stringify(state.results[m.id]) !== JSON.stringify(prev[m.id]),
+    );
+    if (!changed) continue;
+
+    const card = document.getElementById(`group-${g}`);
+    if (!card) continue;
+    const { table, complete } = standings[g];
+
+    const tableEl = card.querySelector(".g-table");
+    if (tableEl) tableEl.innerHTML = groupTableRowsHTML(table);
+
+    const fixEl = card.querySelector(".g-fixtures");
+    if (fixEl) fixEl.innerHTML = groupFixturesHTML(matches);
+
+    if (complete && !card.querySelector(".badge.done")) {
+      card.querySelector(".g-head")?.insertAdjacentHTML("beforeend", '<span class="badge done">final</span>');
+    }
+  }
+
+  // Knockout cards — only update those where score or resolved teams changed
+  const ko = Object.fromEntries(seed.matches.filter((m) => m.stage !== "group").map((m) => [m.id, m]));
+  for (const m of Object.values(ko)) {
+    const rChanged = JSON.stringify(state.results[m.id]) !== JSON.stringify(prev[m.id]);
+    const teamsChanged = JSON.stringify(resolved[m.id]) !== JSON.stringify(prevResolved[m.id]);
+    if (!rChanged && !teamsChanged) continue;
+    const el = document.getElementById(`match-${m.id}`);
+    if (!el) continue;
+    // Preserve absolute position before replacing (outerHTML wipes inline styles)
+    const { left, top, width } = el.style;
+    el.outerHTML = koCardHTML(m, resolved);
+    const newEl = document.getElementById(`match-${m.id}`);
+    if (newEl) { newEl.style.left = left; newEl.style.top = top; if (width) newEl.style.width = width; }
+  }
+
+  // Champion banner
+  const finalWinner = matchWinner(ko["104"], resolved, state.results).winner;
+  const existingBanner = world.querySelector(".champion");
+  if (finalWinner && !existingBanner) {
+    const p = { x: pos104.x, y: pos104.y };
+    world.insertAdjacentHTML(
+      "beforeend",
+      `<div class="champion" style="left:${p.x - 40}px;top:${p.y - 150}px">
+        🏆 ${flagImg(finalWinner)} <b>${seed.teams[finalWinner].name}</b> — World Champions
+      </div>`,
+    );
+  } else if (!finalWinner && existingBanner) {
+    existingBanner.remove();
+  }
+
+  renderScoresCarousel(resolved);
+}
+
+let lastResultsStr = "";
+let lastResolvedStr = "";
+let pos104 = { x: COL_X.final, y: 0 }; // updated by render()
+
 async function refresh() {
   const prev = { ...state.results };
+  const prevResolved = { ...lastResolved };
+  let newState;
   try {
-    state = await loadResults();
-  } catch { /* offline → keep last known */ }
+    newState = await loadResults();
+  } catch { return; }
+
+  // Sanitize the incoming state before comparing so LIVE badges that timed out
+  // are cleared even when the API hasn't updated yet.
+  state = newState;
   sanitizeLive();
-  render();
-  setStatus();
+
+  const newStr = JSON.stringify(state.results);
+  if (newStr === lastResultsStr) {
+    renderScoresCarousel(lastResolved);
+    return;
+  }
+
+  lastResultsStr = newStr;
+
+  const standings = allStandings(seed, state.results);
+  const { resolved } = resolveBracket(seed, state.results, state.overrides, standings);
+
+  const resolvedStr = JSON.stringify(resolved);
+  const structureChanged = resolvedStr !== lastResolvedStr;
+  lastResolvedStr = resolvedStr;
+  lastResolved = resolved;
+
   markChangedScores(prev);
+
+  if (structureChanged) {
+    // A new team entered the bracket — full render keeps connectors and positions correct.
+    render();
+  } else {
+    patchDOM(prev, prevResolved, standings, resolved);
+  }
+
+  setStatus();
 }
 
 // ---- boot ----------------------------------------------------------------------
@@ -632,6 +733,7 @@ async function refresh() {
   [seed] = await Promise.all([loadSeed(), loadBroadcasters()]);
   state = await loadResults().catch(() => state);
   sanitizeLive();
+  lastResultsStr = JSON.stringify(state.results);
   render();
   setStatus();
 
