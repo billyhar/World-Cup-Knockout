@@ -508,6 +508,10 @@ html, body {
 }
 .sc-day .live-dot { width: 6px; height: 6px; flex: none; }
 
+.sc-strip-wrap {
+  position: relative;
+}
+
 .sc-strip {
   display: flex;
   gap: 7px;
@@ -517,6 +521,11 @@ html, body {
   scrollbar-width: none;
 }
 .sc-strip::-webkit-scrollbar { display: none; }
+
+.sc-strip-prev,
+.sc-strip-next {
+  display: none;
+}
 
 .sc-card {
   display: flex;
@@ -613,6 +622,33 @@ html, body {
 @media (max-width: 700px) {
   .scores-carousel { top: 56px; }
   .sc-card { width: 155px; }
+  .sc-strip-prev,
+  .sc-strip-next {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 52px;
+    border: none;
+    color: var(--ink);
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    z-index: 1;
+    padding: 0;
+    pointer-events: auto;
+  }
+  .sc-strip-prev {
+    left: 0;
+    background: linear-gradient(to left, transparent, rgba(7, 9, 15, 0.96) 55%);
+  }
+  .sc-strip-next {
+    right: 0;
+    background: linear-gradient(to right, transparent, rgba(7, 9, 15, 0.96) 55%);
+  }
+  .sc-strip-prev.at-start,
+  .sc-strip-next.at-end { display: none; }
 }
 
 /* ── fixed chrome ──────────────────────────────────────────────────────── */

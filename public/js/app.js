@@ -175,12 +175,19 @@ function renderScoresCarousel(resolved) {
   if (prevBtn) prevBtn.disabled = idx <= 0;
   if (nextBtn) nextBtn.disabled = idx >= futureDays.length - 1;
 
-  // Match cards for selected day, sorted by kickoff
+  // Match cards for selected day: live first, then by kickoff
   const matches = (dayMap.get(scoreDayKey) ?? [])
     .slice()
-    .sort((a, b) => kick(a).localeCompare(kick(b)));
+    .sort((a, b) => {
+      const aLive = state.results[a.id]?.status === "LIVE" ? 0 : 1;
+      const bLive = state.results[b.id]?.status === "LIVE" ? 0 : 1;
+      if (aLive !== bLive) return aLive - bLive;
+      return kick(a).localeCompare(kick(b));
+    });
 
-  document.getElementById("sc-strip").innerHTML = matches.map((m) => {
+  const scStrip = document.getElementById("sc-strip");
+  scStrip.scrollLeft = 0;
+  scStrip.innerHTML = matches.map((m) => {
     const r = state.results[m.id];
     const live = r?.status === "LIVE";
     const score = scoreText(r);
@@ -207,6 +214,17 @@ function renderScoresCarousel(resolved) {
       </span>
     </button>`;
   }).join("");
+
+  updateStripArrow();
+}
+
+function updateStripArrow() {
+  const strip = document.getElementById("sc-strip");
+  if (!strip) return;
+  const atStart = strip.scrollLeft <= 4;
+  const atEnd = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4;
+  document.getElementById("sc-strip-prev")?.classList.toggle("at-start", atStart);
+  document.getElementById("sc-strip-next")?.classList.toggle("at-end", atEnd);
 }
 
 // ---- group cards -----------------------------------------------------------
@@ -500,6 +518,15 @@ function bindChrome() {
     if (rect) panzoom.flyTo(rect, 14);
     for (const b of sideRow.children) b.classList.toggle("active", b === e.target);
   });
+  // Strip scroll arrows (mobile only — CSS hides them on desktop)
+  document.getElementById("sc-strip")?.addEventListener("scroll", updateStripArrow, { passive: true });
+  document.getElementById("sc-strip-prev")?.addEventListener("click", () => {
+    document.getElementById("sc-strip")?.scrollBy({ left: -165, behavior: "smooth" });
+  });
+  document.getElementById("sc-strip-next")?.addEventListener("click", () => {
+    document.getElementById("sc-strip")?.scrollBy({ left: 165, behavior: "smooth" });
+  });
+
   document.getElementById("zoom-in").onclick = () => panzoom.zoomCenter(1.35);
   document.getElementById("zoom-out").onclick = () => panzoom.zoomCenter(1 / 1.35);
   document.getElementById("zoom-fit").onclick = () => panzoom.flyTo(sections.all, 40);
