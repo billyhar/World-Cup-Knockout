@@ -223,17 +223,27 @@ function renderScoresCarousel(resolved) {
     const target = m.stage === "group" ? `group-${m.group}` : `match-${m.id}`;
     const minLabel = live && r.min ? esc(r.min) : "";
 
+    const hasPens = done && r?.hp != null && r?.ap != null;
+    const hasAet = done && r?.et && !hasPens;
+    const doneLabel = hasPens ? "Pens" : hasAet ? "AET" : "Played";
+    const scoreSuffix = hasPens
+      ? `<span class="sc-suf">(${r.hp}–${r.ap} p)</span>`
+      : hasAet
+      ? `<span class="sc-suf">aet</span>`
+      : "";
+    const scoreDisplay = score != null ? `${score}${scoreSuffix}` : fmtTime(kick(m));
+
     const metaLine = live
       ? `<span class="live-badge"><span class="live-dot"></span>LIVE</span>${minLabel ? `<span class="sc-min">${minLabel}</span>` : ""}`
       : done
-      ? `${esc(stageLabel)}<span class="badge done sc-badge-ft">Played</span>`
+      ? `${esc(stageLabel)}<span class="badge done sc-badge-ft">${doneLabel}</span>`
       : esc(stageLabel);
 
     return `<button class="sc-card${live ? " live" : ""}${done ? " done" : ""}" data-target="${target}">
       <span class="sc-meta">${metaLine}</span>
       <span class="sc-matchup">
         <span class="sc-team home">${flagImg(homeCode)}<span class="sc-name">${esc(homeLbl)}</span></span>
-        <span class="sc-result">${score ?? fmtTime(kick(m))}</span>
+        <span class="sc-result">${scoreDisplay}</span>
         <span class="sc-team away"><span class="sc-name">${esc(awayLbl)}</span>${flagImg(awayCode)}</span>
       </span>
     </button>`;

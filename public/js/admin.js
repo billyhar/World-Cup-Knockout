@@ -44,6 +44,7 @@ function rowHTML(m) {
     <span class="scores">
       ${num("hs", r.hs)} – ${num("as", r.as)}
       ${ko ? `<span class="pens-in">pens ${num("hp", r.hp)} – ${num("ap", r.ap)}</span>` : ""}
+      ${ko ? `<label class="et-check"><input type="checkbox" data-et="${m.id}" ${r.et ? "checked" : ""}>AET</label>` : ""}
     </span>
     <span class="team away">${label(m.away)}</span>
     <label class="live-toggle"><input type="checkbox" data-live="${m.id}" ${r.status === "LIVE" ? "checked" : ""}>live</label>
@@ -78,6 +79,10 @@ function collect() {
   for (const box of document.querySelectorAll("[data-live]")) {
     const id = box.dataset.live;
     if (results[id]) results[id].status = box.checked ? "LIVE" : "FT";
+  }
+  for (const box of document.querySelectorAll("[data-et]")) {
+    const id = box.dataset.et;
+    if (results[id] && box.checked) results[id].et = true;
   }
   // drop half-entered scores
   for (const [id, r] of Object.entries(results)) {

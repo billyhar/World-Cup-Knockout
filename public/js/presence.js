@@ -1,8 +1,12 @@
 // Figma-style live multiplayer cursors for the canvas.
 //
-// Uses Supabase Realtime: Broadcast for ephemeral cursor positions and emoji
-// reactions, and Presence for the live viewer count. No database tables are
-// touched — every message lives on the namespaced "cursors" channel.
+// Transport is a Cloudflare Worker + Durable Object (worker/server.js): one tiny
+// server relays ephemeral cursor positions + emoji reactions to everyone else in
+// the room and tracks the live viewer count. Nothing is persisted — every
+// message is fire-and-forget. It's billed by compute, not per fanned-out message
+// (and free on the Workers plan), so it scales where Supabase Realtime didn't.
+// We talk to it with a plain built-in WebSocket — no third-party CDN, so an ad
+// blocker can't break it.
 //
 // Cursors are exchanged in WORLD coordinates (canvas space) so a cursor lands on
 // the same match card for everyone regardless of how each viewer has panned or
@@ -10,14 +14,13 @@
 // #world element (read via getBoundingClientRect, so it tracks translate+scale
 // without us having to know the PanZoom internals).
 
-// The Supabase client is fetched from a third-party CDN, so it's imported
-// dynamically inside initPresence() (not at the top level) and guarded: if an
-// ad blocker or CDN outage blocks the fetch, cursors just don't appear — the
-// rest of the site is unaffected.
-const SUPABASE_CDN = "https://esm.sh/@supabase/supabase-js@2";
-
-const SUPABASE_URL = "https://xozkbbbejhcsglopnoqn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_RIsXDzgjLa6hE3_AFIBzzQ_tUXn9nPR";
+// The deployed Worker URL (printed by `npm run cursors:deploy`). Falls back to
+// the local `wrangler dev` server (port 8787) when running on localhost.
+// TODO: replace USERNAME with your Cloudflare account subdomain after the first
+// deploy (e.g. wss://world-cup-cursors.jane.workers.dev).
+const CURSORS_HOST = location.hostname === "localhost"
+  ? "ws://localhost:8787"
+  : "wss://world-cup-cursors.ioswallpapers.workers.dev";
 
 const ROOM = "cursors";
 const SEND_MS = 80;          // throttle cursor broadcasts (~12/sec)
@@ -84,17 +87,7 @@ const cursorSVG = (color) => `
     <path d="M5 3l14 7-6 1.6L9.6 19 5 3z" fill="${color}" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
   </svg>`;
 
-export async function initPresence({ world, WORLD }) {
-  // Pull in the Supabase realtime client. If the CDN is blocked/unreachable,
-  // bail out quietly — no cursors, but no broken page either.
-  let createClient;
-  try {
-    ({ createClient } = await import(SUPABASE_CDN));
-  } catch (e) {
-    console.warn("Live cursors unavailable (Supabase client failed to load):", e);
-    return;
-  }
-
+export function initPresence({ world, WORLD }) {
   const me = identity();
 
   // ---- DOM scaffolding ---------------------------------------------------
@@ -177,61 +170,66 @@ export async function initPresence({ world, WORLD }) {
   requestAnimationFrame(frame);
 
   // ---- realtime channel --------------------------------------------------
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    realtime: { params: { eventsPerSecond: 15 } },
-  });
+  // A plain WebSocket to our Worker, wrapped with auto-reconnect. Passing me.id
+  // as ?id means the server's close handler fires a "leave" with the same id our
+  // peers map is keyed by, so a disconnected cursor disappears cleanly.
+  const url = `${CURSORS_HOST}/?room=${encodeURIComponent(ROOM)}&id=${encodeURIComponent(me.id)}`;
+  const socket = reconnectingSocket(url, (e) => onMessage(e));
 
-  const channel = supabase.channel(ROOM, {
-    config: { broadcast: { self: false }, presence: { key: me.id } },
-  });
-
-  // How many people (incl. me) are on the channel right now, from Presence.
+  // How many people (incl. me) are in the room right now. The server broadcasts
+  // a {type:"count"} whenever someone joins or leaves.
   // Cursor/emote broadcasts are gated on this: a SOLO visitor moving the mouse
-  // would otherwise fire ~12 messages/sec into the void (Supabase bills every
-  // inbound Realtime message even with zero other subscribers), which is what
-  // blew through the free tier. We only broadcast when there's someone to see
-  // it. Presence itself is cheap — it only fires on join/leave/sync.
+  // would otherwise fire ~12 messages/sec into the void (every inbound message
+  // is still a billable request), which is what blew through the free tier. We
+  // only broadcast when there's someone to see it.
   let present = 1;
   const alone = () => present < 2;
 
   // Single funnel for every outbound broadcast. Two guards live here so no call
   // site can bypass them: (1) skip when alone (nobody to receive it), and (2) a
   // hard per-session cap — a safety net so a tab left open for hours alongside
-  // others can never run away with the Realtime quota. Once capped, this session
-  // goes silent (cursors still receive; they just stop sending).
+  // others can never run away with usage. Once capped, this session goes silent
+  // (cursors still receive; they just stop sending).
   let sends = 0;
   const MAX_SENDS = 20_000;
   const bcast = (event, payload) => {
     if (alone() || sends >= MAX_SENDS) return;
     sends++;
-    try { channel.send({ type: "broadcast", event, payload }); } catch {}
+    try { socket.send(JSON.stringify({ type: event, ...payload })); } catch {}
   };
 
-  channel
-    .on("broadcast", { event: "cursor" }, ({ payload }) => {
-      if (payload.id === me.id) return;
-      const p = ensurePeer(payload.id, payload.color, payload.name);
-      p.x = payload.x; p.y = payload.y; p.last = performance.now();
-      if (payload.name && payload.name !== p.name) {
-        p.name = payload.name; p.label.textContent = payload.name;
+  // The server relays each message to everyone *except* the sender, so we never
+  // see our own. The me.id guards below are just belt-and-braces.
+  function onMessage(e) {
+    let msg;
+    try { msg = JSON.parse(e.data); } catch { return; }
+    switch (msg.type) {
+      case "cursor": {
+        if (msg.id === me.id) return;
+        const p = ensurePeer(msg.id, msg.color, msg.name);
+        p.x = msg.x; p.y = msg.y; p.last = performance.now();
+        if (msg.name && msg.name !== p.name) {
+          p.name = msg.name; p.label.textContent = msg.name;
+        }
+        break;
       }
-    })
-    .on("broadcast", { event: "emote" }, ({ payload }) => {
-      if (payload.id === me.id) return;
-      const s = worldToScreen(payload.x, payload.y);
-      spawnEmote(payload.emoji, s.x, s.y);
-    })
-    .on("broadcast", { event: "leave" }, ({ payload }) => dropPeer(payload.id))
-    .on("presence", { event: "sync" }, () => {
-      present = Object.keys(channel.presenceState()).length || 1;
-      const el = document.getElementById("pd-n");
-      if (el) el.textContent = present;
-    })
-    .subscribe(async (status) => {
-      if (status === "SUBSCRIBED") {
-        await channel.track({ id: me.id, name: me.name, color: me.color });
+      case "emote": {
+        if (msg.id === me.id) return;
+        const s = worldToScreen(msg.x, msg.y);
+        spawnEmote(msg.emoji, s.x, s.y);
+        break;
       }
-    });
+      case "leave":
+        dropPeer(msg.id);
+        break;
+      case "count": {
+        present = msg.n || 1;
+        const el = document.getElementById("pd-n");
+        if (el) el.textContent = present;
+        break;
+      }
+    }
+  }
 
   // ---- local cursor capture + throttled send -----------------------------
   let lastX = 0, lastY = 0, dirty = false, hasPos = false;
@@ -435,9 +433,36 @@ export async function initPresence({ world, WORLD }) {
   addEventListener("blur", stopSpray);
 
   addEventListener("beforeunload", () => {
-    // When alone, bcast no-ops — Presence untrack on disconnect handles the count.
+    // When alone, bcast no-ops — the server's close handler resyncs the count
+    // and tells peers to drop our cursor anyway.
     bcast("leave", { id: me.id });
   });
+}
+
+// A minimal auto-reconnecting WebSocket: exposes send()/close() and forwards
+// every message to onMessage. Exponential backoff (1s→15s) so a dropped or
+// briefly-unreachable Worker reconnects on its own without hammering it.
+function reconnectingSocket(url, onMessage) {
+  let ws, closed = false, retry = 0, timer = null;
+  const connect = () => {
+    ws = new WebSocket(url);
+    ws.addEventListener("open", () => { retry = 0; });
+    ws.addEventListener("message", onMessage);
+    ws.addEventListener("close", () => {
+      if (closed) return;
+      timer = setTimeout(connect, Math.min(1000 * 2 ** retry++, 15_000));
+    });
+    ws.addEventListener("error", () => { try { ws.close(); } catch {} });
+  };
+  connect();
+  return {
+    send: (data) => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        try { ws.send(data); } catch {}
+      }
+    },
+    close: () => { closed = true; clearTimeout(timer); try { ws && ws.close(); } catch {} },
+  };
 }
 
 function escapeHtml(s) {

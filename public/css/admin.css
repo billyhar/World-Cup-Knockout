@@ -158,6 +158,18 @@ select {
 }
 .live-toggle input { accent-color: var(--err); }
 
+.et-check {
+  font-size: 10.5px;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.et-check input { accent-color: var(--amber); }
+
 .toast {
   position: fixed;
   bottom: 22px;

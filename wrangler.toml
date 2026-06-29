@@ -1,0 +1,15 @@
+# Cloudflare Worker for the live-cursor relay (worker/server.js).
+# Deploy to your own Cloudflare account:  npm run cursors:deploy
+name = "world-cup-cursors"
+main = "worker/server.js"
+compatibility_date = "2025-06-01"
+
+[[durable_objects.bindings]]
+name = "CURSORS"
+class_name = "CursorsRoom"
+
+# SQLite-backed Durable Object class — required for the Workers free plan.
+# (We don't store anything; the class just coordinates the WebSockets.)
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["CursorsRoom"]
