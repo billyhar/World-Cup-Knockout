@@ -223,7 +223,9 @@ function renderScoresCarousel(resolved) {
     const target = m.stage === "group" ? `group-${m.group}` : `match-${m.id}`;
     const minLabel = live && r.min ? esc(r.min) : "";
 
-    const hasPens = done && r?.hp != null && r?.ap != null;
+    // Penalties show during a live shootout too (ESPN feeds the running tally),
+    // so the suffix isn't gated on the match being done.
+    const hasPens = r?.hp != null && r?.ap != null;
     const hasAet = done && r?.et && !hasPens;
     const doneLabel = hasPens ? "Pens" : hasAet ? "AET" : "Played";
     const scoreSuffix = hasPens

@@ -247,13 +247,28 @@ export default async function pollLive() {
         if (event.status?.type?.state === "in" && saved.results[id]?.status !== "FT") {
           target = results[id] ??= { status: "LIVE" };
           target.status = "LIVE";
+          // ESPN reports a penalty shootout as state "in" (the match isn't
+          // FINISHED until it's decided), exposing the running shootout tally on
+          // each competitor's shootoutScore. football-data only surfaces
+          // penalties at FINISHED, so this is the only live source for them.
+          const inPens = event.status?.type?.detail === "Penalties" ||
+            comp.competitors?.some((c) => c.shootoutScore != null);
           for (const c of comp.competitors ?? []) {
             const n = Number.parseInt(c.score, 10);
-            if (Number.isNaN(n)) continue;
-            if (sides[c.team?.id] === "h") target.hs = n;
-            else if (sides[c.team?.id] === "a") target.as = n;
+            if (!Number.isNaN(n)) {
+              if (sides[c.team?.id] === "h") target.hs = n;
+              else if (sides[c.team?.id] === "a") target.as = n;
+            }
+            const sp = Number.parseInt(c.shootoutScore, 10);
+            if (!Number.isNaN(sp)) {
+              if (sides[c.team?.id] === "h") target.hp = sp;
+              else if (sides[c.team?.id] === "a") target.ap = sp;
+            }
           }
-          if (clock) target.min = clock;
+          // A shootout means the tie reached extra time; flag it so the UI shows
+          // "aet"/"pens" and label the clock "Pens" rather than a frozen 120'.
+          if (inPens) { target.et = true; target.min = "Pens"; }
+          else if (clock) target.min = clock;
         }
         const ev = [];
         for (const d of comp.details ?? []) {

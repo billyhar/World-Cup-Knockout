@@ -89,6 +89,11 @@ const cursorSVG = (color) => `
 
 export function initPresence({ world, WORLD }) {
   const me = identity();
+  // Persistent identity (name + colour) is shared across a browser's tabs, but
+  // each connection needs a UNIQUE id — otherwise two tabs of the same browser
+  // share an id and filter out each other's cursors as "self" (and collide as
+  // one connection on the server). Suffix a random per-tab token; not persisted.
+  me.id = `${me.id}.${Math.random().toString(36).slice(2, 8)}`;
 
   // ---- DOM scaffolding ---------------------------------------------------
   const layer = document.createElement("div");
