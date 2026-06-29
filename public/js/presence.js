@@ -20,7 +20,7 @@ const SUPABASE_URL = "https://xozkbbbejhcsglopnoqn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_RIsXDzgjLa6hE3_AFIBzzQ_tUXn9nPR";
 
 const ROOM = "cursors";
-const SEND_MS = 50;          // throttle cursor broadcasts (~20/sec)
+const SEND_MS = 80;          // throttle cursor broadcasts (~12/sec)
 const STALE_MS = 10_000;     // drop a cursor we haven't heard from in 10s
 
 // The first 8 are the keyboard quick-keys (press 1-8). EMOJIS + FLAGS make up
@@ -178,12 +178,34 @@ export async function initPresence({ world, WORLD }) {
 
   // ---- realtime channel --------------------------------------------------
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    realtime: { params: { eventsPerSecond: 25 } },
+    realtime: { params: { eventsPerSecond: 15 } },
   });
 
   const channel = supabase.channel(ROOM, {
     config: { broadcast: { self: false }, presence: { key: me.id } },
   });
+
+  // How many people (incl. me) are on the channel right now, from Presence.
+  // Cursor/emote broadcasts are gated on this: a SOLO visitor moving the mouse
+  // would otherwise fire ~12 messages/sec into the void (Supabase bills every
+  // inbound Realtime message even with zero other subscribers), which is what
+  // blew through the free tier. We only broadcast when there's someone to see
+  // it. Presence itself is cheap — it only fires on join/leave/sync.
+  let present = 1;
+  const alone = () => present < 2;
+
+  // Single funnel for every outbound broadcast. Two guards live here so no call
+  // site can bypass them: (1) skip when alone (nobody to receive it), and (2) a
+  // hard per-session cap — a safety net so a tab left open for hours alongside
+  // others can never run away with the Realtime quota. Once capped, this session
+  // goes silent (cursors still receive; they just stop sending).
+  let sends = 0;
+  const MAX_SENDS = 20_000;
+  const bcast = (event, payload) => {
+    if (alone() || sends >= MAX_SENDS) return;
+    sends++;
+    try { channel.send({ type: "broadcast", event, payload }); } catch {}
+  };
 
   channel
     .on("broadcast", { event: "cursor" }, ({ payload }) => {
@@ -201,9 +223,9 @@ export async function initPresence({ world, WORLD }) {
     })
     .on("broadcast", { event: "leave" }, ({ payload }) => dropPeer(payload.id))
     .on("presence", { event: "sync" }, () => {
-      const n = Object.keys(channel.presenceState()).length || 1;
+      present = Object.keys(channel.presenceState()).length || 1;
       const el = document.getElementById("pd-n");
-      if (el) el.textContent = n;
+      if (el) el.textContent = present;
     })
     .subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
@@ -221,18 +243,15 @@ export async function initPresence({ world, WORLD }) {
   }, { passive: true });
 
   addEventListener("pointerout", (e) => {
-    if (!e.relatedTarget && !e.toElement) {
-      channel.send({ type: "broadcast", event: "leave", payload: { id: me.id } });
-    }
+    if (!e.relatedTarget && !e.toElement) bcast("leave", { id: me.id });
   });
 
   setInterval(() => {
     if (!dirty || !hasPos) return;
+    // Tab in the background — don't burn messages (alone() handled by bcast).
+    if (document.hidden) return;
     dirty = false;
-    channel.send({
-      type: "broadcast", event: "cursor",
-      payload: { id: me.id, name: me.name, color: me.color, x: lastX, y: lastY },
-    });
+    bcast("cursor", { id: me.id, name: me.name, color: me.color, x: lastX, y: lastY });
   }, SEND_MS);
 
   // ---- emoji reactions ---------------------------------------------------
@@ -271,8 +290,7 @@ export async function initPresence({ world, WORLD }) {
     const wy = a.y + (Math.random() * 2 - 1) * spread;
     const s = worldToScreen(wx, wy);
     spawnEmote(emoji, s.x, s.y);
-    channel.send({ type: "broadcast", event: "emote",
-      payload: { id: me.id, emoji, x: wx, y: wy } });
+    bcast("emote", { id: me.id, emoji, x: wx, y: wy });
   }
 
   // Fire an emoji at a specific SCREEN point (used by tap-to-spray on mobile).
@@ -282,8 +300,7 @@ export async function initPresence({ world, WORLD }) {
     const wy = w.y + (Math.random() * 2 - 1) * spread;
     const s = worldToScreen(wx, wy);
     spawnEmote(emoji, s.x, s.y);
-    channel.send({ type: "broadcast", event: "emote",
-      payload: { id: me.id, emoji, x: wx, y: wy } });
+    bcast("emote", { id: me.id, emoji, x: wx, y: wy });
   }
 
   // A satisfying little burst at a screen point.
@@ -418,7 +435,8 @@ export async function initPresence({ world, WORLD }) {
   addEventListener("blur", stopSpray);
 
   addEventListener("beforeunload", () => {
-    try { channel.send({ type: "broadcast", event: "leave", payload: { id: me.id } }); } catch {}
+    // When alone, bcast no-ops — Presence untrack on disconnect handles the count.
+    bcast("leave", { id: me.id });
   });
 }
 
