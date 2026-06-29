@@ -4,7 +4,6 @@ import {
   slotLabel, fmtDate, fmtTime, isToday, tzAbbr,
 } from "./data.js";
 import { loadBroadcasters, watchOn } from "./broadcasters.js";
-import { initPresence } from "./presence.js";
 import { loadPredictions, getPrediction, getMyVote, castVote } from "./predictions.js";
 
 // "Where to watch" line for a match in the viewer's country (location-based,
@@ -1022,7 +1021,14 @@ function showBootError() {
   }
 
   // Figma-style live multiplayer cursors, cursor chat and emoji reactions.
-  initPresence({ world, WORLD });
+  // Loaded lazily and defensively: presence.js pulls the Supabase client from a
+  // third-party CDN (esm.sh), which an ad blocker or a CDN hiccup can block. By
+  // dynamically importing it AFTER the bracket is painted — and swallowing any
+  // failure — a blocked CDN only disables the (decorative) cursors instead of
+  // taking down the whole page on a hung loading screen.
+  import("./presence.js")
+    .then((m) => m.initPresence({ world, WORLD }))
+    .catch((e) => console.warn("Live cursors unavailable:", e));
 
   // initial view: everything on desktop; on mobile fill the width with the
   // first group column, anchored just below the header.

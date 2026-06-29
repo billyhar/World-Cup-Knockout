@@ -10,7 +10,11 @@
 // #world element (read via getBoundingClientRect, so it tracks translate+scale
 // without us having to know the PanZoom internals).
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// The Supabase client is fetched from a third-party CDN, so it's imported
+// dynamically inside initPresence() (not at the top level) and guarded: if an
+// ad blocker or CDN outage blocks the fetch, cursors just don't appear — the
+// rest of the site is unaffected.
+const SUPABASE_CDN = "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://xozkbbbejhcsglopnoqn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_RIsXDzgjLa6hE3_AFIBzzQ_tUXn9nPR";
@@ -80,7 +84,17 @@ const cursorSVG = (color) => `
     <path d="M5 3l14 7-6 1.6L9.6 19 5 3z" fill="${color}" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
   </svg>`;
 
-export function initPresence({ world, WORLD }) {
+export async function initPresence({ world, WORLD }) {
+  // Pull in the Supabase realtime client. If the CDN is blocked/unreachable,
+  // bail out quietly — no cursors, but no broken page either.
+  let createClient;
+  try {
+    ({ createClient } = await import(SUPABASE_CDN));
+  } catch (e) {
+    console.warn("Live cursors unavailable (Supabase client failed to load):", e);
+    return;
+  }
+
   const me = identity();
 
   // ---- DOM scaffolding ---------------------------------------------------
