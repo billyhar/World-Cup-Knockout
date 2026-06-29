@@ -619,6 +619,21 @@ function bindChrome() {
     render();
   };
 
+  document.getElementById("theme-btn").onclick = () => {
+    const isLight = document.documentElement.dataset.theme === "light";
+    if (isLight) {
+      delete document.documentElement.dataset.theme;
+      localStorage.removeItem("wc-theme");
+      document.getElementById("theme-btn").setAttribute("aria-label", "Switch to light mode");
+    } else {
+      document.documentElement.dataset.theme = "light";
+      localStorage.setItem("wc-theme", "light");
+      document.getElementById("theme-btn").setAttribute("aria-label", "Switch to dark mode");
+    }
+  };
+
+  document.getElementById("print-btn").onclick = () => window.print();
+
   // one-time rotate tip on phones
   const tip = document.getElementById("rotate-tip");
   if (innerWidth < 700 && !localStorage.getItem("wc-rotate-tip")) tip.hidden = false;
@@ -1000,6 +1015,11 @@ function showBootError() {
   panzoom = new PanZoom(document.getElementById("viewport"), world, WORLD);
   bindChrome();
   setupTooltip();
+
+  // Sync theme button aria-label to match current theme (set before boot by inline script)
+  if (document.documentElement.dataset.theme === "light") {
+    document.getElementById("theme-btn")?.setAttribute("aria-label", "Switch to dark mode");
+  }
 
   // Figma-style live multiplayer cursors, cursor chat and emoji reactions.
   initPresence({ world, WORLD });

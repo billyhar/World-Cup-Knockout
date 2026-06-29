@@ -1,6 +1,8 @@
 // Data loading + tournament logic: group standings, best-thirds allocation,
 // knockout slot resolution.
 
+import { THIRDS_ALLOCATION, THIRDS_SLOT_ORDER } from "./thirds-table.js";
+
 export async function loadSeed() {
   let lastErr;
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -104,10 +106,11 @@ export function allStandings(seed, results) {
 // ---- Best thirds -----------------------------------------------------------
 
 // The 8 best third-placed teams fill the R32 slots written as "3:ABCDF" etc.
-// Which slot each third lands in depends on the qualified combination; we
-// solve it as a constraint-matching problem (each slot accepts thirds from
-// the listed groups only). FIFA's official table is one valid solution of
-// the same constraints.
+// Which slot each third lands in is NOT a free constraint solve — many slot
+// permutations satisfy the "3:" group lists, but FIFA predefines exactly one
+// official matchup per combination of qualifying groups (Annexe C, 495 rows).
+// We look that table up by the set of qualifying groups; a generic backtracking
+// solve is kept only as a fallback for non-standard seeds.
 export function allocateThirds(seed, results, standings) {
   const groups = Object.keys(seed.groups);
   if (!groups.every((g) => standings[g].complete)) return null;
@@ -120,24 +123,40 @@ export function allocateThirds(seed, results, standings) {
     )
     .slice(0, 8);
 
-  const slots = seed.matches
-    .filter((m) => m.stage === "r32" && m.away.startsWith("3:"))
-    .map((m) => ({ id: m.id, allowed: m.away.slice(2).split("") }));
+  const slots = seed.matches.filter(
+    (m) => m.stage === "r32" && typeof m.away === "string" && m.away.startsWith("3:")
+  );
 
-  // Backtracking: assign each qualified third to a slot that allows its group,
-  // trying most-constrained slots first.
-  slots.sort((a, b) => a.allowed.length - b.allowed.length);
+  // Official path: look up FIFA's Annexe C row for this exact set of qualifying
+  // groups. The row gives the third's group for each winner slot (1A, 1B, …);
+  // each third-place match's `home` is one of those winner slots.
+  const key = thirds.map((t) => t.group).sort().join("");
+  const row = THIRDS_ALLOCATION[key];
+  if (row) {
+    const teamOf = Object.fromEntries(thirds.map((t) => [t.group, t.team]));
+    const groupForSlot = Object.fromEntries(
+      THIRDS_SLOT_ORDER.map((s, i) => [s, row[i]])
+    );
+    const assignment = {};
+    for (const m of slots) assignment[m.id] = teamOf[groupForSlot[m.home]] ?? null;
+    return { assignment, qualified: thirds };
+  }
+
+  // Fallback: backtracking over the "3:" group lists (most-constrained first).
+  const cells = slots
+    .map((m) => ({ id: m.id, allowed: m.away.slice(2).split("") }))
+    .sort((a, b) => a.allowed.length - b.allowed.length);
   const assignment = {};
   const used = new Set();
   const solve = (i) => {
-    if (i === slots.length) return true;
-    const slot = slots[i];
+    if (i === cells.length) return true;
+    const cell = cells[i];
     for (const t of thirds) {
-      if (used.has(t.group) || !slot.allowed.includes(t.group)) continue;
-      assignment[slot.id] = t.team;
+      if (used.has(t.group) || !cell.allowed.includes(t.group)) continue;
+      assignment[cell.id] = t.team;
       used.add(t.group);
       if (solve(i + 1)) return true;
-      delete assignment[slot.id];
+      delete assignment[cell.id];
       used.delete(t.group);
     }
     return false;
