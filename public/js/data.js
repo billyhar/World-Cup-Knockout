@@ -48,7 +48,13 @@ export async function loadResults() {
     out.kicks = live.value.kicks ?? {};
   }
   if (manual.status === "fulfilled" && manual.value) {
-    Object.assign(out.results, manual.value.results ?? {});
+    // Layer each manual override ON TOP of the live entry rather than replacing
+    // it wholesale: the admin corrects a field (usually the score), but
+    // live-only fields it doesn't carry — e.g. the `pens` shootout breakdown or
+    // the cleaned-up `ev` list — must survive. (Manual fields still win.)
+    for (const [id, r] of Object.entries(manual.value.results ?? {})) {
+      out.results[id] = { ...out.results[id], ...r };
+    }
     out.overrides = manual.value.overrides ?? {};
     out.updatedAt = manual.value.updatedAt;
   }
