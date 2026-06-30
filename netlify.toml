@@ -1,10 +1,6 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
-  # Stamp a content hash onto index.html's /js/app.js and /css/styles.css URLs
-  # on every deploy, so changed assets bust the 1-hour cache while unchanged
-  # ones stay cached. Cheap, dependency-free (Node stdlib only).
-  command = "npm run build:cachebust"
 
 [[redirects]]
   from = "https://www.worldcupknockout.football/*"
@@ -39,15 +35,21 @@
   [headers.values]
     Content-Type = "text/markdown; charset=utf-8"
 
+# JS/CSS revalidate on every load (cheap ETag 304s), same as index.html. These
+# are hand-authored, unbundled ES modules with stable bare-path imports
+# (app.js -> data.js -> thirds-table.js, etc.), so there's no hashed filename to
+# bust a long cache — and a stale entry point or a stale imported module silently
+# runs old code against fresh data. Revalidation keeps every file in the graph
+# current without any version-string machinery.
 [[headers]]
   for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/data/seed.json"
