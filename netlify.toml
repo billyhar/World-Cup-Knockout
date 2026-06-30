@@ -1,6 +1,10 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
+  # Stamp a content hash onto index.html's /js/app.js and /css/styles.css URLs
+  # on every deploy, so changed assets bust the 1-hour cache while unchanged
+  # ones stay cached. Cheap, dependency-free (Node stdlib only).
+  command = "npm run build:cachebust"
 
 [[redirects]]
   from = "https://www.worldcupknockout.football/*"
