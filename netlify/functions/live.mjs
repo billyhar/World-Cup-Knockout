@@ -15,9 +15,11 @@ const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
     // s-maxage caches at the CDN; max-age=0 lets tabs returning mid-match
-    // revalidate. Even though this is just a blob read, caching keeps
-    // invocations low.
-    headers: { "content-type": "application/json", "cache-control": "public, s-maxage=60, max-age=0" },
+    // revalidate. This only reads a blob (no upstream dependency), so a shorter
+    // CDN window is cheap and just lets live scores/shootout updates surface
+    // sooner — the poller still refreshes the blob once a minute, so this is
+    // bounded regardless of traffic.
+    headers: { "content-type": "application/json", "cache-control": "public, s-maxage=30, max-age=0" },
   });
 
 export default async function handler() {

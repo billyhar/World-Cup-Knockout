@@ -382,6 +382,27 @@ function predWidgetHTML(m, teams) {
   </div>`;
 }
 
+// Per-kick shootout breakdown: a row of dots per team, filled = scored,
+// hollow = missed, in kicking order. Populates live (updates kick by kick) and
+// stays once the match is over. Hovering a dot names the taker.
+function pensBreakdownHTML(r, teams) {
+  if (!r?.pens?.length) return "";
+  const sideRow = (side, code) => {
+    const kicks = r.pens.filter((p) => p.s === side).sort((a, b) => a.n - b.n);
+    if (!kicks.length) return "";
+    const dots = kicks.map((p) =>
+      `<span class="k-pen-dot ${p.ok ? "ok" : "miss"}"${p.p ? ` data-tip="${esc(p.p)} — ${p.ok ? "scored" : "missed"}"` : ""}></span>`
+    ).join("");
+    return `<div class="k-pen-row">
+      <span class="k-pen-team">${esc(displayCode(code ?? "—"))}</span>
+      <span class="k-pen-dots">${dots}</span>
+    </div>`;
+  };
+  return `<div class="k-pens" aria-label="Penalty shootout">
+    ${sideRow("h", teams?.home)}${sideRow("a", teams?.away)}
+  </div>`;
+}
+
 function koCardHTML(m, resolved) {
   const r = state.results[m.id];
   const teams = resolved[m.id];
@@ -408,6 +429,7 @@ function koCardHTML(m, resolved) {
     </div>
     ${teamRowHTML(teams.home, m.home, r, "h", winner)}
     ${teamRowHTML(teams.away, m.away, r, "a", winner)}
+    ${pensBreakdownHTML(r, teams)}
     ${tv ? `<div class="k-tv">${tv}</div>` : ""}
     ${predWidgetHTML(m, teams)}
   </div>`;
@@ -1066,9 +1088,27 @@ function showBootError() {
   // on screen with last-known teams, and any changes slot in via patchDOM.
   if (cached) refresh();
 
-  setInterval(refresh, 60_000);
+  // Adaptive polling: while a match is in play (incl. a live penalty shootout)
+  // refresh more often so scores, the shootout tally and the bracket advancing
+  // all land quickly; fall back to a relaxed cadence when nothing is on so we
+  // don't rack up needless function invocations. The poller itself updates the
+  // feed once a minute (Netlify cron's floor), so this just minimises the lag
+  // between a goal/kick landing upstream and it showing here.
+  let pollTimer;
+  const anyLive = () =>
+    seed.matches.some((m) => state.results[m.id]?.status === "LIVE");
+  const scheduleNext = () => {
+    clearTimeout(pollTimer);
+    pollTimer = setTimeout(tick, anyLive() ? 20_000 : 60_000);
+  };
+  async function tick() {
+    clearTimeout(pollTimer);
+    await refresh();
+    scheduleNext();
+  }
+  scheduleNext();
   // returning to the tab mid-match: don't wait out the interval
   document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) refresh();
+    if (!document.hidden) tick();
   });
 })();

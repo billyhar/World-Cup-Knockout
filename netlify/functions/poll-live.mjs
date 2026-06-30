@@ -106,10 +106,11 @@ export default async function pollLive() {
   const byPair = {};
   const koByStage = {};
   const kickoffOf = {};
+  const isKnockout = {};
   for (const m of seed.matches) {
     kickoffOf[m.id] = m.kickoff;
     if (m.stage === "group") byPair[`${m.home}|${m.away}`] = m.id;
-    else (koByStage[m.stage] ??= []).push(m.id);
+    else { (koByStage[m.stage] ??= []).push(m.id); isKnockout[m.id] = true; }
   }
 
   const claimed = new Set();
@@ -165,7 +166,15 @@ export default async function pollLive() {
     // ESPN buckets its scoreboard by US Eastern date, not UTC.
     const recentNoEv = m.status === "FINISHED" &&
       now - ko < 4 * 86400e3 && !saved.results[id]?.ev?.length;
-    if (inLiveWindow || recentNoEv) {
+    // Re-verify recently-finished KNOCKOUT matches against ESPN every poll:
+    // football-data's free tier regularly reports a wrong scoreline for ties
+    // settled in extra time or on penalties (it has stored plain-90' results
+    // for matches that actually went to a shootout). ESPN is correct for those,
+    // so we keep checking and let the ESPN branch override a wrong FT lock. This
+    // also self-heals results that were already persisted wrong.
+    const recentKo = isKnockout[id] && m.status === "FINISHED" &&
+      now - ko < 3 * 86400e3;
+    if (inLiveWindow || recentNoEv || recentKo) {
       const etDate = new Intl.DateTimeFormat("en-CA", {
         timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit",
       }).format(new Date(ko));
@@ -212,7 +221,12 @@ export default async function pollLive() {
   const espnCode = (team) =>
     normalize(team?.displayName) ??
     (seed.teams[team?.abbreviation] ? team.abbreviation : null);
-  await Promise.all([...espnDates].slice(0, 3).map(async (date) => {
+  // Matches in (or just out of) a penalty shootout, for the per-kick breakdown
+  // fetched from ESPN's summary endpoint after the scoreboard pass.
+  const shootoutEvents = [];
+  // Most-recent dates first so the bounded fan-out always covers live/just-
+  // finished matches before older ones being re-verified.
+  await Promise.all([...espnDates].sort((a, b) => b.localeCompare(a)).slice(0, 5).map(async (date) => {
     try {
       const r = await fetch(
         `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${date}`);
@@ -239,39 +253,73 @@ export default async function pollLive() {
         // entry straight from its scoreboard — seeding it when football-data
         // produced nothing (the usual case) and otherwise keeping the score in
         // lock-step with the scorers. ESPN also exposes the match clock, which
-        // football-data doesn't. Once a match is FINISHED we leave it to
-        // football-data's full-time feed (persisted above), so don't reopen a
-        // result we've already locked in as FT.
-        let target = results[id];
+        // football-data doesn't.
+        //
+        // For KNOCKOUT matches ESPN is also our fast finaliser: football-data's
+        // free tier lags badly (often many minutes) flipping a tie to FINISHED
+        // once it's settled in extra time or on penalties — which is exactly
+        // when the bracket needs to advance. So the moment ESPN reports a
+        // knockout match completed we lock in its result ourselves instead of
+        // waiting. football-data stays authoritative for group-stage finishes,
+        // which it handles fine. Either way we never reopen an FT-locked result.
+        const st = event.status?.type;
         const clock = event.status?.displayClock;
-        if (event.status?.type?.state === "in" && saved.results[id]?.status !== "FT") {
-          target = results[id] ??= { status: "LIVE" };
-          target.status = "LIVE";
-          // ESPN reports a penalty shootout as state "in" (the match isn't
-          // FINISHED until it's decided), exposing the running shootout tally on
-          // each competitor's shootoutScore. football-data only surfaces
-          // penalties at FINISHED, so this is the only live source for them.
-          const inPens = event.status?.type?.detail === "Penalties" ||
-            comp.competitors?.some((c) => c.shootoutScore != null);
+        const espnLive = st?.state === "in";
+        const espnDone = st?.completed === true || st?.state === "post";
+        // ESPN keeps the match "in" through the shootout (it isn't FINISHED
+        // until decided), exposing the running tally on each competitor's
+        // shootoutScore; football-data only surfaces penalties at FINISHED.
+        const inPens = /pen/i.test(st?.detail ?? "") ||
+          comp.competitors?.some((c) => c.shootoutScore != null);
+        const wentToEt = inPens || (event.status?.period ?? 0) > 2;
+        const espnFinalize = espnDone && isKnockout[id];
+        const ftLocked = saved.results[id]?.status === "FT";
+
+        // While a match is live we never reopen one already locked FT. But for a
+        // COMPLETED knockout match ESPN overrides even a persisted football-data
+        // FT — football-data is the unreliable side for ET/penalty results, and
+        // ESPN's completed result is authoritative, so this corrects (and self-
+        // heals) wrong scorelines instead of waiting for a manual override.
+        let target = results[id];
+        if ((espnLive && !ftLocked) || espnFinalize) {
+          target = results[id] ??= {};
+          target.status = espnLive ? "LIVE" : "FT";
+          let hs, as, hp, ap;
           for (const c of comp.competitors ?? []) {
+            const side = sides[c.team?.id];
             const n = Number.parseInt(c.score, 10);
-            if (!Number.isNaN(n)) {
-              if (sides[c.team?.id] === "h") target.hs = n;
-              else if (sides[c.team?.id] === "a") target.as = n;
-            }
+            if (!Number.isNaN(n)) { if (side === "h") hs = n; else if (side === "a") as = n; }
             const sp = Number.parseInt(c.shootoutScore, 10);
-            if (!Number.isNaN(sp)) {
-              if (sides[c.team?.id] === "h") target.hp = sp;
-              else if (sides[c.team?.id] === "a") target.ap = sp;
-            }
+            if (!Number.isNaN(sp)) { if (side === "h") hp = sp; else if (side === "a") ap = sp; }
           }
-          // A shootout means the tie reached extra time; flag it so the UI shows
-          // "aet"/"pens" and label the clock "Pens" rather than a frozen 120'.
-          if (inPens) { target.et = true; target.min = "Pens"; }
-          else if (clock) target.min = clock;
+          if (hs != null) target.hs = hs;
+          if (as != null) target.as = as;
+          if (hp != null && ap != null) { target.hp = hp; target.ap = ap; }
+          else if (espnFinalize) { delete target.hp; delete target.ap; }
+          // Reaching extra time / penalties flags the entry so the UI shows
+          // "aet"/"pens"; label the live clock "Pens" rather than a frozen 120'.
+          if (wentToEt) target.et = true;
+          else if (espnFinalize) delete target.et;
+          if (espnLive) target.min = inPens ? "Pens" : (clock ?? target.min);
+          else delete target.min;
+          // Lock the ESPN result into persistence so it survives the next poll
+          // and isn't re-clobbered by football-data's (possibly wrong) FT.
+          if (target.status === "FT" && target.hs != null && target.as != null) {
+            saved.results[id] = target;
+            savedDirty = true;
+          }
+        }
+
+        // Queue a per-kick shootout breakdown (who scored / who missed) while a
+        // shootout is live and once it's done.
+        if ((espnLive || espnFinalize) && inPens && event.id) {
+          shootoutEvents.push({ id, eventId: event.id, sides });
         }
         const ev = [];
         for (const d of comp.details ?? []) {
+          // Skip shootout kicks — those are carried separately in `pens`, and
+          // counting them here would inflate the score/scorer tooltip.
+          if (d.shootout) continue;
           const t = d.redCard ? "R" : d.yellowCard ? "Y"
             : d.ownGoal ? "O" : d.penaltyKick ? "P" : d.scoringPlay ? "G" : null;
           if (!t) continue;
@@ -293,6 +341,38 @@ export default async function pollLive() {
             savedDirty = true;
           }
         }
+      }
+    } catch {}
+  }));
+
+  // Per-kick shootout breakdowns from ESPN's summary endpoint. The lightweight
+  // scoreboard only lists *scored* kicks; the summary's `shootout` array carries
+  // both makes and misses, in order, per team — so we can show exactly who
+  // scored and who missed. ESPN isn't a rate-limit concern and there are at most
+  // a couple of shootouts at once, so this is a small bounded fan-out.
+  await Promise.all(shootoutEvents.slice(0, 4).map(async ({ id, eventId, sides }) => {
+    try {
+      const r = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=${eventId}`);
+      if (!r.ok) return;
+      const sum = await r.json();
+      const pens = [];
+      for (const block of sum.shootout ?? []) {
+        const s = sides[block.id];
+        if (!s) continue;
+        for (const shot of block.shots ?? []) {
+          pens.push({ s, n: shot.shotNumber, ok: !!shot.didScore, p: shot.player ?? "" });
+        }
+      }
+      if (!pens.length) return;
+      pens.sort((a, b) => a.n - b.n);
+      const target = results[id];
+      if (!target) return;
+      target.pens = pens;
+      // Keep the persisted copy in sync so the breakdown survives once FT.
+      if (saved.results[id]?.status === "FT") {
+        saved.results[id].pens = pens;
+        savedDirty = true;
       }
     } catch {}
   }));

@@ -366,6 +366,44 @@ html, body {
 .pens::before { content: "("; }
 .pens::after { content: " p)"; }
 
+/* ── penalty shootout breakdown (per-kick dots) ────────────────────────── */
+.k-pens {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--card-edge);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.k-pen-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.k-pen-team {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: var(--ink-dim);
+  min-width: 30px;
+}
+.k-pen-dots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.k-pen-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.k-pen-dot.ok { background: var(--accent); }
+.k-pen-dot.miss {
+  background: transparent;
+  border: 1.5px solid rgba(229, 72, 77, 0.9);
+}
+
 .ko-card.is-today { box-shadow: 0 0 0 1.5px rgba(47, 224, 140, 0.4), 0 6px 16px -8px rgba(0, 0, 0, 0.5); }
 .ko-card.is-live { animation: card-pulse 1.6s ease-in-out infinite; }
 @keyframes card-pulse {
