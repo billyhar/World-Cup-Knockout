@@ -1092,7 +1092,7 @@ function showBootError() {
   // refresh more often so scores, the shootout tally and the bracket advancing
   // all land quickly; fall back to a relaxed cadence when nothing is on so we
   // don't rack up needless function invocations. The poller itself updates the
-  // feed once a minute (Netlify cron's floor), so this just minimises the lag
+  // feed once a minute (the poller's cron floor), so this just minimises the lag
   // between a goal/kick landing upstream and it showing here.
   let pollTimer;
   const anyLive = () =>

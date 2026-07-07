@@ -27,7 +27,7 @@ let _manualCachedAt = 0;
 const MANUAL_TTL = 5 * 60 * 1000;
 
 export async function loadResults() {
-  // Manual results (Netlify Blobs) + optional live API, merged.
+  // Manual results (kv store) + optional live API, merged.
   // Manual entries win over live so mistakes upstream can be corrected.
   const out = { results: {}, overrides: {}, kicks: {} };
 

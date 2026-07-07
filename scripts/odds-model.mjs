@@ -1,6 +1,6 @@
 // Shared title-odds model + helpers, used by both the static build
 // (scripts/build-guides.mjs, which bakes a snapshot into the /guides/ hub)
-// and the live endpoint (netlify/functions/odds.mjs, which serves this as
+// and the live endpoint (api/odds.mjs, which serves this as
 // the fallback whenever real bookmaker odds aren't available).
 //
 // The model is a Monte Carlo of the *real* 2026 bracket from seed.json:
