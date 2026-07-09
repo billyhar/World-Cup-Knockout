@@ -11,6 +11,7 @@
     "build": "npm run build:seed && npm run build:seo && npm run build:guides",
     "indexnow": "node scripts/indexnow.mjs",
     "dev": "netlify dev",
+    "dev:vercel": "vercel dev",
     "cursors:dev": "wrangler dev",
     "cursors:deploy": "wrangler deploy"
   },

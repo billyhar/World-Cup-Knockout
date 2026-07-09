@@ -4,6 +4,12 @@ name = "world-cup-cursors"
 main = "worker/server.js"
 compatibility_date = "2025-06-01"
 
+# 1-minute cron that drives the live-score poller on Vercel (worker's scheduled
+# handler pings /api/poll-live). Replaces the old Netlify scheduled function,
+# which Vercel's free plan can't reproduce.
+[triggers]
+crons = ["* * * * *"]
+
 [[durable_objects.bindings]]
 name = "CURSORS"
 class_name = "CursorsRoom"

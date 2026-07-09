@@ -21,6 +21,21 @@ export default {
     const id = env.CURSORS.idFromName(room);
     return env.CURSORS.get(id).fetch(request);
   },
+
+  // Live-score cron. Vercel's free plan can't run minute crons, so this Worker's
+  // 1-minute cron trigger (see wrangler.toml [triggers]) drives the poller by
+  // pinging the Vercel /api/poll-live endpoint. The CRON_SECRET bearer is the
+  // only thing that authorises that endpoint — set it with:
+  //   wrangler secret put CRON_SECRET   (same value as Vercel's CRON_SECRET env)
+  // POLL_URL overrides the target (e.g. the *.vercel.app URL during migration
+  // testing); defaults to the production apex.
+  async scheduled(event, env, ctx) {
+    const url = env.POLL_URL || "https://worldcupknockout.football/api/poll-live";
+    ctx.waitUntil(
+      fetch(url, { headers: { Authorization: `Bearer ${env.CRON_SECRET}` } })
+        .catch(() => {}),
+    );
+  },
 };
 
 export class CursorsRoom {
