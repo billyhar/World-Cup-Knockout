@@ -31,9 +31,13 @@
 
 import { kvGet, kvSet } from "./_lib/kv.mjs";
 
-// Static seed source. The apex serves an identical committed seed.json no matter
-// which host DNS currently points at, so this is stable across the migration.
-const BASE = process.env.POLL_BASE || "https://worldcupknockout.football";
+// Static seed source. Prefer this deployment's own origin (VERCEL_URL) so the
+// poller reads the seed.json it was deployed with. This is resilient during the
+// Netlify→Vercel cutover, when the apex may still point at the old (possibly
+// down) host — fetching the seed from the dead apex would otherwise crash the
+// whole poll. Falls back to the apex only when neither override is present.
+const BASE = process.env.POLL_BASE ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://worldcupknockout.football");
 
 const NAME_TO_CODE = {
   mexico: "MEX", "south africa": "RSA", "south korea": "KOR", "korea republic": "KOR",
