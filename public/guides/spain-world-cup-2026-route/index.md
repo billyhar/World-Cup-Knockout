@@ -11,7 +11,7 @@
 | Round of 32 | Thu, 2 July 2026 | Los Angeles | Austria |
 | Round of 16 | Mon, 6 July 2026 | Dallas | Portugal |
 | Quarter-final | Fri, 10 July 2026 | Los Angeles | Belgium |
-| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Tue, 14 July 2026 | Dallas | France |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
 *Route assumes Spain win Group H. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*

@@ -1068,6 +1068,23 @@ html, body {
   transform: translateX(11px);
   background: var(--accent);
 }
+.made-by {
+  font: 600 10px var(--font-display);
+  color: var(--ink-dim);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 99px;
+  background: rgba(20, 24, 38, 0.85);
+  border: 1px solid var(--card-edge);
+  margin-top: 4px;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.made-by:hover {
+  color: var(--accent);
+  border-color: rgba(47, 224, 140, 0.4);
+  background: rgba(47, 224, 140, 0.08);
+}
 
 
 .hint {

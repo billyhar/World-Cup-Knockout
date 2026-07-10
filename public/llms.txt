@@ -141,6 +141,14 @@ Scores sourced from football-data.org (per-match detail endpoint) and ESPN publi
 
 - [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
 
+## Winner Odds & Predictions
+
+- [Who is likely to win the World Cup 2026?](https://worldcupknockout.football/world-cup-2026-winner/): Live bookmaker odds (median, de-vigged) and Monte Carlo bracket model predictions, updated every 6 hours. Raw JSON: https://worldcupknockout.football/api/odds
+
+## Format Explainers
+
+- [World Cup 2026 best third-placed teams](https://worldcupknockout.football/world-cup-2026-third-place/): How the eight best third-placed teams qualify for the Round of 32, the ranking criteria, the live third-place race, and why the slot allocation is the bracket's most complicated rule.
+
 ## Route Guides
 
 Projected knockout routes (Round of 32 → Final) for leading contenders, with dates, host cities and likely opponents:
