@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Fri, 3 July 2026 | Vancouver | a third-placed team (from Group E, Group F, Group G, Group I or Group J) |
-| Round of 16 | Tue, 7 July 2026 | Vancouver | the winner of Match 87 (the Group K winner vs a third-placed team (from Group D, Group E, Group I, Group J or Group L)) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Argentina, Spain or Uruguay |
+| Round of 32 | Fri, 3 July 2026 | Vancouver | Algeria |
+| Round of 16 | Tue, 7 July 2026 | Vancouver | Colombia |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Argentina |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -18,11 +18,11 @@
 
 ## Who could Canada face in the Round of 32?
 
-In the Round of 32, Canada would meet a third-placed team (from Group E, Group F, Group G, Group I or Group J). The tie is scheduled for Fri, 3 July 2026, 11:00 PM ET at BC Place, Vancouver (Match 85). Win it and Canada reach the last 16 of the 2026 World Cup.
+In the Round of 32, Canada would meet Algeria. The tie is scheduled for Fri, 3 July 2026, 11:00 PM ET at BC Place, Vancouver (Match 85). Win it and Canada reach the last 16 of the 2026 World Cup.
 
 ## What is Canada’s Round of 16 path?
 
-A Round-of-16 place would pit Canada against the winner of Match 87 (the Group K winner vs a third-placed team (from Group D, Group E, Group I, Group J or Group L)), played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [United States](/guides/united-states-world-cup-2026-route/) or [Germany](/guides/germany-world-cup-2026-route/).
+A Round-of-16 place would pit Canada against Colombia, played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [United States](/guides/united-states-world-cup-2026-route/) or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Canada’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Canada finish runner-up in Group B?
 
-As Group B runner-up, Canada would enter the other half of the bracket, opening with a Round of 32 tie against the Group A runner-up in Los Angeles on Sun, 28 June 2026 (Match 73). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group B runner-up, Canada would enter the other half of the bracket, opening with a Round of 32 tie against [South Africa](/guides/south-africa-world-cup-2026-route/) in Los Angeles on Sun, 28 June 2026 (Match 73). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Sun, 28 June 2026 | Los Angeles | the Group A runner-up |
-| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 75 (the Group F winner vs the Group C runner-up) |
-| Quarter-final | Thu, 9 July 2026 | Boston | Potentially Germany, Ivory Coast or Mexico |
+| Round of 32 | Sun, 28 June 2026 | Los Angeles | South Africa |
+| Round of 16 | Sat, 4 July 2026 | Houston | Morocco |
+| Quarter-final | Thu, 9 July 2026 | Boston | France |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -70,7 +70,7 @@ If Canada win Group B, their Round of 16 tie (Match 96) is at BC Place, Vancouve
 
 ### What if Canada finish runner-up in Group B?
 
-As Group B runner-up, Canada would drop into the other half of the bracket. Their Round of 32 tie (Match 73) is against the Group A runner-up in Los Angeles on Sun, 28 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group B runner-up, Canada would drop into the other half of the bracket. Their Round of 32 tie (Match 73) is against South Africa in Los Angeles on Sun, 28 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

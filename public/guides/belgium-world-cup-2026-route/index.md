@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Wed, 1 July 2026 | Seattle | a third-placed team (from Group A, Group E, Group H, Group I or Group J) |
-| Round of 16 | Tue, 7 July 2026 | Seattle | the winner of Match 81 (the Group D winner vs a third-placed team (from Group B, Group E, Group F, Group I or Group J)) |
-| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially Portugal, Colombia or England |
+| Round of 32 | Wed, 1 July 2026 | Seattle | Senegal |
+| Round of 16 | Tue, 7 July 2026 | Seattle | United States |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Spain |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -18,11 +18,11 @@
 
 ## Who could Belgium face in the Round of 32?
 
-In the Round of 32, Belgium would meet a third-placed team (from Group A, Group E, Group H, Group I or Group J). The tie is scheduled for Wed, 1 July 2026, 4:00 PM ET at Lumen Field, Seattle (Match 82). Win it and Belgium reach the last 16 of the 2026 World Cup.
+In the Round of 32, Belgium would meet Senegal. The tie is scheduled for Wed, 1 July 2026, 4:00 PM ET at Lumen Field, Seattle (Match 82). Win it and Belgium reach the last 16 of the 2026 World Cup.
 
 ## What is Belgium’s Round of 16 path?
 
-A Round-of-16 place would pit Belgium against the winner of Match 81 (the Group D winner vs a third-placed team (from Group B, Group E, Group F, Group I or Group J)), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include [United States](/guides/united-states-world-cup-2026-route/), [Canada](/guides/canada-world-cup-2026-route/), [Switzerland](/guides/switzerland-world-cup-2026-route/) or [Germany](/guides/germany-world-cup-2026-route/).
+A Round-of-16 place would pit Belgium against [United States](/guides/united-states-world-cup-2026-route/), played Tue, 7 July 2026, 8:00 PM ET at Lumen Field, Seattle (Match 94). Likely contenders from that side include United States, [Canada](/guides/canada-world-cup-2026-route/), [Switzerland](/guides/switzerland-world-cup-2026-route/) or [Germany](/guides/germany-world-cup-2026-route/).
 
 ## Belgium’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Belgium finish runner-up in Group G?
 
-As Group G runner-up, Belgium would enter the other half of the bracket, opening with a Round of 32 tie against the Group D runner-up in Dallas on Fri, 3 July 2026 (Match 88). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group G runner-up, Belgium would enter the other half of the bracket, opening with a Round of 32 tie against [Australia](/guides/australia-world-cup-2026-route/) in Dallas on Fri, 3 July 2026 (Match 88). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Fri, 3 July 2026 | Dallas | the Group D runner-up |
-| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 86 (the Group J winner vs the Group H runner-up) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Canada, Switzerland or Germany |
+| Round of 32 | Fri, 3 July 2026 | Dallas | Australia |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | Argentina |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Switzerland |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -70,7 +70,7 @@ If Belgium win Group G, their Round of 16 tie (Match 94) is at Lumen Field, Seat
 
 ### What if Belgium finish runner-up in Group G?
 
-As Group G runner-up, Belgium would drop into the other half of the bracket. Their Round of 32 tie (Match 88) is against the Group D runner-up in Dallas on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group G runner-up, Belgium would drop into the other half of the bracket. Their Round of 32 tie (Match 88) is against Australia in Dallas on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

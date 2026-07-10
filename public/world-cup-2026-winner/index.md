@@ -8,22 +8,22 @@
 
 | # | Team | Odds | Bookie % | Model % |
 |---|---|---|---|---|
-| 1 | Argentina | 5.6 | 18.0% | 18.0% |
-| 2 | France | 5.8 | 17.1% | 17.1% |
-| 3 | Spain | 6.5 | 15.5% | 15.5% |
-| 4 | Brazil | 8.7 | 11.5% | 11.5% |
-| 5 | England | 9.6 | 10.5% | 10.5% |
-| 6 | Portugal | 19 | 5.4% | 5.4% |
-| 7 | Netherlands | 26 | 3.8% | 3.8% |
-| 8 | Germany | 29 | 3.4% | 3.4% |
-| 9 | Belgium | 30 | 3.3% | 3.3% |
-| 10 | Uruguay | 52 | 1.9% | 1.9% |
-| 11 | Croatia | 57 | 1.7% | 1.7% |
-| 12 | Colombia | 70 | 1.4% | 1.4% |
-| 13 | Morocco | 77 | 1.3% | 1.3% |
-| 14 | Switzerland | 136 | 0.7% | 0.7% |
-| 15 | Senegal | 148 | 0.7% | 0.7% |
-| 16 | United States | 186 | 0.5% | 0.5% |
+| 1 | Argentina | 5.6 | 17.9% | 17.9% |
+| 2 | France | 5.6 | 17.8% | 17.8% |
+| 3 | Spain | 6.6 | 15.2% | 15.2% |
+| 4 | Brazil | 8.8 | 11.3% | 11.3% |
+| 5 | England | 9.5 | 10.5% | 10.5% |
+| 6 | Portugal | 19 | 5.3% | 5.3% |
+| 7 | Netherlands | 25 | 4.0% | 4.0% |
+| 8 | Germany | 29 | 3.5% | 3.5% |
+| 9 | Belgium | 33 | 3.0% | 3.0% |
+| 10 | Uruguay | 50 | 2.0% | 2.0% |
+| 11 | Croatia | 58 | 1.7% | 1.7% |
+| 12 | Colombia | 67 | 1.5% | 1.5% |
+| 13 | Morocco | 69 | 1.5% | 1.5% |
+| 14 | Senegal | 147 | 0.7% | 0.7% |
+| 15 | Switzerland | 153 | 0.7% | 0.7% |
+| 16 | United States | 205 | 0.5% | 0.5% |
 
 Bookie % = median bookmaker price, de-vigged. Model % = Monte Carlo bracket simulation.
 
@@ -39,7 +39,7 @@ We pull outright winner prices from The Odds API across UK, European and US book
 
 ### What does the bracket model predict for the 2026 World Cup winner?
 
-The model runs 40,000 Monte Carlo simulations of the full 2026 bracket — simulating all 12 groups using Elo-style team ratings, picking the eight best third-placed teams, then playing out the knockout rounds. Argentina currently top the model at 18.0% title probability.
+The model runs 40,000 Monte Carlo simulations of the full 2026 bracket — simulating all 12 groups using Elo-style team ratings, picking the eight best third-placed teams, then playing out the knockout rounds. Argentina currently top the model at 17.9% title probability.
 
 ### What does 'vs Model' mean in the odds table?
 

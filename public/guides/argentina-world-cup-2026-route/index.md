@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Fri, 3 July 2026 | Miami | the Group H runner-up |
-| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 88 (the Group D runner-up vs the Group G runner-up) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Canada, Switzerland or Germany |
+| Round of 32 | Fri, 3 July 2026 | Miami | Cape Verde |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | Egypt |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Switzerland |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -18,11 +18,11 @@
 
 ## Who could Argentina face in the Round of 32?
 
-In the Round of 32, Argentina would meet the Group H runner-up. The tie is scheduled for Fri, 3 July 2026, 6:00 PM ET at Hard Rock Stadium, Miami (Match 86). Win it and Argentina reach the last 16 of the 2026 World Cup.
+In the Round of 32, Argentina would meet [Cape Verde](/guides/cape-verde-world-cup-2026-route/). The tie is scheduled for Fri, 3 July 2026, 6:00 PM ET at Hard Rock Stadium, Miami (Match 86). Win it and Argentina reach the last 16 of the 2026 World Cup.
 
 ## What is Argentina’s Round of 16 path?
 
-A Round-of-16 place would pit Argentina against the winner of Match 88 (the Group D runner-up vs the Group G runner-up), played Tue, 7 July 2026, 12:00 PM ET at Mercedes-Benz Stadium, Atlanta (Match 95). Likely contenders from that side include [United States](/guides/united-states-world-cup-2026-route/) or [Belgium](/guides/belgium-world-cup-2026-route/).
+A Round-of-16 place would pit Argentina against Egypt, played Tue, 7 July 2026, 12:00 PM ET at Mercedes-Benz Stadium, Atlanta (Match 95). Likely contenders from that side include [United States](/guides/united-states-world-cup-2026-route/) or [Belgium](/guides/belgium-world-cup-2026-route/).
 
 ## Argentina’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Argentina finish runner-up in Group J?
 
-As Group J runner-up, Argentina would enter the other half of the bracket, opening with a Round of 32 tie against the Group H winner in Los Angeles on Thu, 2 July 2026 (Match 84). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group J runner-up, Argentina would enter the other half of the bracket, opening with a Round of 32 tie against [Spain](/guides/spain-world-cup-2026-route/) in Los Angeles on Thu, 2 July 2026 (Match 84). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Thu, 2 July 2026 | Los Angeles | the Group H winner |
-| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 83 (the Group K runner-up vs the Group L runner-up) |
-| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Canada or Switzerland |
+| Round of 32 | Thu, 2 July 2026 | Los Angeles | Spain |
+| Round of 16 | Mon, 6 July 2026 | Dallas | Portugal |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Belgium |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -70,7 +70,7 @@ If Argentina win Group J, their Round of 16 tie (Match 95) is at Mercedes-Benz S
 
 ### What if Argentina finish runner-up in Group J?
 
-As Group J runner-up, Argentina would drop into the other half of the bracket. Their Round of 32 tie (Match 84) is against the Group H winner in Los Angeles on Thu, 2 July 2026, then the path runs through the Round of 16 in Dallas and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group J runner-up, Argentina would drop into the other half of the bracket. Their Round of 32 tie (Match 84) is against Spain in Los Angeles on Thu, 2 July 2026, then the path runs through the Round of 16 in Dallas and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

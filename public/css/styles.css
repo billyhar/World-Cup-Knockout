@@ -514,6 +514,27 @@ html, body {
   border: 5px solid transparent;
   border-bottom-color: var(--accent);
 }
+/* Variant anchored to the chrome toggle: arrow points down onto the button */
+.pred-hint-callout.chrome {
+  position: relative;
+  transform: none;
+  align-self: center;
+  animation-name: pred-hint-enter-chrome, pred-hint-bob-chrome;
+}
+.pred-hint-callout.chrome::before {
+  bottom: auto;
+  top: 100%;
+  border-bottom-color: transparent;
+  border-top-color: var(--accent);
+}
+@keyframes pred-hint-enter-chrome {
+  from { opacity: 0; transform: translateY(6px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pred-hint-bob-chrome {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(4px); }
+}
 @keyframes pred-hint-enter {
   from { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.9); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
@@ -1110,13 +1131,13 @@ html, body {
 .rotate-tip[hidden] { display: none; }
 
 @media (max-width: 700px) {
-  .chrome-top { padding: 8px 12px 22px; }
+  .chrome-top { padding: 8px 12px 22px; gap: 6px; }
   .brand-text { display: none; }
-  .chrome-left { gap: 6px; }
-  .nav-chips { overflow-x: auto; scrollbar-width: none; }
+  .chrome-left { gap: 6px; min-width: 0; flex: 1 1 auto; }
+  .nav-chips { overflow-x: auto; scrollbar-width: none; flex: 1 1 auto; min-width: 0; }
   .nav-chips::-webkit-scrollbar { display: none; }
-  .nav-chips button { padding: 7px 11px; font-size: 12px; }
-  .nav-guides { padding: 7px 11px; font-size: 12px; }
+  .nav-chips button { padding: 7px 11px; font-size: 12px; flex-shrink: 0; }
+  .nav-guides { padding: 7px 11px; font-size: 12px; flex-shrink: 0; }
   #status-pill { font-size: 11px; padding: 5px 10px; }
   .chrome-zoom { bottom: 14px; right: 12px; }
   .chrome-zoom button { width: 40px; height: 40px; }
@@ -1127,6 +1148,11 @@ html, body {
   .hint { bottom: 64px; }
   .chrome-action-btn { width: 34px; height: 34px; }
   #print-btn { display: none; }
+}
+
+@media (max-width: 380px) {
+  .nav-guides { font-size: 0; padding: 7px; gap: 0; }
+  .nav-guides .guides-arrow { font-size: 12px; }
 }
 
 /* ── live cursors (multiplayer presence) ───────────────────────────────── */
@@ -1682,6 +1708,10 @@ html, body {
 
 [data-theme="light"] .pred-hint-callout::before {
   border-bottom-color: var(--accent);
+}
+[data-theme="light"] .pred-hint-callout.chrome::before {
+  border-bottom-color: transparent;
+  border-top-color: var(--accent);
 }
 
 /* ── print ─────────────────────────────────────────────────────────────── */

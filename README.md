@@ -40,7 +40,7 @@ bracket that resolves itself as results come in.
 ```sh
 npm install
 npm run build
-npm run dev:vercel          # http://localhost:3000
+npm run dev                 # http://localhost:3000 (Vercel)
 ```
 
 Regenerate the fixture data after editing [scripts/build-seed.mjs](scripts/build-seed.mjs):
@@ -53,16 +53,16 @@ npm run build:seed
 
 ### 1. Supabase schema
 
-Apply the migration in [`supabase/migrations/`](supabase/migrations/) to create
-the `kv` table and the predictions tables/RPC:
+Apply the migrations in [`supabase/migrations/`](supabase/migrations/) to create
+the `kv` table, the predictions tables/RPC, and the RLS policies:
 
 ```sh
 supabase migration up
 ```
 
-(Or run the SQL file directly in the Supabase SQL editor.)
+(Or run the SQL files directly in the Supabase SQL editor.)
 
-### 2. Migrate data from Netlify Blobs (if moving an existing site)
+### 2. Migrate data from Netlify Blobs (one-time, if moving an existing site)
 
 The old Netlify Functions stored state in Netlify Blobs under the `worldcup`
 store. To copy that data into the new Supabase `kv` table:
@@ -75,6 +75,9 @@ npm run migrate:blobs
 ```
 
 Add `--dry-run` to preview what would be copied without writing anything.
+The `netlify/` directory and `netlify.toml` have been removed from this repo;
+this script is the only remaining Netlify dependency and is kept only for the
+one-time migration.
 
 ### 3. Vercel environment variables
 
@@ -117,8 +120,11 @@ The worker also hosts the live-cursor / emoji-reaction relay used by
 
 ## Netlify → Vercel migration notes
 
-- `netlify.toml` redirects are replaced by `vercel.json` rewrites/headers.
+- `netlify.toml` and the `netlify/` directory have been removed.
 - `netlify/edge-functions/markdown.js` is ported to `middleware.js`.
 - `netlify/functions/*` are ported to `api/*.mjs`.
 - Netlify Blobs are replaced by the Supabase `kv` table.
 - The live-score scheduled function is replaced by the Cloudflare Worker cron.
+- Supabase RLS policies lock down the `kv` and predictions tables so anonymous
+  clients can only read public vote tallies; all writes go through Vercel
+  functions or the `cast_vote` RPC.

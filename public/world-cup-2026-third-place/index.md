@@ -6,13 +6,24 @@
 
 **At a glance:** 8 best third-placed teams qualify · 4 are eliminated · 32 teams in the Round of 32 (24 automatic + 8 thirds) · 495 group combinations mapped by a fixed FIFA table.
 
-## The third-place race so far (0 of 12 groups decided)
+## The eight qualified third-placed teams
 
-0 of the 12 groups have finished. The table below ranks the current third-placed team in every group that has started — the top eight are on course to reach the Round of 32, but positions stay provisional until the final group games are played.
+All twelve groups are complete. These are the eight best third-placed teams that advance to the Round of 32, ranked by the FIFA criteria, with the tie each one drops into.
 
 | # | Group | Team | Pts | GD | GF | Status |
 |---|---|---|---|---|---|---|
-
+| 1 | K | DR Congo | 4 | +1 | 4 | Qualified |
+| 2 | F | Sweden | 4 | 0 | 7 | Qualified |
+| 3 | E | Ecuador | 4 | 0 | 2 | Qualified |
+| 4 | L | Ghana | 4 | 0 | 2 | Qualified |
+| 5 | B | Bosnia & Herzegovina | 4 | -1 | 5 | Qualified |
+| 6 | J | Algeria | 4 | -2 | 5 | Qualified |
+| 7 | D | Paraguay | 4 | -2 | 2 | Qualified |
+| 8 | I | Senegal | 3 | +2 | 8 | Qualified |
+| 9 | G | Iran | 3 | 0 | 3 | Eliminated |
+| 10 | A | South Korea | 3 | -1 | 2 | Eliminated |
+| 11 | C | Scotland | 3 | -3 | 1 | Eliminated |
+| 12 | H | Uruguay | 2 | -1 | 3 | Eliminated |
 
 ## How the best third-placed teams are decided
 
@@ -24,14 +35,14 @@ Each Round of 32 slot only takes a third from a fixed pool of groups, so teams a
 
 | Tie | Date | Host city | Group winner | Faces 3rd from |
 |---|---|---|---|---|
-| Match 74 | Mon, 29 June 2026 | Boston | the Group E winner | 3rd from Group A, Group B, Group C, Group D or Group F |
-| Match 77 | Tue, 30 June 2026 | New York / New Jersey | the Group I winner | 3rd from Group C, Group D, Group F, Group G or Group H |
-| Match 79 | Wed, 1 July 2026 | Mexico City | the Group A winner | 3rd from Group C, Group E, Group F, Group H or Group I |
-| Match 80 | Wed, 1 July 2026 | Atlanta | the Group L winner | 3rd from Group E, Group H, Group I, Group J or Group K |
-| Match 81 | Thu, 2 July 2026 | SF Bay Area | the Group D winner | 3rd from Group B, Group E, Group F, Group I or Group J |
-| Match 82 | Wed, 1 July 2026 | Seattle | the Group G winner | 3rd from Group A, Group E, Group H, Group I or Group J |
-| Match 85 | Fri, 3 July 2026 | Vancouver | the Group B winner | 3rd from Group E, Group F, Group G, Group I or Group J |
-| Match 87 | Sat, 4 July 2026 | Kansas City | the Group K winner | 3rd from Group D, Group E, Group I, Group J or Group L |
+| Match 74 | Mon, 29 June 2026 | Boston | Germany | Paraguay |
+| Match 77 | Tue, 30 June 2026 | New York / New Jersey | France | Sweden |
+| Match 79 | Wed, 1 July 2026 | Mexico City | Mexico | Ecuador |
+| Match 80 | Wed, 1 July 2026 | Atlanta | England | DR Congo |
+| Match 81 | Thu, 2 July 2026 | SF Bay Area | United States | Bosnia & Herzegovina |
+| Match 82 | Wed, 1 July 2026 | Seattle | Belgium | Senegal |
+| Match 85 | Fri, 3 July 2026 | Vancouver | Switzerland | Algeria |
+| Match 87 | Sat, 4 July 2026 | Kansas City | Colombia | Ghana |
 
 ## Best third-placed teams — FAQ
 

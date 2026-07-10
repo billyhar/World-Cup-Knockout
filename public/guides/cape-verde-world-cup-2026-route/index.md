@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Thu, 2 July 2026 | Los Angeles | the Group J runner-up |
-| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 83 (the Group K runner-up vs the Group L runner-up) |
-| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Canada or Switzerland |
+| Round of 32 | Thu, 2 July 2026 | Los Angeles | Austria |
+| Round of 16 | Mon, 6 July 2026 | Dallas | Portugal |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Belgium |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -18,11 +18,11 @@
 
 ## Who could Cape Verde face in the Round of 32?
 
-In the Round of 32, Cape Verde would meet the Group J runner-up. The tie is scheduled for Thu, 2 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles (Match 84). Win it and Cape Verde reach the last 16 of the 2026 World Cup.
+In the Round of 32, Cape Verde would meet Austria. The tie is scheduled for Thu, 2 July 2026, 3:00 PM ET at SoFi Stadium, Los Angeles (Match 84). Win it and Cape Verde reach the last 16 of the 2026 World Cup.
 
 ## What is Cape Verde’s Round of 16 path?
 
-A Round-of-16 place would pit Cape Verde against the winner of Match 83 (the Group K runner-up vs the Group L runner-up), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include [Portugal](/guides/portugal-world-cup-2026-route/), Colombia, [England](/guides/england-world-cup-2026-route/) or [Croatia](/guides/croatia-world-cup-2026-route/).
+A Round-of-16 place would pit Cape Verde against [Portugal](/guides/portugal-world-cup-2026-route/), played Mon, 6 July 2026, 3:00 PM ET at AT&T Stadium, Dallas (Match 93). Likely contenders from that side include Portugal, Colombia, [England](/guides/england-world-cup-2026-route/) or [Croatia](/guides/croatia-world-cup-2026-route/).
 
 ## Cape Verde’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Cape Verde finish runner-up in Group H?
 
-As Group H runner-up, Cape Verde would enter the other half of the bracket, opening with a Round of 32 tie against the Group J winner in Miami on Fri, 3 July 2026 (Match 86). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group H runner-up, Cape Verde would enter the other half of the bracket, opening with a Round of 32 tie against [Argentina](/guides/argentina-world-cup-2026-route/) in Miami on Fri, 3 July 2026 (Match 86). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Fri, 3 July 2026 | Miami | the Group J winner |
-| Round of 16 | Tue, 7 July 2026 | Atlanta | the winner of Match 88 (the Group D runner-up vs the Group G runner-up) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Canada, Switzerland or Germany |
+| Round of 32 | Fri, 3 July 2026 | Miami | Argentina |
+| Round of 16 | Tue, 7 July 2026 | Atlanta | Egypt |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Switzerland |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -70,7 +70,7 @@ If Cape Verde win Group H, their Round of 16 tie (Match 93) is at AT&T Stadium, 
 
 ### What if Cape Verde finish runner-up in Group H?
 
-As Group H runner-up, Cape Verde would drop into the other half of the bracket. Their Round of 32 tie (Match 86) is against the Group J winner in Miami on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group H runner-up, Cape Verde would drop into the other half of the bracket. Their Round of 32 tie (Match 86) is against Argentina in Miami on Fri, 3 July 2026, then the path runs through the Round of 16 in Atlanta and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

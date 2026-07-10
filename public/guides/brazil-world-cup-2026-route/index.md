@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Mon, 29 June 2026 | Houston | the Group F runner-up |
-| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | the winner of Match 78 (the Group E runner-up vs the Group I runner-up) |
-| Quarter-final | Sat, 11 July 2026 | Miami | Potentially Mexico, South Africa or South Korea |
+| Round of 32 | Mon, 29 June 2026 | Houston | Japan |
+| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | Norway |
+| Quarter-final | Sat, 11 July 2026 | Miami | England |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -18,11 +18,11 @@
 
 ## Who could Brazil face in the Round of 32?
 
-In the Round of 32, Brazil would meet the Group F runner-up. The tie is scheduled for Mon, 29 June 2026, 1:00 PM ET at NRG Stadium, Houston (Match 76). Win it and Brazil reach the last 16 of the 2026 World Cup.
+In the Round of 32, Brazil would meet [Japan](/guides/japan-world-cup-2026-route/). The tie is scheduled for Mon, 29 June 2026, 1:00 PM ET at NRG Stadium, Houston (Match 76). Win it and Brazil reach the last 16 of the 2026 World Cup.
 
 ## What is Brazil’s Round of 16 path?
 
-A Round-of-16 place would pit Brazil against the winner of Match 78 (the Group E runner-up vs the Group I runner-up), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include [Germany](/guides/germany-world-cup-2026-route/), [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/), [France](/guides/france-world-cup-2026-route/) or Senegal.
+A Round-of-16 place would pit Brazil against [Norway](/guides/norway-world-cup-2026-route/), played Sun, 5 July 2026, 4:00 PM ET at MetLife Stadium, New York / New Jersey (Match 91). Likely contenders from that side include [Germany](/guides/germany-world-cup-2026-route/), [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/), [France](/guides/france-world-cup-2026-route/) or Senegal.
 
 ## Brazil’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Brazil finish runner-up in Group C?
 
-As Group C runner-up, Brazil would enter the other half of the bracket, opening with a Round of 32 tie against the Group F winner in Monterrey on Tue, 30 June 2026 (Match 75). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group C runner-up, Brazil would enter the other half of the bracket, opening with a Round of 32 tie against [Netherlands](/guides/netherlands-world-cup-2026-route/) in Monterrey on Tue, 30 June 2026 (Match 75). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Tue, 30 June 2026 | Monterrey | the Group F winner |
-| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 73 (the Group A runner-up vs the Group B runner-up) |
-| Quarter-final | Thu, 9 July 2026 | Boston | Potentially Germany, Ivory Coast or Mexico |
+| Round of 32 | Tue, 30 June 2026 | Monterrey | Netherlands |
+| Round of 16 | Sat, 4 July 2026 | Houston | Canada |
+| Quarter-final | Thu, 9 July 2026 | Boston | France |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Morocco, Netherlands or Japan |
 
@@ -70,7 +70,7 @@ If Brazil win Group C, their Round of 16 tie (Match 91) is at MetLife Stadium, N
 
 ### What if Brazil finish runner-up in Group C?
 
-As Group C runner-up, Brazil would drop into the other half of the bracket. Their Round of 32 tie (Match 75) is against the Group F winner in Monterrey on Tue, 30 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group C runner-up, Brazil would drop into the other half of the bracket. Their Round of 32 tie (Match 75) is against Netherlands in Monterrey on Tue, 30 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

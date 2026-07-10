@@ -81,7 +81,7 @@ const TEAM_COLOR = {
   EGY: "#CE1126", IRN: "#239F40", NZL: "#5580CC", ESP: "#F5C000", CPV: "#5BBCE0",
   KSA: "#20AD65", URU: "#4FA8DE", FRA: "#5577DD", SEN: "#009639", IRQ: "#22B25A",
   NOR: "#C91535", ARG: "#75AADB", ALG: "#1FA85E", AUT: "#ED2939", JOR: "#22B25A",
-  POR: "#1DAA60", COD: "#0085CA", UZB: "#0099B5", COL: "#FCD116", ENG: "#CF142B",
+  POR: "#1DAA60", COD: "#0085CA", UZB: "#0099B5", COL: "#FCD116", ENG: "#FF4D4D",
   CRO: "#6688EE", GHA: "#1DB070", PAN: "#3A88CC",
 };
 const teamColor = (code) => TEAM_COLOR[code] ?? "#8a93a6";
@@ -729,37 +729,20 @@ function bindChrome() {
 function showPredHint() {
   if (localStorage.getItem("wc-pred-hint")) return;
 
-  // Find first upcoming knockout match with both teams already known
-  const m = seed.matches.find((x) =>
-    x.stage !== "group" &&
-    !state.results[x.id]?.hs &&
-    lastResolved[x.id]?.home &&
-    lastResolved[x.id]?.away,
-  );
-  if (!m) return;
+  const btn = document.getElementById("preds-btn");
+  if (!btn) return;
 
   localStorage.setItem("wc-pred-hint", "1");
 
-  const el = document.getElementById(`match-${m.id}`);
-  if (!el) return;
-
   const hint = document.createElement("div");
-  hint.className = "pred-hint-callout";
+  hint.className = "pred-hint-callout chrome";
   hint.textContent = "✦ New — tap to predict the winner";
-  // Position in canvas space, centred below the card's pred widget
-  hint.style.left = `${el.offsetLeft + el.offsetWidth / 2}px`;
-  hint.style.top = `${el.offsetTop + el.offsetHeight + 8}px`;
-  world.appendChild(hint);
-
-  // Fly to this card so the user sees it
-  panzoom.flyTo(
-    { x: el.offsetLeft, y: el.offsetTop - 30, w: el.offsetWidth, h: el.offsetHeight + 80 },
-    60, 700,
-  );
+  // Sit above the predictions toggle in the fixed chrome
+  btn.parentNode.insertBefore(hint, btn);
 
   const remove = () => hint.remove();
   setTimeout(remove, 6000);
-  world.addEventListener("pointerdown", remove, { once: true });
+  document.addEventListener("pointerdown", remove, { once: true });
 }
 
 function setStatus() {
@@ -1055,11 +1038,10 @@ function showBootError() {
   }
 
   // Figma-style live multiplayer cursors, cursor chat and emoji reactions.
-  // Loaded lazily and defensively: presence.js pulls the Supabase client from a
-  // third-party CDN (esm.sh), which an ad blocker or a CDN hiccup can block. By
-  // dynamically importing it AFTER the bracket is painted — and swallowing any
-  // failure — a blocked CDN only disables the (decorative) cursors instead of
-  // taking down the whole page on a hung loading screen.
+  // Transport is a plain WebSocket to our own Cloudflare Worker (no third-party
+  // realtime service), loaded lazily and defensively after the bracket is painted.
+  // If the worker is unreachable, the (decorative) cursors silently fail instead
+  // of taking down the whole page.
   import("./presence.js")
     .then((m) => m.initPresence({ world, WORLD }))
     .catch((e) => console.warn("Live cursors unavailable:", e));

@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Tue, 30 June 2026 | Monterrey | the Group C runner-up |
-| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 73 (the Group A runner-up vs the Group B runner-up) |
-| Quarter-final | Thu, 9 July 2026 | Boston | Potentially Germany, Ivory Coast or Mexico |
+| Round of 32 | Tue, 30 June 2026 | Monterrey | Morocco |
+| Round of 16 | Sat, 4 July 2026 | Houston | Canada |
+| Quarter-final | Thu, 9 July 2026 | Boston | France |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Japan |
 
@@ -18,11 +18,11 @@
 
 ## Who could Netherlands face in the Round of 32?
 
-In the Round of 32, Netherlands would meet the Group C runner-up. The tie is scheduled for Tue, 30 June 2026, 9:00 PM ET at Estadio BBVA, Monterrey (Match 75). Win it and Netherlands reach the last 16 of the 2026 World Cup.
+In the Round of 32, Netherlands would meet [Morocco](/guides/morocco-world-cup-2026-route/). The tie is scheduled for Tue, 30 June 2026, 9:00 PM ET at Estadio BBVA, Monterrey (Match 75). Win it and Netherlands reach the last 16 of the 2026 World Cup.
 
 ## What is Netherlands’ Round of 16 path?
 
-A Round-of-16 place would pit Netherlands against the winner of Match 73 (the Group A runner-up vs the Group B runner-up), played Sat, 4 July 2026, 1:00 PM ET at NRG Stadium, Houston (Match 90). Likely contenders from that side include [Mexico](/guides/mexico-world-cup-2026-route/), [South Africa](/guides/south-africa-world-cup-2026-route/), South Korea or [Canada](/guides/canada-world-cup-2026-route/).
+A Round-of-16 place would pit Netherlands against [Canada](/guides/canada-world-cup-2026-route/), played Sat, 4 July 2026, 1:00 PM ET at NRG Stadium, Houston (Match 90). Likely contenders from that side include [Mexico](/guides/mexico-world-cup-2026-route/), [South Africa](/guides/south-africa-world-cup-2026-route/), South Korea or Canada.
 
 ## Netherlands’ potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Netherlands finish runner-up in Group F?
 
-As Group F runner-up, Netherlands would enter the other half of the bracket, opening with a Round of 32 tie against the Group C winner in Houston on Mon, 29 June 2026 (Match 76). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group F runner-up, Netherlands would enter the other half of the bracket, opening with a Round of 32 tie against [Brazil](/guides/brazil-world-cup-2026-route/) in Houston on Mon, 29 June 2026 (Match 76). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Mon, 29 June 2026 | Houston | the Group C winner |
-| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | the winner of Match 78 (the Group E runner-up vs the Group I runner-up) |
-| Quarter-final | Sat, 11 July 2026 | Miami | Potentially Mexico, South Africa or South Korea |
+| Round of 32 | Mon, 29 June 2026 | Houston | Brazil |
+| Round of 16 | Sun, 5 July 2026 | New York / New Jersey | Norway |
+| Quarter-final | Sat, 11 July 2026 | Miami | England |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -70,7 +70,7 @@ If Netherlands win Group F, their Round of 16 tie (Match 90) is at NRG Stadium, 
 
 ### What if Netherlands finish runner-up in Group F?
 
-As Group F runner-up, Netherlands would drop into the other half of the bracket. Their Round of 32 tie (Match 76) is against the Group C winner in Houston on Mon, 29 June 2026, then the path runs through the Round of 16 in New York / New Jersey and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group F runner-up, Netherlands would drop into the other half of the bracket. Their Round of 32 tie (Match 76) is against Brazil in Houston on Mon, 29 June 2026, then the path runs through the Round of 16 in New York / New Jersey and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 

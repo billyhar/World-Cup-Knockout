@@ -8,9 +8,9 @@
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Sat, 4 July 2026 | Kansas City | a third-placed team (from Group D, Group E, Group I, Group J or Group L) |
-| Round of 16 | Tue, 7 July 2026 | Vancouver | the winner of Match 85 (the Group B winner vs a third-placed team (from Group E, Group F, Group G, Group I or Group J)) |
-| Quarter-final | Sun, 12 July 2026 | Kansas City | Potentially Argentina, Spain or Uruguay |
+| Round of 32 | Sat, 4 July 2026 | Kansas City | Ghana |
+| Round of 16 | Tue, 7 July 2026 | Vancouver | Switzerland |
+| Quarter-final | Sun, 12 July 2026 | Kansas City | Argentina |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
 
@@ -18,11 +18,11 @@
 
 ## Who could Portugal face in the Round of 32?
 
-In the Round of 32, Portugal would meet a third-placed team (from Group D, Group E, Group I, Group J or Group L). The tie is scheduled for Sat, 4 July 2026, 9:30 PM ET at Arrowhead Stadium, Kansas City (Match 87). Win it and Portugal reach the last 16 of the 2026 World Cup.
+In the Round of 32, Portugal would meet Ghana. The tie is scheduled for Sat, 4 July 2026, 9:30 PM ET at Arrowhead Stadium, Kansas City (Match 87). Win it and Portugal reach the last 16 of the 2026 World Cup.
 
 ## What is Portugal’s Round of 16 path?
 
-A Round-of-16 place would pit Portugal against the winner of Match 85 (the Group B winner vs a third-placed team (from Group E, Group F, Group G, Group I or Group J)), played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include [Canada](/guides/canada-world-cup-2026-route/), [Switzerland](/guides/switzerland-world-cup-2026-route/), [Germany](/guides/germany-world-cup-2026-route/) or [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/).
+A Round-of-16 place would pit Portugal against [Switzerland](/guides/switzerland-world-cup-2026-route/), played Tue, 7 July 2026, 4:00 PM ET at BC Place, Vancouver (Match 96). Likely contenders from that side include [Canada](/guides/canada-world-cup-2026-route/), Switzerland, [Germany](/guides/germany-world-cup-2026-route/) or [Ivory Coast](/guides/ivory-coast-world-cup-2026-route/).
 
 ## Portugal’s potential quarter-final
 
@@ -38,13 +38,13 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Portugal finish runner-up in Group K?
 
-As Group K runner-up, Portugal would enter the other half of the bracket, opening with a Round of 32 tie against the Group L runner-up in Toronto on Thu, 2 July 2026 (Match 83). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group K runner-up, Portugal would enter the other half of the bracket, opening with a Round of 32 tie against [Croatia](/guides/croatia-world-cup-2026-route/) in Toronto on Thu, 2 July 2026 (Match 83). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Thu, 2 July 2026 | Toronto | the Group L runner-up |
-| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 84 (the Group H winner vs the Group J runner-up) |
-| Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Canada or Switzerland |
+| Round of 32 | Thu, 2 July 2026 | Toronto | Croatia |
+| Round of 16 | Mon, 6 July 2026 | Dallas | Spain |
+| Quarter-final | Fri, 10 July 2026 | Los Angeles | Belgium |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
@@ -70,7 +70,7 @@ If Portugal win Group K, their Round of 16 tie (Match 96) is at BC Place, Vancou
 
 ### What if Portugal finish runner-up in Group K?
 
-As Group K runner-up, Portugal would drop into the other half of the bracket. Their Round of 32 tie (Match 83) is against the Group L runner-up in Toronto on Thu, 2 July 2026, then the path runs through the Round of 16 in Dallas and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group K runner-up, Portugal would drop into the other half of the bracket. Their Round of 32 tie (Match 83) is against Croatia in Toronto on Thu, 2 July 2026, then the path runs through the Round of 16 in Dallas and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 
