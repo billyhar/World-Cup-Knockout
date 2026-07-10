@@ -30,7 +30,9 @@ export default {
   // POLL_URL overrides the target (e.g. the *.vercel.app URL during migration
   // testing); defaults to the production apex.
   async scheduled(event, env, ctx) {
-    const url = env.POLL_URL || "https://worldcupknockout.football/api/poll-live";
+    // Use www subdomain: the apex redirects to www, and redirects drop the
+    // Authorization header, causing the cron to fail with 401.
+    const url = env.POLL_URL || "https://www.worldcupknockout.football/api/poll-live";
     ctx.waitUntil(
       fetch(url, { headers: { Authorization: `Bearer ${env.CRON_SECRET}` } })
         .catch(() => {}),

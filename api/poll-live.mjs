@@ -31,13 +31,10 @@
 
 import { kvGet, kvSet } from "./_lib/kv.mjs";
 
-// Static seed source. Prefer this deployment's own origin (VERCEL_URL) so the
-// poller reads the seed.json it was deployed with. This is resilient during the
-// Netlify→Vercel cutover, when the apex may still point at the old (possibly
-// down) host — fetching the seed from the dead apex would otherwise crash the
-// whole poll. Falls back to the apex only when neither override is present.
-const BASE = process.env.POLL_BASE ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://worldcupknockout.football");
+// Static seed source. Always use the production apex: deployment URLs
+// (*.vercel.app) return Vercel's splash HTML rather than static assets, which
+// crashes JSON parsing. POLL_BASE can override for testing.
+const BASE = process.env.POLL_BASE || "https://worldcupknockout.football";
 
 const NAME_TO_CODE = {
   mexico: "MEX", "south africa": "RSA", "south korea": "KOR", "korea republic": "KOR",
@@ -84,9 +81,17 @@ const buildEntry = (m, byPair) => {
 async function pollLive(req) {
   // Cron-only: this endpoint does upstream fetching and kv writes, so it must
   // not be publicly invokable. The Cloudflare Worker cron sends the bearer.
-  if (!process.env.CRON_SECRET ||
-      req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("unauthorized", { status: 401 });
+  // Be tolerant of accidental whitespace/quotes from copy/paste in env vars.
+  const strip = (s) => s?.trim().replace(/^["']|["']$/g, "") ?? "";
+  const authHeader = req.headers.get("authorization") ?? "";
+  const providedToken = strip(authHeader.replace(/^Bearer\s+/i, ""));
+  const envSecret = strip(process.env.CRON_SECRET);
+  console.log(`[poll-live auth] authorized=${providedToken === envSecret} hasSecret=${!!envSecret} secretLen=${envSecret.length} tokenLen=${providedToken.length}`);
+  if (!envSecret) {
+    return new Response("unauthorized: CRON_SECRET not set", { status: 401 });
+  }
+  if (providedToken !== envSecret) {
+    return new Response("unauthorized: bearer mismatch", { status: 401 });
   }
 
   const token = process.env.FOOTBALL_DATA_TOKEN;
@@ -109,7 +114,14 @@ async function pollLive(req) {
   // Load our seed to map API matches -> our match ids. Group games map by
   // team pair; knockout pairings aren't known upfront, so those map by
   // stage + nearest kickoff (robust to rescheduled times).
-  const seed = await (await fetch(`${BASE}/data/seed.json`)).json();
+  let seed;
+  try {
+    const seedRes = await fetch(`${BASE}/data/seed.json`);
+    if (!seedRes.ok) throw new Error(`seed ${seedRes.status}`);
+    seed = await seedRes.json();
+  } catch (err) {
+    return new Response(`skip: seed failed - ${String(err?.message ?? err)}`, { status: 200 });
+  }
   const STAGE = {
     LAST_32: "r32", LAST_16: "r16", QUARTER_FINALS: "qf",
     SEMI_FINALS: "sf", THIRD_PLACE: "third", FINAL: "final",
