@@ -17,14 +17,21 @@ bracket that resolves itself as results come in.
   final, the eight best third-placed teams are allocated to their R32 slots by
   constraint matching, and every `Winner M74`-style slot fills itself from
   knockout results (including penalty shootouts).
-- **Backend** — a Netlify Function ([netlify/functions/results.mjs](netlify/functions/results.mjs))
-  stores results in Netlify Blobs. Enter scores at `/admin.html` using the
-  `ADMIN_TOKEN`.
+- **Backend** — Vercel serverless functions in [`api/`](api/):
+  - [`api/results.mjs`](api/results.mjs) stores confirmed results + bracket overrides.
+  - [`api/live.mjs`](api/live.mjs) serves the live-score feed.
+  - [`api/predictions.mjs`](api/predictions.mjs) handles match-winner predictions.
+  - [`api/odds.mjs`](api/odds.mjs) serves outright winner odds.
+- **Storage** — a Supabase `kv` table replaces Netlify Blobs. State keys:
+  `live-output`, `live-api`, `results`, `odds-api`.
+- **Live polling** — a Cloudflare Worker cron triggers once a minute and pings
+  `/api/poll-live` with a bearer secret. The poller fetches from
+  football-data.org + ESPN and writes the computed feed to Supabase.
+- **Admin** — enter scores at `/admin.html` using the `ADMIN_TOKEN`.
 - **Optional live data** — set `FOOTBALL_DATA_TOKEN` (free key from
   [football-data.org](https://www.football-data.org/), World Cup included in
-  the free tier) and [netlify/functions/live.mjs](netlify/functions/live.mjs)
-  merges live scores automatically. Manually entered results always win over
-  the API, so you can correct anything.
+  the free tier). Manually entered results always win over the API, so you can
+  correct anything.
 - **Flags** via [flagcdn.com](https://flagcdn.com). Schedule data sourced from
   [openfootball/worldcup](https://github.com/openfootball/worldcup) (CC0).
 
@@ -32,8 +39,8 @@ bracket that resolves itself as results come in.
 
 ```sh
 npm install
-echo 'ADMIN_TOKEN=test' > .env
-npx netlify dev          # http://localhost:8888
+npm run build
+npm run dev:vercel          # http://localhost:3000
 ```
 
 Regenerate the fixture data after editing [scripts/build-seed.mjs](scripts/build-seed.mjs):
@@ -44,7 +51,74 @@ npm run build:seed
 
 ## Deploy
 
+### 1. Supabase schema
+
+Apply the migration in [`supabase/migrations/`](supabase/migrations/) to create
+the `kv` table and the predictions tables/RPC:
+
 ```sh
-netlify deploy --prod
-netlify env:set ADMIN_TOKEN <your-secret>
+supabase migration up
 ```
+
+(Or run the SQL file directly in the Supabase SQL editor.)
+
+### 2. Migrate data from Netlify Blobs (if moving an existing site)
+
+The old Netlify Functions stored state in Netlify Blobs under the `worldcup`
+store. To copy that data into the new Supabase `kv` table:
+
+```sh
+NETLIFY_SITE_ID=<site-id> \
+NETLIFY_TOKEN=<personal-access-token> \
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key> \
+npm run migrate:blobs
+```
+
+Add `--dry-run` to preview what would be copied without writing anything.
+
+### 3. Vercel environment variables
+
+| Variable | Required for | Where to get it |
+|---|---|---|
+| `ADMIN_TOKEN` | `/admin.html` score entry | Any strong secret you generate |
+| `FOOTBALL_DATA_TOKEN` | Live scores | [football-data.org](https://www.football-data.org/) dashboard |
+| `SUPABASE_SERVICE_ROLE_KEY` | KV reads/writes (`api/_lib/kv.mjs`) | Supabase project settings → API |
+| `SUPABASE_ANON_KEY` | Predictions | Supabase project settings → API |
+| `CRON_SECRET` | Secures `/api/poll-live` | Any strong secret you generate |
+| `ODDS_API_KEY` | Bookmaker odds | [the-odds-api.com](https://the-odds-api.com/) (optional) |
+
+```sh
+vercel env add ADMIN_TOKEN
+vercel env add FOOTBALL_DATA_TOKEN
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+vercel env add SUPABASE_ANON_KEY
+vercel env add CRON_SECRET
+vercel env add ODDS_API_KEY    # optional
+vercel deploy
+```
+
+### 4. Cloudflare Worker cron
+
+The live-score poller runs as a Cloudflare Worker cron because Vercel's free
+plan can't run minute-level crons.
+
+```sh
+# Set the same CRON_SECRET you used in Vercel
+wrangler secret put CRON_SECRET
+
+# Optional: point cron at a preview URL during testing
+wrangler secret put POLL_URL   # e.g. https://your-branch.vercel.app/api/poll-live
+
+npm run cursors:deploy
+```
+
+The worker also hosts the live-cursor / emoji-reaction relay used by
+[`public/js/presence.js`](public/js/presence.js).
+
+## Netlify → Vercel migration notes
+
+- `netlify.toml` redirects are replaced by `vercel.json` rewrites/headers.
+- `netlify/edge-functions/markdown.js` is ported to `middleware.js`.
+- `netlify/functions/*` are ported to `api/*.mjs`.
+- Netlify Blobs are replaced by the Supabase `kv` table.
+- The live-score scheduled function is replaced by the Cloudflare Worker cron.

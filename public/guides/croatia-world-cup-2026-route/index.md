@@ -2,14 +2,14 @@
 
 > If Croatia win Group L, their knockout route runs from a Round of 32 tie in Atlanta on Wed, 1 July 2026, through the Round of 16 in Mexico City (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group L · Projected knockout path · Updated Sat, 27 June 2026*
+*Group L · Projected knockout path · Updated Fri, 10 July 2026*
 
 ## Croatia’s projected knockout route
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
 | Round of 32 | Wed, 1 July 2026 | Atlanta | a third-placed team (from Group E, Group H, Group I, Group J or Group K) |
-| Round of 16 | Mon, 6 July 2026 | Mexico City | the winner of Match 79 (Mexico vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)) |
+| Round of 16 | Mon, 6 July 2026 | Mexico City | the winner of Match 79 (the Group A winner vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)) |
 | Quarter-final | Sat, 11 July 2026 | Miami | Potentially Brazil, Morocco or Netherlands |
 | Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
@@ -22,7 +22,7 @@ In the Round of 32, Croatia would meet a third-placed team (from Group E, Group 
 
 ## What is Croatia’s Round of 16 path?
 
-A Round-of-16 place would pit Croatia against the winner of Match 79 ([Mexico](/guides/mexico-world-cup-2026-route/) vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)), played Mon, 6 July 2026, 8:00 PM ET at Estadio Azteca, Mexico City (Match 92). Likely contenders from that side include Mexico, [South Africa](/guides/south-africa-world-cup-2026-route/), South Korea or [Brazil](/guides/brazil-world-cup-2026-route/).
+A Round-of-16 place would pit Croatia against the winner of Match 79 (the Group A winner vs a third-placed team (from Group C, Group E, Group F, Group H or Group I)), played Mon, 6 July 2026, 8:00 PM ET at Estadio Azteca, [Mexico](/guides/mexico-world-cup-2026-route/) City (Match 92). Likely contenders from that side include Mexico, [South Africa](/guides/south-africa-world-cup-2026-route/), South Korea or [Brazil](/guides/brazil-world-cup-2026-route/).
 
 ## Croatia’s potential quarter-final
 
@@ -43,7 +43,7 @@ As Group L runner-up, Croatia would enter the other half of the bracket, opening
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
 | Round of 32 | Thu, 2 July 2026 | Toronto | the Group K runner-up |
-| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 84 (Spain vs the Group J runner-up) |
+| Round of 16 | Mon, 6 July 2026 | Dallas | the winner of Match 84 (the Group H winner vs the Group J runner-up) |
 | Quarter-final | Fri, 10 July 2026 | Los Angeles | Potentially United States, Canada or Switzerland |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Germany, Ivory Coast or Mexico |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |

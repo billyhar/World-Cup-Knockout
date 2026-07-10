@@ -2,7 +2,7 @@
 
 > If Switzerland win Group B, their knockout route runs from a Round of 32 tie in Vancouver on Fri, 3 July 2026, through the Round of 16 in Vancouver (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group B · Projected knockout path · Updated Sat, 27 June 2026*
+*Group B · Projected knockout path · Updated Fri, 10 July 2026*
 
 ## Switzerland’s projected knockout route
 
@@ -38,12 +38,12 @@ The 2026 World Cup Final is at MetLife Stadium, New York / New Jersey on Sun, 19
 
 ## What if Switzerland finish runner-up in Group B?
 
-As Group B runner-up, Switzerland would enter the other half of the bracket, opening with a Round of 32 tie against [South Africa](/guides/south-africa-world-cup-2026-route/) in Los Angeles on Sun, 28 June 2026 (Match 73). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group B runner-up, Switzerland would enter the other half of the bracket, opening with a Round of 32 tie against the Group A runner-up in Los Angeles on Sun, 28 June 2026 (Match 73). The path still converges on the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 | Round | Date | Host city | Likely opponent |
 |---|---|---|---|
-| Round of 32 | Sun, 28 June 2026 | Los Angeles | South Africa |
-| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 75 (Netherlands vs Morocco) |
+| Round of 32 | Sun, 28 June 2026 | Los Angeles | the Group A runner-up |
+| Round of 16 | Sat, 4 July 2026 | Houston | the winner of Match 75 (the Group F winner vs the Group C runner-up) |
 | Quarter-final | Thu, 9 July 2026 | Boston | Potentially Germany, Ivory Coast or Mexico |
 | Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
@@ -70,7 +70,7 @@ If Switzerland win Group B, their Round of 16 tie (Match 96) is at BC Place, Van
 
 ### What if Switzerland finish runner-up in Group B?
 
-As Group B runner-up, Switzerland would drop into the other half of the bracket. Their Round of 32 tie (Match 73) is against South Africa in Los Angeles on Sun, 28 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
+As Group B runner-up, Switzerland would drop into the other half of the bracket. Their Round of 32 tie (Match 73) is against the Group A runner-up in Los Angeles on Sun, 28 June 2026, then the path runs through the Round of 16 in Houston and on toward the same Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
 ### Where is the 2026 World Cup Final?
 
