@@ -2,7 +2,7 @@
 
 > If Morocco win Group C, their knockout route runs from a Round of 32 tie in Houston on Mon, 29 June 2026, through the Round of 16 in New York / New Jersey (Sun, 5 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group C · Projected knockout path · Updated Fri, 10 July 2026*
+*Group C · Projected knockout path · Updated Sat, 11 July 2026*
 
 ## Morocco’s projected knockout route
 
@@ -45,7 +45,7 @@ As Group C runner-up, Morocco would enter the other half of the bracket, opening
 | Round of 32 | Tue, 30 June 2026 | Monterrey | Netherlands |
 | Round of 16 | Sat, 4 July 2026 | Houston | Canada |
 | Quarter-final | Thu, 9 July 2026 | Boston | France |
-| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
+| Semi-final | Tue, 14 July 2026 | Dallas | Spain |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Netherlands or Japan |
 
 *Route assumes Morocco finish second in Group C. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*

@@ -2,7 +2,7 @@
 
 > If Argentina win Group J, their knockout route runs from a Round of 32 tie in Miami on Fri, 3 July 2026, through the Round of 16 in Atlanta (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group J · Projected knockout path · Updated Fri, 10 July 2026*
+*Group J · Projected knockout path · Updated Sat, 11 July 2026*
 
 ## Argentina’s projected knockout route
 

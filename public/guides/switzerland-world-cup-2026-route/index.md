@@ -2,7 +2,7 @@
 
 > If Switzerland win Group B, their knockout route runs from a Round of 32 tie in Vancouver on Fri, 3 July 2026, through the Round of 16 in Vancouver (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group B · Projected knockout path · Updated Fri, 10 July 2026*
+*Group B · Projected knockout path · Updated Sat, 11 July 2026*
 
 ## Switzerland’s projected knockout route
 
@@ -45,7 +45,7 @@ As Group B runner-up, Switzerland would enter the other half of the bracket, ope
 | Round of 32 | Sun, 28 June 2026 | Los Angeles | South Africa |
 | Round of 16 | Sat, 4 July 2026 | Houston | Morocco |
 | Quarter-final | Thu, 9 July 2026 | Boston | France |
-| Semi-final | Tue, 14 July 2026 | Dallas | Potentially Portugal, Colombia or England |
+| Semi-final | Tue, 14 July 2026 | Dallas | Spain |
 | Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
 
 *Route assumes Switzerland finish second in Group B. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*

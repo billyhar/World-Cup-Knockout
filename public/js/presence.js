@@ -32,6 +32,25 @@ const EMOJIS = ["⚽️", "🥅", "🧤", "🏆", "🟨", "🟥", "🔥", "🎉"
   "😂", "😍", "🤩", "😱", "😭", "👏", "🙌", "💪",
   "🐐", "⭐️", "💥", "❤️", "💔", "🍺", "📣", "🤬"];
 
+// GIPHY API key for GIF search. Get a free key at https://developers.giphy.com
+// and either replace this value or set it via your build system. If left empty,
+// the picker falls back to the curated GIFS list below and hides the search box.
+const GIPHY_API_KEY = ""; // <-- paste your Giphy API key here
+
+// Football GIF reactions. These are example URLs from GIPHY — replace them with
+// your own self-hosted GIFs or licensed assets. The first 8 are mapped to the
+// 1-8 keyboard quick-keys while in GIF mode.
+const GIFS = [
+  { url: "https://media.giphy.com/media/56FwDJAmy5MGkZmVyP/giphy.gif", label: "Goal" },
+  { url: "https://media.giphy.com/media/cSTU6GckHzaw5R2SmE/giphy.gif", label: "Celebrate" },
+  { url: "https://media.giphy.com/media/dMyMc3bF4FF9m/giphy.gif", label: "Cheer" },
+  { url: "https://media.giphy.com/media/RX8Vaidhc3m2gz1eQh/giphy.gif", label: "World Cup" },
+  { url: "https://media.giphy.com/media/RGjTCVnCgnFu2rTemJ/giphy.gif", label: "Ball" },
+  { url: "https://media.giphy.com/media/eh50GNrUrVRXVzaOYF/giphy.gif", label: "Save" },
+  { url: "https://media.giphy.com/media/tHIIvgdO5yPCpQT1kH/giphy.gif", label: "Red card" },
+  { url: "https://media.giphy.com/media/QgsB4jveermiAk5O5j/giphy.gif", label: "Fans" },
+];
+
 // Every team in the 2026 World Cup, alphabetical by country name. England and
 // Scotland use ISO subdivision codes -> regional flag emoji (tag sequences).
 const TEAM_FLAGS = [
@@ -104,9 +123,9 @@ export function initPresence({ world, WORLD }) {
   const dock = document.createElement("div");
   dock.id = "presence-dock";
   dock.innerHTML =
-    `<div class="pd-picker" hidden>${PICKER.map((e) =>
-       `<button data-emoji="${e}">${e}</button>`).join("")}</div>
+    `<div class="pd-picker" hidden></div>
      <button class="pd-current" title="Tap to choose · hold or press space to spray">${EMOJIS[0]}</button>
+     <button class="pd-mode" title="Switch to GIF reactions">GIF</button>
      <div class="pd-tip"><span class="pd-tip-text">Press <kbd>space</kbd> to spray</span><button class="pd-tip-x" aria-label="Dismiss">×</button></div>
      <div class="pd-count" title="People here now"><span class="pd-dot"></span><span id="pd-n">1</span></div>`;
   document.body.appendChild(dock);
@@ -221,7 +240,10 @@ export function initPresence({ world, WORLD }) {
       case "emote": {
         if (msg.id === me.id) return;
         const s = worldToScreen(msg.x, msg.y);
-        spawnEmote(msg.emoji, s.x, s.y);
+        const reaction = msg.gif
+          ? { type: "gif", value: msg.gif }
+          : { type: "emoji", value: msg.emoji };
+        spawnEmote(reaction, s.x, s.y);
         break;
       }
       case "leave":
@@ -257,90 +279,224 @@ export function initPresence({ world, WORLD }) {
     bcast("cursor", { id: me.id, name: me.name, color: me.color, x: lastX, y: lastY });
   }, SEND_MS);
 
-  // ---- emoji reactions ---------------------------------------------------
-  let currentEmoji = EMOJIS[0];   // the one "f" / hold sprays
+  // ---- reactions (emoji + GIF) ------------------------------------------
+  // A reaction is either { type: "emoji", value: "⚽️" } or { type: "gif", value: url }.
+  let mode = "emoji";                       // "emoji" | "gif"
+  let currentReaction = { type: "emoji", value: EMOJIS[0] };
   let sprayTimer = null;
 
+  // GIF search state (only used in GIF mode).
+  const gifSearchEnabled = !!GIPHY_API_KEY;
+  let gifSearchQuery = "";
+  let gifSearchResults = [];
+  let gifSearchTimer = null;
+
   const currentBtn = dock.querySelector(".pd-current");
+  const modeBtn = dock.querySelector(".pd-mode");
   const picker = dock.querySelector(".pd-picker");
 
-  function selectEmoji(emoji) {
-    currentEmoji = emoji;
-    currentBtn.textContent = emoji;          // the single button shows the choice
-    for (const b of picker.querySelectorAll("button"))
-      b.classList.toggle("sel", b.dataset.emoji === emoji);
+  function renderCurrentBtn() {
+    if (currentReaction.type === "emoji") {
+      currentBtn.textContent = currentReaction.value;
+    } else {
+      currentBtn.innerHTML = `<img src="${escapeHtml(currentReaction.value)}" alt="" loading="eager">`;
+    }
   }
 
-  // Log emoji usage to Umami — once per spray gesture (a tap, a hold, a key),
-  // never per particle, so the fountain doesn't flood analytics. View the
-  // "emoji" event's data breakdown to see the most popular emoji.
-  function trackEmoji(emoji) {
-    try { window.umami && window.umami.track("emoji", { emoji }); } catch {}
+  function renderGifButtons(items) {
+    return items.map((g) =>
+      `<button data-type="gif" data-value="${escapeHtml(g.url)}" title="${escapeHtml(g.label || "")}">
+         <img src="${escapeHtml(g.url)}" alt="${escapeHtml(g.label || "gif")}" loading="lazy">
+       </button>`).join("");
   }
 
-  // Where emojis spawn from: the live cursor on desktop, or just above the
-  // emoji button on touch devices (which have no hover cursor).
+  function renderPicker() {
+    picker.classList.toggle("gif-mode", mode === "gif");
+    if (mode === "emoji") {
+      picker.innerHTML = PICKER.map((value) =>
+        `<button data-type="emoji" data-value="${escapeHtml(value)}">${value}</button>`).join("");
+    } else if (gifSearchEnabled) {
+      const resultsHtml = gifSearchResults.length
+        ? renderGifButtons(gifSearchResults)
+        : renderGifButtons(GIFS);
+      const placeholder = gifSearchResults.length ? "Search results" : "Search GIFs…";
+      picker.innerHTML =
+        `<label class="pd-search">
+           <input type="text" placeholder="${placeholder}" value="${escapeHtml(gifSearchQuery)}" autocomplete="off">
+         </label>
+         <div class="pd-results">${resultsHtml}</div>`;
+    } else {
+      // No API key: show the curated list with a helpful note.
+      picker.innerHTML =
+        `<div class="pd-search-note">Add a GIPHY_API_KEY to search any GIF</div>
+         <div class="pd-results">${renderGifButtons(GIFS)}</div>`;
+    }
+    highlightCurrent();
+  }
+
+  async function searchGifs(query) {
+    if (!gifSearchEnabled || !query.trim()) {
+      gifSearchResults = [];
+      if (gifSearchQuery === query) renderPicker();
+      return;
+    }
+    try {
+      const q = encodeURIComponent(query.trim());
+      const res = await fetch(
+        `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${q}&limit=16&rating=pg-13`);
+      const data = await res.json();
+      // Ignore stale responses: only keep results if the user hasn't moved on.
+      if (gifSearchQuery !== query) return;
+      gifSearchResults = (data.data || []).map((item) => ({
+        url: item.images.fixed_height_small?.url || item.images.fixed_height?.url || item.images.downsized?.url,
+        label: item.title || "GIF",
+      })).filter((g) => g.url);
+      renderPicker();
+      // Keep focus on the search input after re-render.
+      const input = picker.querySelector(".pd-search input");
+      if (input) {
+        input.focus();
+        input.setSelectionRange(query.length, query.length);
+      }
+    } catch {
+      if (gifSearchQuery === query) {
+        gifSearchResults = [];
+        renderPicker();
+      }
+    }
+  }
+
+  function debouncedSearch(query) {
+    gifSearchQuery = query;
+    clearTimeout(gifSearchTimer);
+    gifSearchTimer = setTimeout(() => searchGifs(query), 300);
+  }
+
+  function selectReaction(reaction) {
+    currentReaction = reaction;
+    renderCurrentBtn();
+    highlightCurrent();
+  }
+
+  function highlightCurrent() {
+    const container = picker.querySelector(".pd-results") || picker;
+    for (const b of container.querySelectorAll("button")) {
+      const sel = b.dataset.type === currentReaction.type && b.dataset.value === currentReaction.value;
+      b.classList.toggle("sel", sel);
+    }
+  }
+
+  function setMode(newMode) {
+    mode = newMode;
+    gifSearchQuery = "";
+    gifSearchResults = [];
+    modeBtn.textContent = mode === "emoji" ? "GIF" : "😀";
+    modeBtn.title = mode === "emoji" ? "Switch to GIF reactions" : "Switch to emoji reactions";
+    // Pick a sensible default when switching modes.
+    selectReaction(mode === "emoji"
+      ? { type: "emoji", value: EMOJIS[0] }
+      : { type: "gif", value: GIFS[0].url });
+    renderPicker();
+  }
+
+  // Log reaction usage to Umami — once per spray gesture (a tap, a hold, a key),
+  // never per particle, so the fountain doesn't flood analytics.
+  function trackReaction(reaction) {
+    try {
+      if (window.umami) {
+        if (reaction.type === "emoji") window.umami.track("emoji", { emoji: reaction.value });
+        else window.umami.track("gif", { gif: reaction.value });
+      }
+    } catch {}
+  }
+
+  // Where reactions spawn from: the live cursor on desktop, or just above the
+  // button on touch devices (which have no hover cursor).
   function anchorWorld() {
     if (hasPos) return { x: lastX, y: lastY };
     const r = currentBtn.getBoundingClientRect();
     return screenToWorld(r.left + r.width / 2, r.top - 8);
   }
 
-  // Fire one emoji from the anchor (with optional world-space spread).
-  function fireEmote(emoji, spread = 0) {
+  function payloadFor(reaction) {
+    return reaction.type === "emoji"
+      ? { emoji: reaction.value }
+      : { gif: reaction.value };
+  }
+
+  // Fire one reaction from the anchor (with optional world-space spread).
+  function fireEmote(reaction, spread = 0) {
     const a = anchorWorld();
     const wx = a.x + (Math.random() * 2 - 1) * spread;
     const wy = a.y + (Math.random() * 2 - 1) * spread;
     const s = worldToScreen(wx, wy);
-    spawnEmote(emoji, s.x, s.y);
-    bcast("emote", { id: me.id, emoji, x: wx, y: wy });
+    spawnEmote(reaction, s.x, s.y);
+    bcast("emote", { id: me.id, ...payloadFor(reaction), x: wx, y: wy });
   }
 
-  // Fire an emoji at a specific SCREEN point (used by tap-to-spray on mobile).
-  function fireAt(cx, cy, emoji, spread = 0) {
+  // Fire a reaction at a specific SCREEN point (used by tap-to-spray on mobile).
+  function fireAt(cx, cy, reaction, spread = 0) {
     const w = screenToWorld(cx, cy);
     const wx = w.x + (Math.random() * 2 - 1) * spread;
     const wy = w.y + (Math.random() * 2 - 1) * spread;
     const s = worldToScreen(wx, wy);
-    spawnEmote(emoji, s.x, s.y);
-    bcast("emote", { id: me.id, emoji, x: wx, y: wy });
+    spawnEmote(reaction, s.x, s.y);
+    bcast("emote", { id: me.id, ...payloadFor(reaction), x: wx, y: wy });
   }
 
   // A satisfying little burst at a screen point.
-  function burstAt(cx, cy, emoji, n = 4) {
+  function burstAt(cx, cy, reaction, n = 4) {
     dismissTip();
-    trackEmoji(emoji);
-    fireAt(cx, cy, emoji, 0);
+    trackReaction(reaction);
+    // GIFs are larger and busier, so a single pop is enough; emojis get a cluster.
+    const count = reaction.type === "gif" ? 1 : n;
+    fireAt(cx, cy, reaction, 0);
     let i = 1;
-    const t = setInterval(() => { fireAt(cx, cy, emoji, 60); if (++i >= n) clearInterval(t); }, 70);
+    const t = setInterval(() => { fireAt(cx, cy, reaction, 60); if (++i >= count) clearInterval(t); }, 70);
   }
 
-  // Hold to spray a fountain of emojis; tap = a single one. This sprays the
-  // given emoji *temporarily* — it never changes the chosen button emoji
-  // (only the picker does that), so the 1-8 keys are throwaway quick-fires.
-  let sprayEmoji = currentEmoji;
-  function startSpray(emoji) {
-    sprayEmoji = emoji;
+  // Hold to spray. Emojis become a fast fountain; GIFs are slower (one every
+  // 3s) so each animation is actually visible.
+  const EMOJI_SPRAY_MS = 75;
+  const GIF_SPRAY_MS = 3000;
+  let sprayReaction = currentReaction;
+  function startSpray(reaction) {
+    const wasSpraying = !!sprayTimer;
+    const intervalChanged = sprayReaction.type !== reaction.type;
+    sprayReaction = reaction;
+    // If already spraying and the reaction type changed, restart the interval
+    // so GIFs slow down and emojis stay fast.
+    if (wasSpraying && intervalChanged) {
+      clearInterval(sprayTimer);
+      sprayTimer = null;
+    }
     if (sprayTimer) return;
     dismissTip();
-    trackEmoji(emoji);
-    fireEmote(emoji, 0);                                  // instant first hit
-    sprayTimer = setInterval(() => fireEmote(sprayEmoji, 70), 75);
+    trackReaction(reaction);
+    if (!wasSpraying) fireEmote(reaction, 0);             // instant first hit on new spray
+    const isGif = reaction.type === "gif";
+    const interval = isGif ? GIF_SPRAY_MS : EMOJI_SPRAY_MS;
+    const spread = isGif ? 0 : 70;
+    sprayTimer = setInterval(() => fireEmote(sprayReaction, spread), interval);
   }
   function stopSpray() {
     clearInterval(sprayTimer);
     sprayTimer = null;
   }
 
-  function spawnEmote(emoji, x, y) {
+  function spawnEmote(reaction, x, y) {
     const el = document.createElement("div");
     el.className = "emote";
-    el.textContent = emoji;
     el.style.left = x + "px";
     el.style.top = y + "px";
     el.style.setProperty("--dx", (Math.random() * 140 - 70) + "px");
     el.style.setProperty("--rot", (Math.random() * 70 - 35) + "deg");
     el.style.setProperty("--scl", (0.85 + Math.random() * 0.5).toFixed(2));
+    if (reaction.type === "gif") {
+      el.innerHTML = `<img src="${escapeHtml(reaction.value)}" alt="" loading="eager">`;
+    } else {
+      el.textContent = reaction.value;
+    }
     layer.appendChild(el);
     el.addEventListener("animationend", () => el.remove());
   }
@@ -350,6 +506,7 @@ export function initPresence({ world, WORLD }) {
   const setPicker = (open) => {
     picker.hidden = !open;
     currentBtn.classList.toggle("open", open);
+    modeBtn.classList.toggle("open", open);
     countEl.style.visibility = open ? "hidden" : "";
   };
   let holdTimer = null, didHold = false, downTouch = false;
@@ -360,12 +517,19 @@ export function initPresence({ world, WORLD }) {
     downTouch = e.pointerType === "touch";
     // mouse: hold sprays. touch: the button only opens the picker (you spray by
     // tapping the canvas), so no hold action.
-    if (!downTouch) holdTimer = setTimeout(() => { didHold = true; startSpray(currentEmoji); }, 180);
+    if (!downTouch) holdTimer = setTimeout(() => { didHold = true; startSpray(currentReaction); }, 180);
   });
   currentBtn.addEventListener("pointerup", () => {
     clearTimeout(holdTimer);
     if (didHold) stopSpray();
     else setPicker(picker.hidden);             // a tap toggles the picker
+  });
+
+  // Toggle between emoji and GIF modes.
+  modeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setMode(mode === "emoji" ? "gif" : "emoji");
+    setPicker(true);
   });
 
   // Mobile: tap anywhere on the canvas to spray a burst at that spot.
@@ -385,19 +549,30 @@ export function initPresence({ world, WORLD }) {
     tTouches = Math.max(0, tTouches - 1);
     // a quick, still, single-finger tap = spray (not a pan or pinch)
     if (wasSingle && !tMoved && performance.now() - tStart < 300) {
-      burstAt(e.clientX, e.clientY, currentEmoji);
+      burstAt(e.clientX, e.clientY, currentReaction);
     }
   };
   viewport.addEventListener("pointerup", endTouch, { passive: true });
   viewport.addEventListener("pointercancel", () => { tTouches = Math.max(0, tTouches - 1); }, { passive: true });
 
-  // Pick an emoji from the collection -> it becomes the current one.
+  // Pick a reaction from the collection -> it becomes the current one.
   picker.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-emoji]");
+    const b = e.target.closest("[data-type]");
     if (!b) return;
-    selectEmoji(b.dataset.emoji);
+    selectReaction({ type: b.dataset.type, value: b.dataset.value });
     setPicker(false);
-    fireEmote(currentEmoji, 0);          // a little confirmation pop
+    fireEmote(currentReaction, 0);       // a little confirmation pop
+  });
+
+  // GIF search input.
+  picker.addEventListener("input", (e) => {
+    const input = e.target.closest(".pd-search input");
+    if (!input) return;
+    debouncedSearch(input.value);
+  });
+  picker.addEventListener("keydown", (e) => {
+    // Don't let typing in the search box trigger global spray hotkeys.
+    if (e.target.closest(".pd-search input")) e.stopPropagation();
   });
 
   // Click anywhere else closes the picker.
@@ -405,7 +580,8 @@ export function initPresence({ world, WORLD }) {
     if (!picker.hidden && !dock.contains(e.target)) setPicker(false);
   });
 
-  selectEmoji(currentEmoji);    // set the default (⚽️) for the "f" hotkey
+  renderPicker();
+  selectReaction(currentReaction);      // set the default (⚽️) for the space hotkey
 
   // ---- spray hotkeys ----------------------------------------------------
   // any key that started a spray, so the matching keyup stops it
@@ -414,15 +590,20 @@ export function initPresence({ world, WORLD }) {
   addEventListener("keydown", (e) => {
     if (/^(input|textarea|select)$/i.test(e.target.tagName)) return;
 
-    // Spacebar sprays the currently-selected emoji (hold = fountain).
+    // Spacebar sprays the currently-selected reaction (hold = fountain).
     if (e.key === " " || e.code === "Space") {
       e.preventDefault();                  // don't scroll / activate buttons
-      if (!e.repeat) { startSpray(currentEmoji); sprayKey = " "; }
+      if (!e.repeat) { startSpray(currentReaction); sprayKey = " "; }
       return;
     }
     if (e.repeat) return;                  // we run our own spray interval
     const n = parseInt(e.key, 10);
-    if (n >= 1 && n <= 8) { startSpray(EMOJIS[n - 1]); sprayKey = e.key; }
+    if (n >= 1 && n <= 8) {
+      const reaction = mode === "emoji"
+        ? { type: "emoji", value: EMOJIS[n - 1] }
+        : { type: "gif", value: GIFS[n - 1]?.url };
+      if (reaction.value) { startSpray(reaction); sprayKey = e.key; }
+    }
   });
 
   addEventListener("keyup", (e) => {

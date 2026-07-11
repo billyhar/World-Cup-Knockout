@@ -2,7 +2,7 @@
 
 > If Australia win Group D, their knockout route runs from a Round of 32 tie in SF Bay Area on Thu, 2 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group D · Projected knockout path · Updated Fri, 10 July 2026*
+*Group D · Projected knockout path · Updated Sat, 11 July 2026*
 
 ## Australia’s projected knockout route
 

@@ -10,7 +10,6 @@
     "build:guides": "node scripts/build-guides.mjs",
     "build": "npm run build:seed && npm run build:seo && npm run build:guides",
     "indexnow": "node scripts/indexnow.mjs",
-    "dev": "vercel dev",
     "cursors:dev": "wrangler dev",
     "cursors:deploy": "wrangler deploy",
     "migrate:blobs": "node scripts/migrate-blobs-to-supabase.mjs"

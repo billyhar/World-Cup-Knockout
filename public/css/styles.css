@@ -1200,7 +1200,7 @@ html, body {
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
-/* floating emoji reactions */
+/* floating emoji / GIF reactions */
 .emote {
   position: absolute;
   top: 0;
@@ -1212,6 +1212,13 @@ html, body {
   will-change: transform, opacity;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
   animation: emote-float 2.4s cubic-bezier(0.22, 0.7, 0.3, 1) forwards;
+}
+.emote img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+  pointer-events: none;
 }
 @keyframes emote-float {
   0%   { opacity: 0; transform: translate(-50%, -30%) scale(0.3) rotate(0deg); }
@@ -1246,6 +1253,40 @@ html, body {
 .pd-current:hover { transform: scale(1.08); }
 .pd-current:active { transform: scale(0.94); }
 .pd-current.open { box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6), inset 0 0 0 2px var(--accent); }
+.pd-current img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* mode toggle: swaps the picker between emoji and GIF reactions */
+.pd-mode {
+  position: absolute;
+  left: 38px;
+  bottom: 38px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--accent, #2fe08c);
+  background: rgba(20, 24, 38, 0.96);
+  border: 1px solid var(--card-edge, rgba(255, 255, 255, 0.12));
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+.pd-mode:hover { transform: scale(1.1); }
+.pd-mode:active { transform: scale(0.92); }
+.pd-mode.open { box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5), inset 0 0 0 1.5px var(--accent); }
 
 .pd-tip {
   position: absolute;
@@ -1381,10 +1422,63 @@ html, body {
 }
 .pd-picker button:hover { background: rgba(255, 255, 255, 0.08); transform: scale(1.15); }
 .pd-picker button.sel { background: rgba(47, 224, 140, 0.16); box-shadow: inset 0 0 0 1.5px rgba(47, 224, 140, 0.5); }
+.pd-picker button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* GIF picker: larger thumbnails, fewer columns, with search */
+.pd-picker.gif-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 320px;
+  max-height: 420px;
+  padding: 10px;
+}
+.pd-picker.gif-mode .pd-results {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.pd-picker.gif-mode button {
+  aspect-ratio: 1;
+  padding: 2px;
+}
+.pd-search {
+  display: flex;
+}
+.pd-search input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-edge, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  outline: none;
+}
+.pd-search input::placeholder { color: var(--ink-dim, #9aa0b2); }
+.pd-search input:focus { border-color: var(--accent, #2fe08c); background: rgba(255, 255, 255, 0.09); }
+.pd-search-note {
+  padding: 6px 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-dim, #9aa0b2);
+  text-align: center;
+}
 
 @media (max-width: 700px) {
   #presence-dock { bottom: 14px; left: 12px; }
   .pd-current { width: 46px; height: 46px; font-size: 23px; }
+  .pd-current img { width: 32px; height: 32px; }
+  .pd-mode { left: 34px; bottom: 34px; width: 24px; height: 24px; font-size: 9px; }
   .pd-picker {
     grid-template-columns: repeat(8, 1fr);
     width: min(344px, calc(100vw - 24px));
@@ -1393,6 +1487,13 @@ html, body {
     scrollbar-width: none;
   }
   .pd-picker::-webkit-scrollbar { display: none; }
+  .pd-picker.gif-mode {
+    width: min(320px, calc(100vw - 24px));
+    max-height: min(72vh, 460px);
+  }
+  .pd-picker.gif-mode .pd-results {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* ── light mode ────────────────────────────────────────────────────────── */

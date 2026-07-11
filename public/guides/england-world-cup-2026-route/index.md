@@ -2,7 +2,7 @@
 
 > If England win Group L, their knockout route runs from a Round of 32 tie in Atlanta on Wed, 1 July 2026, through the Round of 16 in Mexico City (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group L · Projected knockout path · Updated Fri, 10 July 2026*
+*Group L · Projected knockout path · Updated Sat, 11 July 2026*
 
 ## England’s projected knockout route
 
