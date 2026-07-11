@@ -121,7 +121,6 @@ The worker also hosts the live-cursor / emoji-reaction relay used by
 ## Netlify → Vercel migration notes
 
 - `netlify.toml` and the `netlify/` directory have been removed.
-- `netlify/edge-functions/markdown.js` is ported to `middleware.js`.
 - `netlify/functions/*` are ported to `api/*.mjs`.
 - Netlify Blobs are replaced by the Supabase `kv` table.
 - The live-score scheduled function is replaced by the Cloudflare Worker cron.
