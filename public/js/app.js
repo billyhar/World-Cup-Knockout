@@ -495,12 +495,12 @@ function finalCountdownHTML(m) {
   const ko = kick(m);
   if (!ko) return "";
   return `
-  <div class="final-countdown" id="final-countdown" data-kickoff="${esc(ko)}" style="left:${pos104.x - 40}px;top:${pos104.y - 72}px;width:${K.w + 80}px">
+  <div class="final-countdown" id="final-countdown" data-kickoff="${esc(ko)}" style="left:${pos104.x - 40}px;top:${pos104.y - 92}px;width:${K.w + 80}px">
     <div class="fc-units">
-      <div class="fc-unit"><span class="fc-num" data-unit="days">00</span></div>
-      <div class="fc-unit"><span class="fc-num" data-unit="hours">00</span></div>
-      <div class="fc-unit"><span class="fc-num" data-unit="minutes">00</span></div>
-      <div class="fc-unit"><span class="fc-num" data-unit="seconds">00</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="days">00</span><span class="fc-unit-label">days</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="hours">00</span><span class="fc-unit-label">hours</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="minutes">00</span><span class="fc-unit-label">mins</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="seconds">00</span><span class="fc-unit-label">secs</span></div>
     </div>
   </div>`;
 }
