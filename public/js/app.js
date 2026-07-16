@@ -412,9 +412,11 @@ function koCardHTML(m, resolved) {
   const today = isToday(ko);
   const done = r?.hs != null && !live;
   const showToday = today && !done && !live;
+  const franceSpainFinal = m.stage === "final" && isFranceSpainFinal(resolved);
   const cls = [
     "card", "ko-card",
     m.stage === "final" ? "final-card" : "",
+    franceSpainFinal ? "final-card-epic" : "",
     live ? "is-live" : "", showToday ? "is-today" : "", done ? "is-done" : "",
   ].join(" ");
   const aet = r?.et ? ' · <span class="aet">aet</span>' : "";
@@ -432,6 +434,74 @@ function koCardHTML(m, resolved) {
     ${pensBreakdownHTML(r, teams)}
     ${tv ? `<div class="k-tv">${tv}</div>` : ""}
     ${predWidgetHTML(m, teams)}
+  </div>`;
+}
+
+// Returns true when the resolved final is France vs Spain (or force on localhost).
+function isFranceSpainFinal(resolved) {
+  const forceLocal = location.hostname === "localhost";
+  const finalMatch = seed.matches.find((m) => m.id === "104");
+  const final = resolved?.["104"];
+  const home = final?.home ?? finalMatch?.home;
+  const away = final?.away ?? finalMatch?.away;
+  const codes = [home, away].filter((c) => c && /^[A-Z]{3}$/.test(c)).sort();
+  return forceLocal || (codes.length === 2 && codes[0] === "ESP" && codes[1] === "FRA");
+}
+
+// Confetti burst behind the epic final card: Argentina + Spain flag colours and flags.
+function finalConfettiHTML() {
+  const colors = ["#75AADB", "#FFFFFF", "#F1BF00", "#AA151B"];
+  const flags = [
+    "https://flagcdn.com/w40/ar.png",
+    "https://flagcdn.com/w40/es.png",
+  ];
+  const total = 48;
+  const pieces = Array.from({ length: total }, (_, i) => {
+    const isFlag = i % 3 === 0;
+    const flag = isFlag ? flags[(i / 3 | 0) % flags.length] : null;
+    const color = colors[i % colors.length];
+    const angle = ((i / total) * 360 + (Math.random() * 20 - 10)) * (Math.PI / 180);
+    const distance = 120 + Math.random() * 180;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    const delay = (Math.random() * 0.6).toFixed(2);
+    const size = isFlag ? 10 + Math.random() * 6 : 6 + Math.random() * 8;
+    const duration = (1.8 + Math.random() * 0.8).toFixed(2);
+    const style = flag
+      ? `--cf-flag: url('${flag}');`
+      : `--cf-color: ${color};`;
+    return `<span class="confetti${flag ? " flag" : ""}" style="
+      ${style}
+      --cf-dx: ${dx.toFixed(1)}px;
+      --cf-dy: ${dy.toFixed(1)}px;
+      --cf-delay: ${delay}s;
+      --cf-size: ${size}px;
+      --cf-duration: ${duration}s;
+    "></span>`;
+  }).join("");
+  return `<div class="final-confetti" aria-hidden="true">${pieces}</div>`;
+}
+
+// Generate confetti containers for every France/Spain epic final card.
+function epicFinalConfettiHTML(resolved) {
+  if (!isFranceSpainFinal(resolved)) return "";
+  const finalMatch = seed.matches.find((m) => m.id === "104");
+  if (!finalMatch) return "";
+  return `<div class="final-confetti-wrap" id="confetti-${finalMatch.id}">${finalConfettiHTML()}</div>`;
+}
+
+// Small countdown above the FINAL label on the canvas, shown before kickoff.
+function finalCountdownHTML(m) {
+  const ko = kick(m);
+  if (!ko) return "";
+  return `
+  <div class="final-countdown" id="final-countdown" data-kickoff="${esc(ko)}" style="left:${pos104.x - 40}px;top:${pos104.y - 72}px;width:${K.w + 80}px">
+    <div class="fc-units">
+      <div class="fc-unit"><span class="fc-num" data-unit="days">00</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="hours">00</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="minutes">00</span></div>
+      <div class="fc-unit"><span class="fc-num" data-unit="seconds">00</span></div>
+    </div>
   </div>`;
 }
 
@@ -511,13 +581,18 @@ function render() {
 
   for (const g of Object.keys(seed.groups)) html += groupCardHTML(g, standings);
   for (const m of Object.values(ko)) html += koCardHTML(m, resolved);
+  html += epicFinalConfettiHTML(resolved);
 
-  // champion banner above the final
+  // champion banner above the final (or countdown before kickoff)
   const finalWinner = matchWinner(ko["104"], resolved, state.results).winner;
+  const finalLive = state.results["104"]?.status === "LIVE";
+  const finalMatch = ko["104"];
   if (finalWinner) {
     html += `<div class="champion" style="left:${pos["match-104"].x - 40}px;top:${pos["match-104"].y - 150}px">
       🏆 ${flagImg(finalWinner)} <b>${seed.teams[finalWinner].name}</b> — World Champions
     </div>`;
+  } else if (!finalLive && finalMatch) {
+    html += finalCountdownHTML(finalMatch);
   }
 
   world.innerHTML = html;
@@ -530,6 +605,16 @@ function render() {
     el.style.top = `${p.y}px`;
     if (id.startsWith("group-")) { el.style.width = `${G.w}px`; el.style.height = `${G.h}px`; }
     else { el.style.width = `${K.w}px`; }
+  }
+
+  // Position confetti wrap to sit exactly behind the epic final card.
+  const confettiWrap = document.getElementById("confetti-104");
+  if (confettiWrap && pos["match-104"]) {
+    const p = pos["match-104"];
+    confettiWrap.style.left = `${p.x}px`;
+    confettiWrap.style.top = `${p.y}px`;
+    confettiWrap.style.width = `${K.w}px`;
+    confettiWrap.style.height = `${K.h}px`;
   }
 
   // nav rects: each round spans its two mirrored columns
@@ -883,19 +968,31 @@ function patchDOM(prev, prevResolved, standings, resolved) {
     if (newEl) { newEl.style.left = left; newEl.style.top = top; if (width) newEl.style.width = width; }
   }
 
-  // Champion banner
+  // Champion banner (or countdown before kickoff)
   const finalWinner = matchWinner(ko["104"], resolved, state.results).winner;
+  const finalLive = state.results["104"]?.status === "LIVE";
   const existingBanner = world.querySelector(".champion");
-  if (finalWinner && !existingBanner) {
-    const p = { x: pos104.x, y: pos104.y };
-    world.insertAdjacentHTML(
-      "beforeend",
-      `<div class="champion" style="left:${p.x - 40}px;top:${p.y - 150}px">
-        🏆 ${flagImg(finalWinner)} <b>${seed.teams[finalWinner].name}</b> — World Champions
-      </div>`,
-    );
-  } else if (!finalWinner && existingBanner) {
-    existingBanner.remove();
+  const existingCountdown = world.querySelector("#final-countdown");
+  if (finalWinner) {
+    if (!existingBanner) {
+      const p = { x: pos104.x, y: pos104.y };
+      world.insertAdjacentHTML(
+        "beforeend",
+        `<div class="champion" style="left:${p.x - 40}px;top:${p.y - 150}px">
+          🏆 ${flagImg(finalWinner)} <b>${seed.teams[finalWinner].name}</b> — World Champions
+        </div>`,
+      );
+    }
+    existingCountdown?.remove();
+  } else if (!finalLive) {
+    const finalMatch = ko["104"];
+    if (finalMatch && !existingCountdown) {
+      world.insertAdjacentHTML("beforeend", finalCountdownHTML(finalMatch));
+    }
+    existingBanner?.remove();
+  } else {
+    existingBanner?.remove();
+    existingCountdown?.remove();
   }
 
   renderScoresCarousel(resolved);
@@ -980,6 +1077,30 @@ async function refresh() {
 
 // ---- boot ----------------------------------------------------------------------
 
+// Update the big final countdown every second without re-rendering the world.
+function updateFinalCountdown() {
+  const el = document.getElementById("final-countdown");
+  if (!el) return;
+  const kickoff = new Date(el.dataset.kickoff);
+  const diff = kickoff.getTime() - Date.now();
+  if (diff <= 0) {
+    for (const u of el.querySelectorAll("[data-unit]")) u.textContent = "00";
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  const set = (unit, n) => {
+    const span = el.querySelector(`[data-unit="${unit}"]`);
+    if (span) span.textContent = String(n).padStart(2, "0");
+  };
+  set("days", days);
+  set("hours", hours);
+  set("minutes", minutes);
+  set("seconds", seconds);
+}
+
 function hideLoader() {
   const loader = document.getElementById("boot-loader");
   if (!loader) return;
@@ -1025,6 +1146,8 @@ function showBootError() {
   sanitizeLive();
   lastResultsStr = JSON.stringify(state.results);
   render();
+  updateFinalCountdown();
+  setInterval(updateFinalCountdown, 1000);
   hideLoader();
   setStatus();
 

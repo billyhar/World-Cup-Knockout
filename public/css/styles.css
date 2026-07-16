@@ -611,8 +611,119 @@ html, body {
   background:
     linear-gradient(180deg, rgba(255, 209, 102, 0.08), rgba(255, 209, 102, 0) 50%), var(--card);
   box-shadow: 0 0 50px -12px rgba(255, 209, 102, 0.25), 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.final-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 0 70px -10px rgba(255, 209, 102, 0.35), 0 24px 50px -18px rgba(0, 0, 0, 0.7);
 }
 .final-card .k-meta { color: rgba(255, 209, 102, 0.75); }
+
+/* Epic France vs Spain final card: animated gold shimmer, pulse and float. */
+.final-card-epic {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, rgba(255, 209, 102, 0.12), rgba(255, 209, 102, 0) 55%),
+    linear-gradient(135deg, rgba(0, 85, 164, 0.18), rgba(170, 22, 45, 0.18)),
+    var(--card);
+  background-size: 100% 100%, 200% 200%, 100% 100%;
+  animation: final-card-pulse 3s ease-in-out infinite, final-card-shimmer 5s linear infinite;
+  box-shadow:
+    0 0 0 1px rgba(255, 209, 102, 0.5),
+    0 0 60px -12px rgba(255, 209, 102, 0.45),
+    0 20px 50px -18px rgba(0, 0, 0, 0.65);
+}
+.final-card-epic::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(90deg, #0055a4, #ffffff, #aa162d, #0055a4);
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: final-border-shimmer 3s linear infinite;
+  pointer-events: none;
+}
+.final-card-epic::after {
+  content: "🏆";
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  filter: drop-shadow(0 0 12px rgba(255, 209, 102, 0.8));
+  animation: final-trophy-bob 2s ease-in-out infinite;
+  pointer-events: none;
+}
+.final-card-epic .k-meta { color: rgba(255, 209, 102, 0.95); text-shadow: 0 0 10px rgba(255, 209, 102, 0.35); }
+
+/* Confetti burst behind the epic final card */
+.final-confetti-wrap {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.final-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--cf-size, 8px);
+  height: var(--cf-size, 8px);
+  margin-left: calc(var(--cf-size, 8px) / -2);
+  margin-top: calc(var(--cf-size, 8px) / -2);
+  background: var(--cf-color, #ffd700);
+  border-radius: 1px;
+  opacity: 0;
+  animation: confetti-burst var(--cf-duration, 2s) ease-out var(--cf-delay, 0s) infinite;
+}
+.confetti.flag {
+  width: calc(var(--cf-size, 8px) * 1.5);
+  margin-left: calc(var(--cf-size, 8px) * -0.75);
+  background: var(--cf-flag) center / cover no-repeat;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--cf-dx, 200px), var(--cf-dy, 200px)) rotate(720deg) scale(0.5);
+  }
+}
+
+@keyframes final-card-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.5), 0 0 60px -12px rgba(255, 209, 102, 0.4), 0 20px 50px -18px rgba(0, 0, 0, 0.65); }
+  50% { box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.7), 0 0 80px -8px rgba(255, 209, 102, 0.6), 0 20px 50px -18px rgba(0, 0, 0, 0.65); }
+}
+@keyframes final-card-shimmer {
+  0% { background-position: 0 0, 0% 50%, 0 0; }
+  50% { background-position: 0 0, 100% 50%, 0 0; }
+  100% { background-position: 0 0, 0% 50%, 0 0; }
+}
+@keyframes final-border-shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 300% 0; }
+}
+@keyframes final-trophy-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
 
 .champion {
   position: absolute;
@@ -626,6 +737,40 @@ html, body {
   border: 1px solid rgba(255, 209, 102, 0.5);
   color: var(--gold);
   white-space: nowrap;
+}
+
+/* Small countdown above the FINAL label on the canvas */
+.final-countdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--gold);
+  text-align: center;
+  pointer-events: none;
+}
+.final-countdown .fc-units {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.final-countdown .fc-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+}
+.final-countdown .fc-num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 12px rgba(255, 209, 102, 0.45), 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 699px) {
+  .final-countdown .fc-units { gap: 8px; }
+  .final-countdown .fc-unit { min-width: 26px; }
+  .final-countdown .fc-num { font-size: 18px; }
 }
 
 /* ── scores carousel ───────────────────────────────────────────────────── */
@@ -1665,6 +1810,18 @@ html, body {
 
 [data-theme="light"] .final-card .k-meta { color: rgba(154, 104, 0, 0.7); }
 
+[data-theme="light"] .final-card-epic {
+  background:
+    linear-gradient(180deg, rgba(180, 120, 0, 0.1), rgba(180, 120, 0, 0) 55%),
+    linear-gradient(135deg, rgba(0, 85, 164, 0.12), rgba(170, 22, 45, 0.12)),
+    var(--card);
+  box-shadow:
+    0 0 0 1px rgba(180, 120, 0, 0.5),
+    0 0 50px -12px rgba(180, 120, 0, 0.3),
+    0 10px 28px -12px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .final-card-epic .k-meta { color: rgba(154, 104, 0, 0.9); text-shadow: none; }
+
 [data-theme="light"] .champion {
   background: linear-gradient(135deg, rgba(180, 120, 0, 0.12), rgba(180, 120, 0, 0.04));
   border-color: rgba(154, 104, 0, 0.45);
@@ -1906,10 +2063,14 @@ html, body {
     box-shadow: none !important;
   }
 
-  .final-card {
+  .final-card,
+  .final-card-epic {
     border-color: rgba(160, 110, 0, 0.45) !important;
     background: #fffef8 !important;
+    animation: none !important;
   }
+  .final-card-epic::before,
+  .final-card-epic::after { display: none !important; }
 
   /* Connectors: visible on white paper */
   .connectors path { stroke: rgba(0, 0, 0, 0.22) !important; }
