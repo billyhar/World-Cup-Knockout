@@ -2,7 +2,7 @@
 
 > If Japan win Group F, their knockout route runs from a Round of 32 tie in Monterrey on Tue, 30 June 2026, through the Round of 16 in Houston (Sat, 4 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group F · Projected knockout path · Updated Sat, 11 July 2026*
+*Group F · Projected knockout path · Updated Sat, 18 July 2026*
 
 ## Japan’s projected knockout route
 
@@ -12,7 +12,7 @@
 | Round of 16 | Sat, 4 July 2026 | Houston | Canada |
 | Quarter-final | Thu, 9 July 2026 | Boston | France |
 | Semi-final | Tue, 14 July 2026 | Dallas | Spain |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Argentina |
 
 *Route assumes Japan win Group F. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
@@ -45,8 +45,8 @@ As Group F runner-up, Japan would enter the other half of the bracket, opening w
 | Round of 32 | Mon, 29 June 2026 | Houston | Brazil |
 | Round of 16 | Sun, 5 July 2026 | New York / New Jersey | Norway |
 | Quarter-final | Sat, 11 July 2026 | Miami | England |
-| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Argentina |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Spain |
 
 *Route assumes Japan finish second in Group F. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 

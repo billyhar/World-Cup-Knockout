@@ -2,7 +2,7 @@
 
 > If South Africa win Group A, their knockout route runs from a Round of 32 tie in Mexico City on Wed, 1 July 2026, through the Round of 16 in Mexico City (Mon, 6 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group A · Projected knockout path · Updated Sat, 11 July 2026*
+*Group A · Projected knockout path · Updated Sat, 18 July 2026*
 
 ## South Africa’s projected knockout route
 
@@ -11,8 +11,8 @@
 | Round of 32 | Wed, 1 July 2026 | Mexico City | Ecuador |
 | Round of 16 | Mon, 6 July 2026 | Mexico City | England |
 | Quarter-final | Sat, 11 July 2026 | Miami | Norway |
-| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Argentina |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Spain |
 
 *Route assumes South Africa win Group A. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
@@ -46,7 +46,7 @@ As Group A runner-up, South Africa would enter the other half of the bracket, op
 | Round of 16 | Sat, 4 July 2026 | Houston | Morocco |
 | Quarter-final | Thu, 9 July 2026 | Boston | France |
 | Semi-final | Tue, 14 July 2026 | Dallas | Spain |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Argentina |
 
 *Route assumes South Africa finish second in Group A. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 

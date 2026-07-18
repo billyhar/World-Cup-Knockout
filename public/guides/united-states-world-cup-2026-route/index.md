@@ -2,7 +2,7 @@
 
 > If United States win Group D, their knockout route runs from a Round of 32 tie in SF Bay Area on Thu, 2 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group D · Projected knockout path · Updated Sat, 11 July 2026*
+*Group D · Projected knockout path · Updated Sat, 18 July 2026*
 
 ## United States’ projected knockout route
 
@@ -12,7 +12,7 @@
 | Round of 16 | Tue, 7 July 2026 | Seattle | Belgium |
 | Quarter-final | Fri, 10 July 2026 | Los Angeles | Spain |
 | Semi-final | Tue, 14 July 2026 | Dallas | France |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Argentina |
 
 *Route assumes United States win Group D. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
@@ -45,8 +45,8 @@ As Group D runner-up, United States would enter the other half of the bracket, o
 | Round of 32 | Fri, 3 July 2026 | Dallas | Egypt |
 | Round of 16 | Tue, 7 July 2026 | Atlanta | Argentina |
 | Quarter-final | Sun, 12 July 2026 | Kansas City | Switzerland |
-| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Wed, 15 July 2026 | Atlanta | England |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Spain |
 
 *Route assumes United States finish second in Group D. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
