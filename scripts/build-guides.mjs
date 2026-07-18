@@ -380,6 +380,7 @@ function head({ title, desc, url, jsonld, image = `${ORIGIN}/og.png` }) {
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽️</text></svg>">
 <link rel="stylesheet" href="/css/guides.css">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="c63b4d7f-d188-4b09-87df-bbcbb0b744a8"></script>
+<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 ${jsonld.map((b) => `<script type="application/ld+json">${JSON.stringify(b)}</script>`).join("\n")}
 </head>
 <body>`;

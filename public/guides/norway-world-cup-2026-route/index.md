@@ -2,7 +2,7 @@
 
 > If Norway win Group I, their knockout route runs from a Round of 32 tie in New York / New Jersey on Tue, 30 June 2026, through the Round of 16 in Philadelphia (Sat, 4 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group I · Projected knockout path · Updated Sat, 11 July 2026*
+*Group I · Projected knockout path · Updated Sat, 18 July 2026*
 
 ## Norway’s projected knockout route
 
@@ -12,7 +12,7 @@
 | Round of 16 | Sat, 4 July 2026 | Philadelphia | Paraguay |
 | Quarter-final | Thu, 9 July 2026 | Boston | Morocco |
 | Semi-final | Tue, 14 July 2026 | Dallas | Spain |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Argentina |
 
 *Route assumes Norway win Group I. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
@@ -45,8 +45,8 @@ As Group I runner-up, Norway would enter the other half of the bracket, opening 
 | Round of 32 | Tue, 30 June 2026 | Dallas | Ivory Coast |
 | Round of 16 | Sun, 5 July 2026 | New York / New Jersey | Brazil |
 | Quarter-final | Sat, 11 July 2026 | Miami | England |
-| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Argentina, Spain or Uruguay |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Wed, 15 July 2026 | Atlanta | Argentina |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Spain |
 
 *Route assumes Norway finish second in Group I. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 

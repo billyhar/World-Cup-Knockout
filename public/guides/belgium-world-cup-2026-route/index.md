@@ -2,7 +2,7 @@
 
 > If Belgium win Group G, their knockout route runs from a Round of 32 tie in Seattle on Wed, 1 July 2026, through the Round of 16 in Seattle (Tue, 7 July 2026), and on toward the Final at MetLife Stadium, New York / New Jersey on Sun, 19 July 2026.
 
-*Group G · Projected knockout path · Updated Sat, 11 July 2026*
+*Group G · Projected knockout path · Updated Sat, 18 July 2026*
 
 ## Belgium’s projected knockout route
 
@@ -12,7 +12,7 @@
 | Round of 16 | Tue, 7 July 2026 | Seattle | United States |
 | Quarter-final | Fri, 10 July 2026 | Los Angeles | Spain |
 | Semi-final | Tue, 14 July 2026 | Dallas | France |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Brazil, Morocco or Netherlands |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Argentina |
 
 *Route assumes Belgium win Group G. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 
@@ -45,8 +45,8 @@ As Group G runner-up, Belgium would enter the other half of the bracket, opening
 | Round of 32 | Fri, 3 July 2026 | Dallas | Australia |
 | Round of 16 | Tue, 7 July 2026 | Atlanta | Argentina |
 | Quarter-final | Sun, 12 July 2026 | Kansas City | Switzerland |
-| Semi-final | Wed, 15 July 2026 | Atlanta | Potentially Brazil, Morocco or Netherlands |
-| Final | Sun, 19 July 2026 | New York / New Jersey | Potentially Germany, Ivory Coast or Mexico |
+| Semi-final | Wed, 15 July 2026 | Atlanta | England |
+| Final | Sun, 19 July 2026 | New York / New Jersey | Spain |
 
 *Route assumes Belgium finish second in Group G. Confirmed opponents are named once their group finishes; the rest stay bracket projections until then.*
 

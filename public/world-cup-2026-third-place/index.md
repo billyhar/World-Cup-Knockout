@@ -2,7 +2,7 @@
 
 > At the 2026 World Cup, the eight best third-placed teams from the 12 groups join the 24 group winners and runners-up in the Round of 32 — so only four of the twelve third-placed sides go out. They are ranked by points, goal difference then goals scored, and a fixed FIFA table decides which third plays which group winner.
 
-*48-team format · best thirds & Round of 32 · Updated Sat, 11 July 2026*
+*48-team format · best thirds & Round of 32 · Updated Sat, 18 July 2026*
 
 **At a glance:** 8 best third-placed teams qualify · 4 are eliminated · 32 teams in the Round of 32 (24 automatic + 8 thirds) · 495 group combinations mapped by a fixed FIFA table.
 

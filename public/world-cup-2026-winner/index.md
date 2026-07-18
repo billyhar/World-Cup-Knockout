@@ -1,29 +1,29 @@
 # Who is Likely to Win the World Cup 2026?
 
-> France and Argentina lead the outright market. Live bookmaker odds and bracket model predictions updated every 6 hours. Live JSON: https://worldcupknockout.football/api/odds
+> Argentina and France lead the outright market. Live bookmaker odds and bracket model predictions updated every 6 hours. Live JSON: https://worldcupknockout.football/api/odds
 
-*Updated Sat, 11 July 2026*
+*Updated Sat, 18 July 2026*
 
 ## Live winner odds
 
 | # | Team | Odds | Bookie % | Model % |
 |---|---|---|---|---|
-| 1 | France | 5.7 | 17.6% | 17.6% |
-| 2 | Argentina | 5.8 | 17.4% | 17.4% |
+| 1 | Argentina | 5.7 | 17.6% | 17.6% |
+| 2 | France | 5.8 | 17.3% | 17.3% |
 | 3 | Spain | 6.5 | 15.4% | 15.4% |
-| 4 | Brazil | 8.4 | 11.9% | 11.9% |
-| 5 | England | 9.4 | 10.6% | 10.6% |
-| 6 | Portugal | 18 | 5.4% | 5.4% |
-| 7 | Netherlands | 28 | 3.6% | 3.6% |
-| 8 | Germany | 30 | 3.3% | 3.3% |
-| 9 | Belgium | 33 | 3.1% | 3.1% |
-| 10 | Uruguay | 52 | 1.9% | 1.9% |
-| 11 | Croatia | 53 | 1.9% | 1.9% |
-| 12 | Morocco | 70 | 1.4% | 1.4% |
-| 13 | Colombia | 75 | 1.3% | 1.3% |
-| 14 | Switzerland | 132 | 0.8% | 0.8% |
-| 15 | Senegal | 141 | 0.7% | 0.7% |
-| 16 | Japan | 212 | 0.5% | 0.5% |
+| 4 | Brazil | 8.7 | 11.5% | 11.5% |
+| 5 | England | 9.5 | 10.5% | 10.5% |
+| 6 | Portugal | 18 | 5.5% | 5.5% |
+| 7 | Netherlands | 26 | 3.9% | 3.9% |
+| 8 | Germany | 29 | 3.4% | 3.4% |
+| 9 | Belgium | 32 | 3.1% | 3.1% |
+| 10 | Uruguay | 49 | 2.0% | 2.0% |
+| 11 | Croatia | 55 | 1.8% | 1.8% |
+| 12 | Morocco | 68 | 1.5% | 1.5% |
+| 13 | Colombia | 72 | 1.4% | 1.4% |
+| 14 | Switzerland | 144 | 0.7% | 0.7% |
+| 15 | Senegal | 165 | 0.6% | 0.6% |
+| 16 | United States | 211 | 0.5% | 0.5% |
 
 Bookie % = median bookmaker price, de-vigged. Model % = Monte Carlo bracket simulation.
 
@@ -39,7 +39,7 @@ We pull outright winner prices from The Odds API across UK, European and US book
 
 ### What does the bracket model predict for the 2026 World Cup winner?
 
-The model runs 40,000 Monte Carlo simulations of the full 2026 bracket — simulating all 12 groups using Elo-style team ratings, picking the eight best third-placed teams, then playing out the knockout rounds. France currently top the model at 17.6% title probability.
+The model runs 40,000 Monte Carlo simulations of the full 2026 bracket — simulating all 12 groups using Elo-style team ratings, picking the eight best third-placed teams, then playing out the knockout rounds. Argentina currently top the model at 17.6% title probability.
 
 ### What does 'vs Model' mean in the odds table?
 
